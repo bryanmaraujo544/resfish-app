@@ -1,9 +1,10 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 import { Header } from 'components/Header';
+import { Layout } from 'components/Layout';
 
 export const CommandsLayout = () => (
-  <Box>
+  <Layout>
     <Header />
     <Text>Commands</Text>
-  </Box>
+  </Layout>
 );

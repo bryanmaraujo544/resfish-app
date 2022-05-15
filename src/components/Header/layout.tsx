@@ -12,14 +12,14 @@ const headerButtons = [
     path: '/commands',
   },
   {
-    text: 'Estoque',
-    icon: MdInventory2,
-    path: '/stock',
-  },
-  {
     text: 'Cozinha',
     icon: GiCook,
     path: '/kitchen',
+  },
+  {
+    text: 'Estoque',
+    icon: MdInventory2,
+    path: '/stock',
   },
 ];
 
@@ -35,29 +35,36 @@ export const HeaderLayout = ({ handleLinkToPage }: Props) => {
       as="header"
       align="center"
       justify="space-between"
+      gap={6}
+      flexDirection={['column', null, 'row']}
       py={[4, 6, 8, 10]}
-      px={[8, 12, 14, 16]}
+      mb={[8, 10, 12, 14, 16]}
+      w="100%"
     >
       <Box>
         <Text fontWeight={700} color="red.500" fontSize="2xl">
           Pesqueiro Arruda's
         </Text>
       </Box>
-      <Flex gap={4}>
+      <Flex gap={4} w={['100%', null, 'auto']} justify="center">
         {headerButtons.map(({ text, icon: BtnIcon, path }) => (
           <Button
             onClick={() => handleLinkToPage(path)}
             alignItems="center"
-            gap={2}
+            gap={[1, 1, 2]}
             bg={pathname === path ? 'blue.400' : 'blue.50'}
             color={pathname === path ? 'blue.50' : 'blue.800'}
             boxShadow="base"
-            fontSize="xl"
+            fontSize={['sm', 'md', 'lg']}
             fontWeight={600}
-            p={6}
+            p={[2, 4, 6]}
             _hover={{
-              bg: 'red.50',
-              color: 'red.900',
+              bg: 'blue.100',
+              color: 'blue.900',
+            }}
+            _active={{
+              bg: 'blue.100',
+              color: 'blue.800',
             }}
           >
             <Icon as={BtnIcon} />
