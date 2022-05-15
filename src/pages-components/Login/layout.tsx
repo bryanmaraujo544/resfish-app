@@ -1,6 +1,22 @@
-import { Button, Flex, FormControl, Input } from '@chakra-ui/react';
+import { Button, Checkbox, Flex, FormControl, Input } from '@chakra-ui/react';
+import { Dispatch, SetStateAction } from 'react';
 
-export const LoginLayout = () => (
+interface Props {
+  showPassword: boolean;
+  setShowPassword: Dispatch<SetStateAction<boolean>>;
+  handleLogin: any;
+
+  accessKey: string;
+  setAccessKey: Dispatch<SetStateAction<string>>;
+}
+
+export const LoginLayout = ({
+  setShowPassword,
+  showPassword,
+  handleLogin,
+  accessKey,
+  setAccessKey,
+}: Props) => (
   <Flex
     justify="center"
     align="center"
@@ -12,6 +28,7 @@ export const LoginLayout = () => (
   >
     <FormControl
       as="form"
+      onSubmit={(e: any) => handleLogin(e)}
       display="flex"
       justifyContent="center"
       flexDirection="column"
@@ -24,20 +41,31 @@ export const LoginLayout = () => (
     >
       <Input
         placeholder="Chave De Acesso"
+        type={showPassword ? 'text' : 'password'}
+        value={accessKey}
+        onChange={(e) => setAccessKey(e.target.value)}
         bg="gray.100"
-        fontSize={20}
+        fontSize={['md', 'lg', 'xl']}
         h={16}
         fontWeight={600}
       />
+      <Checkbox
+        mb={2}
+        color="blue.600"
+        fontWeight={500}
+        onChange={(e) => setShowPassword(e.target.checked)}
+      >
+        Mostrar Chave
+      </Checkbox>
       <Button
         type="submit"
         h={16}
         bg="blue.500"
         color="gray.100"
-        fontSize={20}
+        fontSize={['md', 'lg', 'xl']}
         fontWeight={700}
         _hover={{
-          backgroundColor: 'red.400',
+          backgroundColor: 'blue.400',
         }}
       >
         Acessar

@@ -20,7 +20,8 @@
     "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
     "react/function-component-definition": "off",
     "import/prefer-default-export": "off",
-    "import/extensions": "off"
+    "import/extensions": "off",
+    "react/jsx-no-bind": "off"
   },
   "settings": {
     "import/resolver": {
