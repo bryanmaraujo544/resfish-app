@@ -18,6 +18,13 @@
     "react/react-in-jsx-scope": "off",
     "react/jsx-props-no-spreading": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
-    "react/function-component-definition": "off"
+    "react/function-component-definition": "off",
+    "import/prefer-default-export": "off",
+    "import/extensions": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {} // this loads <rootdir>/tsconfig.json to eslint
+    }
   }
 }
