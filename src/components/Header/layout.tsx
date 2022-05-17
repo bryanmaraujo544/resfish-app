@@ -29,7 +29,7 @@ interface Props {
 
 export const HeaderLayout = ({ handleLinkToPage }: Props) => {
   const { pathname } = useRouter();
-  console.log(pathname);
+
   return (
     <Flex
       as="header"

@@ -1,4 +1,8 @@
 import { SetStateAction, Dispatch } from 'react';
+import { useToast } from '@chakra-ui/react';
+
+import { formatPrice } from 'utils/formatPrice';
+import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { EditModalLayout } from './layout';
 import type { Item } from '../../types/Item';
 
@@ -13,15 +17,43 @@ export const EditModal = ({
   isEditModalOpen,
   setIsEditModalOpen,
 }: Props) => {
+  const toast = useToast();
+
   function handleSubmit(e: any) {
     e.preventDefault();
 
+    const unitPrice = itemInfos.unitPrice.split(' ')[1];
+    const formattedUnitPrice = formatDecimalNum({
+      num: unitPrice,
+      to: 'point',
+    }); // 33,90 -> 33.90
+    console.log({ formattedUnitPrice });
+    const isUnitPriceValid = !!Number(formattedUnitPrice); // 44.9 = true | 44,9 = false | 33,fd = false
+
+    if (!isUnitPriceValid) {
+      toast({
+        status: 'error',
+        title: 'Preço inválido :(',
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    toast({
+      status: 'success',
+      title: 'Item atualizado',
+    });
     // TODO: update the globalState
-    console.log(itemInfos);
   }
 
   function onClose() {
     setIsEditModalOpen(false);
+  }
+
+  function handleChangeUnitPrice(e: any) {
+    console.log(e.target.value);
+    itemInfos.setUnitPrice(formatPrice(e.target.value));
   }
 
   return (
@@ -31,6 +63,7 @@ export const EditModal = ({
       onClose={onClose}
       itemInfos={itemInfos}
       handleSubmit={handleSubmit}
+      handleChangeUnitPrice={handleChangeUnitPrice}
     />
   );
 };

@@ -1,4 +1,13 @@
-import { FormControl, Button, Input } from '@chakra-ui/react';
+import {
+  FormControl,
+  Button,
+  Input,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+} from '@chakra-ui/react';
 
 import { Modal } from 'components/Modal';
 import type { Item } from '../../types/Item';
@@ -9,6 +18,7 @@ interface Props {
   title: any;
   itemInfos: Item;
   handleSubmit: any;
+  handleChangeUnitPrice: any;
 }
 
 export const EditModalLayout = ({
@@ -17,6 +27,7 @@ export const EditModalLayout = ({
   title,
   itemInfos,
   handleSubmit,
+  handleChangeUnitPrice,
 }: Props) => {
   console.log('modal');
 
@@ -41,16 +52,20 @@ export const EditModalLayout = ({
         />
         <Input
           placeholder="Preço da Unidade"
-          type="number"
           value={itemInfos.unitPrice || ''}
-          onChange={(e) => itemInfos.setUnitPrice(Number(e.target.value))}
+          onChange={(e) => handleChangeUnitPrice(e)}
         />
-        <Input
-          placeholder="Quantidade"
-          type="number"
-          value={itemInfos.amount || ''}
-          onChange={(e) => itemInfos.setAmount(Number(e.target.value))}
-        />
+        <NumberInput>
+          <NumberInputField
+            placeholder="Quantidade"
+            value={itemInfos.amount || ''}
+            onChange={(e) => itemInfos.setAmount(Number(e.target.value))}
+          />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
         <Button type="submit">Atualizar Item</Button>
       </FormControl>
     </Modal>

@@ -9,7 +9,9 @@ export const Stock = () => {
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [amount, setAmount] = useState(null as null | number);
-  const [unitPrice, setUnitPrice] = useState(0);
+  const [unitPrice, setUnitPrice] = useState('R$');
+
+  console.log({ unitPrice });
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -18,7 +20,8 @@ export const Stock = () => {
     setName(itemInfos.name);
     setImage(itemInfos.image);
     setAmount(itemInfos.amount);
-    setUnitPrice(itemInfos.unitPrice);
+    console.log('unitPrice', itemInfos.unitPrice.toString());
+    setUnitPrice(`R$ ${itemInfos.unitPrice.toString()}`);
 
     setIsEditModalOpen(true);
   }

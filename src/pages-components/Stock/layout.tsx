@@ -2,6 +2,7 @@ import { Flex, Grid, GridItem, Text } from '@chakra-ui/react';
 import { Header } from 'components/Header';
 import { Layout } from 'components/Layout';
 import Image from 'next/image';
+import { NavHeader } from './components/NavHeader';
 
 const stockColumns = ['Image', 'Nome', 'Preço Unid.', 'Qntd'];
 
@@ -31,6 +32,7 @@ interface Props {
 export const StockLayout = ({ handleOpenEditModal }: Props) => (
   <Layout>
     <Header />
+    <NavHeader />
     <Grid templateColumns={`repeat(${stockColumns.length}, auto)`} w="100%">
       <GridItem
         display="grid"
@@ -50,6 +52,7 @@ export const StockLayout = ({ handleOpenEditModal }: Props) => (
       </GridItem>
       {mockProducts.map(({ image, name, amount, unitPrice, id }) => (
         <GridItem
+          key={id}
           display="grid"
           gridTemplateColumns={`repeat(${stockColumns.length}, 1fr)`}
           colStart={1}

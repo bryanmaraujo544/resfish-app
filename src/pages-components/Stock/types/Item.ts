@@ -5,9 +5,9 @@ export interface Item {
   image: string;
   name: string;
   amount: number | null;
-  unitPrice: number;
+  unitPrice: string;
   setName: Dispatch<SetStateAction<string>>;
   setImage: Dispatch<SetStateAction<string>>;
   setAmount: Dispatch<SetStateAction<number | null>>;
-  setUnitPrice: Dispatch<SetStateAction<number>>;
+  setUnitPrice: Dispatch<SetStateAction<string>>;
 }

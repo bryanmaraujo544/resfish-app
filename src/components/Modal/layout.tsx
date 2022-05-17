@@ -15,17 +15,13 @@ interface Props {
   children: ReactNode;
 }
 
-export const ModalLayout = ({ title, isOpen, onClose, children }: Props) => {
-  console.log('modal');
-
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
-      <ModalOverlay />
-      <ModalContent py={2}>
-        <ModalHeader>{title}</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>{children}</ModalBody>
-      </ModalContent>
-    </Modal>
-  );
-};
+export const ModalLayout = ({ title, isOpen, onClose, children }: Props) => (
+  <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <ModalOverlay />
+    <ModalContent py={2}>
+      <ModalHeader>{title}</ModalHeader>
+      <ModalCloseButton />
+      <ModalBody>{children}</ModalBody>
+    </ModalContent>
+  </Modal>
+);
