@@ -1,3 +1,5 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 /* eslint-disable react/no-children-prop */
 import { useState } from 'react';
 import {
@@ -9,13 +11,31 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Box,
 } from '@chakra-ui/react';
 import { AiFillFilter } from 'react-icons/ai';
 import { BiSearchAlt2 } from 'react-icons/bi';
 
 const filtersOptions = ['imagem', 'nome', 'preço unid.', 'qntd'];
 
-export const NavHeaderLayout = () => {
+interface CheckIsMenuItemChecked {
+  menu: 'sort' | 'filter';
+  item: string;
+}
+
+interface Props {
+  filters: string[];
+  orderBy: string;
+  handleSetFilter: any;
+  handleSetOrderBy: any;
+}
+
+export const NavHeaderLayout = ({
+  filters,
+  orderBy,
+  handleSetFilter,
+  handleSetOrderBy,
+}: Props) => {
   const [whichMenuIsOpened, setWhichMenuIsOpened] = useState<
     'filter' | 'sort' | ''
   >('');
@@ -30,126 +50,93 @@ export const NavHeaderLayout = () => {
     setWhichMenuIsOpened((prevState) => (prevState === 'sort' ? '' : 'sort'));
   }
 
+  function checkIsMenuItemChecked({ menu, item }: CheckIsMenuItemChecked) {
+    if (menu === 'filter') {
+      return filters.some(
+        (filter) => filter.toLocaleLowerCase() === item.toLocaleLowerCase()
+      );
+    }
+
+    return item === orderBy;
+  }
+
   return (
     <Flex mb={8} w="100%">
-      <Flex mb={8} w="100%" justify="space-between" gap={4} height={14}>
+      <Flex
+        mb={8}
+        w="100%"
+        justify="space-between"
+        gap={4}
+        height={['auto', '32', 14]}
+        flexWrap={['wrap', 'wrap', 'nowrap']}
+        display={['grid', 'grid', 'flex']}
+        gridTemplateColumns={['repeat(2, 1fr)', 'repeat(2, 1fr)', null]}
+      >
         {/* Filtering Container */}
-        <Flex
-          direction="column"
-          w={[100, 200]}
-          position="relative"
-          height="100%"
-        >
-          <Button
-            onClick={() => handleToggleFilterMenu()}
-            w="100%"
-            h="100%"
-            bg="blue.50"
-            gap={2}
-            boxShadow="base"
-            color="blue.800"
-            fontWeight={600}
-            _hover={{
-              bg: 'blue.100',
-            }}
-            _active={{
-              bg: 'blue.50',
-            }}
-          >
+        <MenuBtnContainer>
+          <MenuBtn onClick={() => handleToggleFilterMenu()}>
             <Icon as={AiFillFilter} fontSize={[12, 16, 18]} />
             Filtrar
-          </Button>
+            {filters.length > 0 && <Circle />}
+          </MenuBtn>
           {whichMenuIsOpened === 'filter' && (
-            <Flex
-              position="absolute"
-              direction="column"
-              gap={0}
-              top="100%"
-              width="100%"
-              bg="blue.50"
-              rounded="md"
-              boxShadow="base"
-              color="blue.800"
-              mt={4}
-              p={2}
-              zIndex={100}
-            >
+            <MenuItemsContainer>
               {filtersOptions.map((text) => (
-                <>
-                  <Text
-                    _hover={{
-                      bg: 'blue.200',
-                    }}
-                    cursor="pointer"
-                    p={2}
-                    rounded="md"
-                    fontWeight={600}
-                  >
-                    {text}
-                  </Text>
-                  <Divider />
-                </>
+                <ItemContainer
+                  onClick={() => handleSetFilter(text)}
+                  bg={
+                    checkIsMenuItemChecked({ menu: 'filter', item: text })
+                      ? 'blue.300'
+                      : 'none'
+                  }
+                  color={
+                    checkIsMenuItemChecked({ menu: 'filter', item: text })
+                      ? 'blue.50'
+                      : 'blue.900'
+                  }
+                >
+                  {text}
+                </ItemContainer>
               ))}
-            </Flex>
+            </MenuItemsContainer>
           )}
-        </Flex>
+        </MenuBtnContainer>
 
         {/* Sort Button */}
-        <Flex direction="column" w={[100, 200]} h="100%" position="relative">
-          <Button
-            onClick={() => handleToggleSortMenu()}
-            width="100%"
-            h="100%"
-            bg="blue.50"
-            gap={2}
-            boxShadow="base"
-            color="blue.800"
-            fontWeight={600}
-            _hover={{
-              bg: 'blue.100',
-            }}
-            _active={{
-              bg: 'blue.50',
-            }}
-          >
+        <MenuBtnContainer>
+          <MenuBtn onClick={() => handleToggleSortMenu()} oi="oi">
             <Icon as={AiFillFilter} fontSize={[12, 16, 18]} />
             Ordenar
-          </Button>
+            {orderBy && <Circle />}
+          </MenuBtn>
           {whichMenuIsOpened === 'sort' && (
-            <Flex
-              position="absolute"
-              direction="column"
-              gap={0}
-              top="100%"
-              width="100%"
-              bg="blue.50"
-              rounded="md"
-              boxShadow="base"
-              color="blue.800"
-              mt={4}
-              p={2}
-              zIndex={100}
-            >
+            <MenuItemsContainer>
               {filtersOptions.map((text) => (
-                <>
-                  <Text
-                    _hover={{
-                      bg: 'blue.200',
-                    }}
-                    cursor="pointer"
-                    p={2}
-                    rounded="md"
-                    fontWeight={600}
-                  >
-                    {text}
-                  </Text>
-                  <Divider />
-                </>
+                <ItemContainer
+                  onClick={() => handleSetOrderBy(text)}
+                  bg={
+                    checkIsMenuItemChecked({ menu: 'sort', item: text })
+                      ? 'blue.300'
+                      : 'none'
+                  }
+                  color={
+                    checkIsMenuItemChecked({ menu: 'sort', item: text })
+                      ? 'blue.50'
+                      : 'blue.900'
+                  }
+                >
+                  {text}
+                </ItemContainer>
               ))}
-            </Flex>
+            </MenuItemsContainer>
           )}
-        </Flex>
-        <InputGroup boxSizing="border-box">
+        </MenuBtnContainer>
+        <InputGroup
+          boxSizing="border-box"
+          gridColumnStart="1"
+          gridColumnEnd="3"
+          h={[14, 14, '100%']}
+        >
           <InputLeftElement
             pointerEvents="none"
             h="100%"
@@ -164,12 +151,12 @@ export const NavHeaderLayout = () => {
           <Input
             variant="filled"
             placeholder="Pesquise por um item"
-            h="100%"
             fontWeight={600}
             fontSize={18}
             color="blue.800"
             bg="blue.50"
             boxShadow="base"
+            h="100%"
             _hover={{
               bg: 'blue.100',
             }}
@@ -184,3 +171,79 @@ export const NavHeaderLayout = () => {
     </Flex>
   );
 };
+
+const MenuBtnContainer = (props: any) => (
+  <Flex
+    {...props}
+    direction="column"
+    w={['auto', 'auto', 200]}
+    flex={[1, 1, 'auto']}
+    h={[12, 12, '100%']}
+    position="relative"
+  >
+    {props.children}
+  </Flex>
+);
+
+const MenuBtn = (props: any) => (
+  <Button
+    {...props}
+    display="flex"
+    alignItems="center"
+    width="100%"
+    h="100%"
+    bg="blue.50"
+    gap={2}
+    boxShadow="base"
+    color="blue.800"
+    fontWeight={600}
+    _hover={{
+      bg: 'blue.100',
+    }}
+    _active={{
+      bg: 'blue.50',
+    }}
+  >
+    {props.children}
+  </Button>
+);
+
+const MenuItemsContainer = (props: any) => (
+  <Flex
+    {...props}
+    position="absolute"
+    direction="column"
+    gap={0}
+    top="100%"
+    width="100%"
+    bg="blue.50"
+    rounded="md"
+    boxShadow="base"
+    color="blue.800"
+    mt={4}
+    p={2}
+    zIndex={100}
+  >
+    {props.children}
+  </Flex>
+);
+
+const ItemContainer = (props: any) => (
+  <>
+    <Text
+      {...props}
+      p={2}
+      rounded="md"
+      fontWeight={600}
+      cursor="pointer"
+      _hover={{
+        bg: 'blue.200',
+      }}
+    >
+      {props.children}
+    </Text>
+    <Divider />
+  </>
+);
+
+const Circle = () => <Box w={2} h={2} rounded={2} bg="blue.400" mt={1} />;
