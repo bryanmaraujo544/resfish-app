@@ -10,4 +10,6 @@ export interface Item {
   setImage: Dispatch<SetStateAction<string>>;
   setAmount: Dispatch<SetStateAction<number | null>>;
   setUnitPrice: Dispatch<SetStateAction<string>>;
+  category: string;
+  setCategory: Dispatch<SetStateAction<string>>;
 }

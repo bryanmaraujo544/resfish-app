@@ -51,6 +51,11 @@ export const EditModalLayout = ({
           onChange={(e) => itemInfos.setName(e.target.value)}
         />
         <Input
+          placeholder="Categoria"
+          value={itemInfos.category || ''}
+          onChange={(e) => itemInfos.setCategory(e.target.value)}
+        />
+        <Input
           placeholder="Preço da Unidade"
           value={itemInfos.unitPrice || ''}
           onChange={(e) => handleChangeUnitPrice(e)}
@@ -61,6 +66,7 @@ export const EditModalLayout = ({
             value={itemInfos.amount || ''}
             onChange={(e) => itemInfos.setAmount(Number(e.target.value))}
           />
+
           <NumberInputStepper>
             <NumberIncrementStepper />
             <NumberDecrementStepper />

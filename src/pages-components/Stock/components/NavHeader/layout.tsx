@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { AiFillFilter } from 'react-icons/ai';
 import { BiSearchAlt2 } from 'react-icons/bi';
+import { CgSortAz } from 'react-icons/cg';
 
 const filtersOptions = ['imagem', 'nome', 'preço unid.', 'qntd'];
 
@@ -105,7 +106,7 @@ export const NavHeaderLayout = ({
         {/* Sort Button */}
         <MenuBtnContainer>
           <MenuBtn onClick={() => handleToggleSortMenu()} oi="oi">
-            <Icon as={AiFillFilter} fontSize={[12, 16, 18]} />
+            <Icon as={CgSortAz} fontSize={[16, 20, 24]} />
             Ordenar
             {orderBy && <Circle />}
           </MenuBtn>
@@ -213,7 +214,7 @@ const MenuItemsContainer = (props: any) => (
     {...props}
     position="absolute"
     direction="column"
-    gap={0}
+    gap={0.5}
     top="100%"
     width="100%"
     bg="blue.50"
@@ -232,12 +233,12 @@ const ItemContainer = (props: any) => (
   <>
     <Text
       {...props}
-      p={2}
+      p={1.5}
       rounded="md"
       fontWeight={600}
       cursor="pointer"
       _hover={{
-        bg: 'blue.200',
+        bg: 'blue.100',
       }}
     >
       {props.children}
