@@ -22,7 +22,8 @@
     "import/prefer-default-export": "off",
     "import/extensions": "off",
     "react/jsx-no-bind": "off",
-    "react/no-unescaped-entities": "off"
+    "react/no-unescaped-entities": "off",
+    "no-use-before-define": "off"
   },
   "settings": {
     "import/resolver": {

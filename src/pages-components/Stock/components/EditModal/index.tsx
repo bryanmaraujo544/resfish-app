@@ -28,7 +28,7 @@ export const EditModal = ({
       to: 'point',
     }); // 33,90 -> 33.90
     console.log({ formattedUnitPrice });
-    const isUnitPriceValid = !!Number(formattedUnitPrice); // 44.9 = true | 44,9 = false | 33,fd = false
+    const isUnitPriceValid = Number(formattedUnitPrice) !== null; // 44.9 = true | 44,9 = false | 33,fd = false
 
     if (!isUnitPriceValid) {
       toast({
@@ -44,12 +44,15 @@ export const EditModal = ({
       status: 'success',
       title: 'Item atualizado',
     });
+    onClose();
     // TODO: update the globalState
   }
 
   function onClose() {
     setIsEditModalOpen(false);
   }
+
+  console.log(itemInfos.unitPrice);
 
   function handleChangeUnitPrice(e: any) {
     console.log(e.target.value);
