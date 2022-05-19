@@ -1,7 +1,7 @@
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import {
-  // Flex,
-  // Grid,
-  // GridItem,
+  Flex,
   TableContainer,
   // Text,
   Table,
@@ -10,13 +10,16 @@ import {
   Tr,
   Td,
   Tbody,
+  Icon,
 } from '@chakra-ui/react';
+import { FaArrowUp } from 'react-icons/fa';
+
 import { Header } from 'components/Header';
 import { Layout } from 'components/Layout';
-import Image from 'next/image';
+import { SetStateAction, Dispatch } from 'react';
 import { NavHeader } from './components/NavHeader';
 
-const stockColumns = ['Image', 'Nome', 'Categoria', 'Qntd', 'Preço Unid.'];
+const stockColumns = ['Imagem', 'Nome', 'Categoria', 'Qntd', 'Preço Unid.'];
 
 const mockProducts = [
   {
@@ -41,53 +44,105 @@ const mockProducts = [
 
 interface Props {
   handleOpenEditModal: any;
+  filters: string[];
+  setFilters: Dispatch<SetStateAction<string[]>>;
+  orderBy: string;
+  setOrderBy: Dispatch<SetStateAction<string>>;
+  handleToggleOrderByDir: any;
+  orderByDir: string;
 }
 
-export const StockLayout = ({ handleOpenEditModal }: Props) => (
-  <Layout>
-    <Header />
-    <NavHeader />
-    <TableContainer>
-      <Table variant="simple">
-        <Thead>
-          <Tr>
-            {stockColumns.map((column) => (
-              <Th>{column}</Th>
-            ))}
-          </Tr>
-        </Thead>
-        <Tbody>
-          {mockProducts.map(
-            ({ id, image, amount, category, unitPrice, name }) => (
-              <Tr
-                key={id}
-                cursor="pointer"
-                _hover={{
-                  bg: 'blue.50',
-                }}
-                onClick={() =>
-                  handleOpenEditModal({
-                    name,
-                    image,
-                    id,
-                    amount,
-                    unitPrice,
-                    category,
-                  })
-                }
-              >
-                <Td>
-                  <Image src={image} width={32} height={32} objectFit="cover" />
-                </Td>
-                <Td>{name}</Td>
-                <Td>{category}</Td>
-                <Td>{amount}</Td>
-                <Td>{unitPrice}</Td>
-              </Tr>
-            )
-          )}
-        </Tbody>
-      </Table>
-    </TableContainer>
-  </Layout>
-);
+export const StockLayout = ({
+  handleOpenEditModal,
+  filters,
+  setFilters,
+  orderBy,
+  setOrderBy,
+  handleToggleOrderByDir,
+  orderByDir,
+}: Props) => {
+  console.log('oi');
+  function isColumnSelectedToOrder(column: string) {
+    return column.toLocaleLowerCase() === orderBy.toLocaleLowerCase();
+  }
+
+  return (
+    <Layout>
+      <Header />
+      <NavHeader
+        filters={filters}
+        setFilters={setFilters}
+        orderBy={orderBy}
+        setOrderBy={setOrderBy}
+      />
+      <TableContainer>
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              {stockColumns.map((column) => (
+                <Th>
+                  <Flex align="center" gap={2}>
+                    {column}{' '}
+                    {isColumnSelectedToOrder(column) === true && (
+                      <motion.div
+                        style={{
+                          transform:
+                            orderByDir === 'asc'
+                              ? 'rotate(0deg)'
+                              : 'rotate(180deg)',
+                        }}
+                      >
+                        <Icon
+                          as={FaArrowUp}
+                          fontSize={16}
+                          color="blue.800"
+                          onClick={() => handleToggleOrderByDir()}
+                        />
+                      </motion.div>
+                    )}
+                  </Flex>
+                </Th>
+              ))}
+            </Tr>
+          </Thead>
+          <Tbody>
+            {mockProducts.map(
+              ({ id, image, amount, category, unitPrice, name }) => (
+                <Tr
+                  key={id}
+                  cursor="pointer"
+                  _hover={{
+                    bg: 'blue.50',
+                  }}
+                  onClick={() =>
+                    handleOpenEditModal({
+                      name,
+                      image,
+                      id,
+                      amount,
+                      unitPrice,
+                      category,
+                    })
+                  }
+                >
+                  <Td>
+                    <Image
+                      src={image}
+                      width={32}
+                      height={32}
+                      objectFit="cover"
+                    />
+                  </Td>
+                  <Td>{name}</Td>
+                  <Td>{category}</Td>
+                  <Td>{amount}</Td>
+                  <Td>{unitPrice}</Td>
+                </Tr>
+              )
+            )}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    </Layout>
+  );
+};

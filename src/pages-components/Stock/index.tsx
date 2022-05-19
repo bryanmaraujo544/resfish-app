@@ -12,7 +12,9 @@ export const Stock = () => {
   const [amount, setAmount] = useState(null as null | number);
   const [unitPrice, setUnitPrice] = useState('R$');
 
-  console.log({ unitPrice });
+  const [filters, setFilters] = useState([] as string[]);
+  const [orderBy, setOrderBy] = useState('');
+  const [orderByDir, setOrderByDir] = useState<'asc' | 'desc'>('asc');
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -21,12 +23,32 @@ export const Stock = () => {
     setName(itemInfos.name);
     setImage(itemInfos.image);
     setAmount(itemInfos.amount);
-    console.log('unitPrice', itemInfos.unitPrice.toString());
     setUnitPrice(`R$ ${itemInfos.unitPrice.toString()}`);
     setCategory(itemInfos.category);
 
     setIsEditModalOpen(true);
   }
+
+  function handleSortResultsItems({
+    direction,
+    property,
+  }: {
+    direction: 'asc' | 'desc';
+    property: string;
+  }) {
+    if (direction === 'asc') {
+      console.log(property);
+      return;
+    }
+
+    console.log('desc');
+  }
+
+  function handleToggleOrderByDir() {
+    setOrderByDir((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+  }
+
+  handleSortResultsItems({ direction: orderByDir, property: 'oid' });
 
   return (
     <>
@@ -47,7 +69,16 @@ export const Stock = () => {
         isEditModalOpen={isEditModalOpen}
         setIsEditModalOpen={setIsEditModalOpen}
       />
-      <StockLayout handleOpenEditModal={handleOpenEditModal} />;
+      <StockLayout
+        handleOpenEditModal={handleOpenEditModal}
+        filters={filters}
+        setFilters={setFilters}
+        orderBy={orderBy}
+        setOrderBy={setOrderBy}
+        handleToggleOrderByDir={handleToggleOrderByDir}
+        orderByDir={orderByDir}
+      />
+      ;
     </>
   );
 };

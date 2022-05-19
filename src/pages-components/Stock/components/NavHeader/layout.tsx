@@ -17,7 +17,7 @@ import { AiFillFilter } from 'react-icons/ai';
 import { BiSearchAlt2 } from 'react-icons/bi';
 import { CgSortAz } from 'react-icons/cg';
 
-const filtersOptions = ['imagem', 'nome', 'preço unid.', 'qntd'];
+const filtersOptions = ['imagem', 'nome', 'categoria', 'preço unid.', 'qntd'];
 
 interface CheckIsMenuItemChecked {
   menu: 'sort' | 'filter';

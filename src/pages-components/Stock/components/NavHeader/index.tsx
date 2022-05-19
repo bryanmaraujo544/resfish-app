@@ -1,10 +1,19 @@
-import { useState } from 'react';
 import { NavHeaderLayout } from './layout';
 
-export const NavHeader = () => {
+interface Props {
+  filters: string[];
+  setFilters: any;
+  orderBy: string;
+  setOrderBy: any;
+}
+
+export const NavHeader = ({
+  orderBy,
+  filters,
+  setOrderBy,
+  setFilters,
+}: Props) => {
   console.log('navheader');
-  const [filters, setFilters] = useState([] as string[]);
-  const [orderBy, setOrderBy] = useState('');
 
   function handleSetFilter(filter: string) {
     setFilters((prevFilters: string[]) => {
