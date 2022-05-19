@@ -97,6 +97,7 @@ export const StockLayout = ({
                           fontSize={16}
                           color="blue.800"
                           onClick={() => handleToggleOrderByDir()}
+                          cursor="pointer"
                         />
                       </motion.div>
                     )}

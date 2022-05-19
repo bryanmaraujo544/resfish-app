@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { StockLayout } from './layout';
 import { EditModal } from './components/EditModal';
@@ -18,6 +18,15 @@ export const Stock = () => {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+  useEffect(() => {
+    if (orderByDir === 'asc') {
+      console.log({ orderBy, orderByDir });
+      return;
+    }
+
+    console.log('é desc', { orderBy, orderByDir });
+  }, [orderByDir, orderBy]);
+
   function handleOpenEditModal(itemInfos: Item) {
     setId(itemInfos.id);
     setName(itemInfos.name);
@@ -29,26 +38,9 @@ export const Stock = () => {
     setIsEditModalOpen(true);
   }
 
-  function handleSortResultsItems({
-    direction,
-    property,
-  }: {
-    direction: 'asc' | 'desc';
-    property: string;
-  }) {
-    if (direction === 'asc') {
-      console.log(property);
-      return;
-    }
-
-    console.log('desc');
-  }
-
   function handleToggleOrderByDir() {
     setOrderByDir((prev) => (prev === 'asc' ? 'desc' : 'asc'));
   }
-
-  handleSortResultsItems({ direction: orderByDir, property: 'oid' });
 
   return (
     <>
