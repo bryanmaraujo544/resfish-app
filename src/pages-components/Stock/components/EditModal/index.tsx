@@ -29,6 +29,7 @@ export const EditModal = ({
     }); // 33,90 -> 33.90
     const isUnitPriceValid = Number(formattedUnitPrice) !== null; // 44.9 = true | 44,9 = false | 33,fd = false
 
+    console.log({ formattedUnitPrice });
     if (!isUnitPriceValid) {
       toast({
         status: 'error',
@@ -50,8 +51,6 @@ export const EditModal = ({
   function onClose() {
     setIsEditModalOpen(false);
   }
-
-  console.log(itemInfos.unitPrice);
 
   function handleChangeUnitPrice(e: any) {
     console.log(e.target.value);

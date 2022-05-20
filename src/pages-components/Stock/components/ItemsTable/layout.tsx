@@ -13,6 +13,7 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { FaArrowUp } from 'react-icons/fa';
+import { formatDecimalNum } from 'utils/formatDecimalNum';
 
 const stockColumns = [
   { text: 'Imagem', prop: 'image' },
@@ -115,7 +116,10 @@ export const ItemsTableLayout = ({
               <Td>{name}</Td>
               <Td>{category}</Td>
               <Td>{amount}</Td>
-              <Td>{unitPrice}</Td>
+              <Td>
+                R${' '}
+                {formatDecimalNum({ num: unitPrice.toString(), to: 'comma' })}
+              </Td>
             </Tr>
           ))}
         </Tbody>
