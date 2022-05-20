@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useMemo } from 'react';
 import { StockContext } from 'pages-components/Stock';
 import { ItemsTableLayout } from './layout';
@@ -54,8 +55,6 @@ export const ItemsTable = () => {
   const filteredBySort = useMemo(
     () =>
       filteredByFilter.sort((a: any, b: any) => {
-        console.log({ orderBy });
-        console.log(a);
         if (orderByDir === 'asc') {
           if (a[orderBy] < b[orderBy]) {
             return -1;
@@ -74,22 +73,22 @@ export const ItemsTable = () => {
         }
         return 0;
       }),
-    [orderBy, orderByDir]
+    [orderBy, orderByDir, filteredByFilter]
   );
 
   // console.log({ filteredByFilter });
 
-  // const filteredBySearch = useMemo(
-  //   () =>
-  //     mockProducts.filter((item) => {
-  //       const itemsArr = Object.values(item).join('');
-  //       if (itemsArr.includes(searchContent)) {
-  //         return true;
-  //       }
-  //       return false;
-  //     }),
-  //   [searchContent, filters, orderBy]
-  // );
+  const filteredBySearch = useMemo(
+    () =>
+      filteredBySort.filter((item) => {
+        const itemsArr = Object.values(item).join('').toLowerCase();
+        if (itemsArr.includes(searchContent.toLowerCase())) {
+          return true;
+        }
+        return false;
+      }),
+    [searchContent, filteredBySort, orderByDir]
+  );
 
   return (
     <ItemsTableLayout
@@ -97,7 +96,7 @@ export const ItemsTable = () => {
       orderByDir={orderByDir}
       handleOpenEditModal={handleOpenEditModal}
       handleToggleOrderByDir={handleToggleOrderByDir}
-      items={filteredBySort}
+      items={filteredBySearch}
     />
   );
 };
