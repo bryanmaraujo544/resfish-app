@@ -5,8 +5,8 @@ import { NavHeader } from './components/NavHeader';
 import { ItemsTable } from './components/ItemsTable';
 
 interface Props {
-  filters: string[];
-  setFilters: Dispatch<SetStateAction<string[]>>;
+  filters: string;
+  setFilters: Dispatch<SetStateAction<string>>;
   orderBy: string;
   setOrderBy: Dispatch<SetStateAction<string>>;
 }

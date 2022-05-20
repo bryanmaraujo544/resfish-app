@@ -17,25 +17,45 @@ import { AiFillFilter } from 'react-icons/ai';
 import { BiSearchAlt2 } from 'react-icons/bi';
 import { CgSortAz } from 'react-icons/cg';
 
-const filtersOptions = ['imagem', 'nome', 'categoria', 'preço unid.', 'qntd'];
+const sortOptions = [
+  { text: 'Imagem', prop: 'image' },
+  { text: 'Nome', prop: 'name' },
+  { text: 'Categoria', prop: 'category' },
+  { text: 'Preço unid.', prop: 'unitPrice' },
+  { text: 'Qntd', prop: 'amount' },
+];
+
+const filterOptions = [
+  'Pesca',
+  'Peixes',
+  'Bebidas',
+  'Pratos',
+  'Sobremesas',
+  'Porções',
+  'Doses',
+];
 
 interface CheckIsMenuItemChecked {
   menu: 'sort' | 'filter';
   item: string;
 }
 
-interface Props {
-  filters: string[];
+type Props = {
+  filters: string;
   orderBy: string;
   handleSetFilter: any;
   handleSetOrderBy: any;
-}
+  searchContent: string;
+  handleSearchItems: any;
+};
 
 export const NavHeaderLayout = ({
   filters,
   orderBy,
   handleSetFilter,
   handleSetOrderBy,
+  searchContent,
+  handleSearchItems,
 }: Props) => {
   const [whichMenuIsOpened, setWhichMenuIsOpened] = useState<
     'filter' | 'sort' | ''
@@ -53,9 +73,7 @@ export const NavHeaderLayout = ({
 
   function checkIsMenuItemChecked({ menu, item }: CheckIsMenuItemChecked) {
     if (menu === 'filter') {
-      return filters.some(
-        (filter) => filter.toLocaleLowerCase() === item.toLocaleLowerCase()
-      );
+      return item === filters;
     }
 
     return item === orderBy;
@@ -82,7 +100,7 @@ export const NavHeaderLayout = ({
           </MenuBtn>
           {whichMenuIsOpened === 'filter' && (
             <MenuItemsContainer>
-              {filtersOptions.map((text) => (
+              {filterOptions.map((text) => (
                 <ItemContainer
                   onClick={() => handleSetFilter(text)}
                   bg={
@@ -112,16 +130,16 @@ export const NavHeaderLayout = ({
           </MenuBtn>
           {whichMenuIsOpened === 'sort' && (
             <MenuItemsContainer>
-              {filtersOptions.map((text) => (
+              {sortOptions.map(({ text, prop }) => (
                 <ItemContainer
-                  onClick={() => handleSetOrderBy(text)}
+                  onClick={() => handleSetOrderBy(prop)}
                   bg={
-                    checkIsMenuItemChecked({ menu: 'sort', item: text })
+                    checkIsMenuItemChecked({ menu: 'sort', item: prop })
                       ? 'blue.300'
                       : 'none'
                   }
                   color={
-                    checkIsMenuItemChecked({ menu: 'sort', item: text })
+                    checkIsMenuItemChecked({ menu: 'sort', item: prop })
                       ? 'blue.50'
                       : 'blue.900'
                   }
@@ -150,6 +168,8 @@ export const NavHeaderLayout = ({
             }
           />
           <Input
+            value={searchContent}
+            onChange={(e) => handleSearchItems(e)}
             variant="filled"
             placeholder="Pesquise por um item"
             fontWeight={600}

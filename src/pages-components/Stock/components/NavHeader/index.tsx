@@ -1,8 +1,10 @@
+import { StockContext } from 'pages-components/Stock';
+import { useContext, Dispatch, SetStateAction } from 'react';
 import { NavHeaderLayout } from './layout';
 
 interface Props {
-  filters: string[];
-  setFilters: any;
+  filters: string;
+  setFilters: Dispatch<SetStateAction<string>>;
   orderBy: string;
   setOrderBy: any;
 }
@@ -14,17 +16,15 @@ export const NavHeader = ({
   setFilters,
 }: Props) => {
   console.log('navheader');
+  const { searchContent, setSearchContent } = useContext(StockContext);
 
   function handleSetFilter(filter: string) {
-    setFilters((prevFilters: string[]) => {
-      const alreadyHasFilter = prevFilters.some(
-        (text: string) => text === filter
-      );
-      if (alreadyHasFilter) {
-        return prevFilters.filter((text: string) => text !== filter);
+    setFilters((prevFilter: string) => {
+      if (prevFilter === filter) {
+        return '';
       }
 
-      return [...prevFilters, filter];
+      return filter;
     });
   }
 
@@ -38,12 +38,18 @@ export const NavHeader = ({
     });
   }
 
+  function handleSearchItems(e: any) {
+    setSearchContent(e.target.value);
+  }
+
   return (
     <NavHeaderLayout
       filters={filters}
       orderBy={orderBy}
       handleSetFilter={handleSetFilter}
       handleSetOrderBy={handleSetOrderBy}
+      searchContent={searchContent}
+      handleSearchItems={handleSearchItems}
     />
   );
 };

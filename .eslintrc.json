@@ -4,7 +4,7 @@
     "es2021": true,
     "node": true
   },
-  "extends": ["plugin:react/recommended", "airbnb", "prettier"],
+  "extends": ["plugin:react/recommended", "airbnb", "prettier", "next"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
@@ -23,7 +23,8 @@
     "import/extensions": "off",
     "react/jsx-no-bind": "off",
     "react/no-unescaped-entities": "off",
-    "no-use-before-define": "off"
+    "no-use-before-define": "off",
+    "import/no-cycle": "off"
   },
   "settings": {
     "import/resolver": {

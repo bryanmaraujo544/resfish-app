@@ -49,6 +49,7 @@ export const HeaderLayout = ({ handleLinkToPage }: Props) => {
       <Flex gap={4} w={['100%', null, 'auto']} justify="center">
         {headerButtons.map(({ text, icon: BtnIcon, path }) => (
           <Button
+            key={`header-btn-${path}`}
             onClick={() => handleLinkToPage(path)}
             alignItems="center"
             gap={[1, 1, 2]}
