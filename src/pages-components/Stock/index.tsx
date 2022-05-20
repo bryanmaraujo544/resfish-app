@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable react/jsx-no-constructed-context-values */
+import { createContext, useCallback, useEffect, useState } from 'react';
 
 import { StockLayout } from './layout';
 import { EditModal } from './components/EditModal';
 import type { Item } from './types/Item';
+
+export const StockContext = createContext({} as any);
 
 export const Stock = () => {
   const [id, setId] = useState(null as null | number | string);
@@ -38,12 +41,23 @@ export const Stock = () => {
     setIsEditModalOpen(true);
   }
 
-  function handleToggleOrderByDir() {
-    setOrderByDir((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-  }
+  const handleToggleOrderByDir = useCallback(
+    () => setOrderByDir((prev) => (prev === 'asc' ? 'desc' : 'asc')),
+    []
+  );
 
   return (
-    <>
+    <StockContext.Provider
+      value={{
+        filters,
+        setFilters,
+        orderBy,
+        setOrderBy,
+        orderByDir,
+        handleToggleOrderByDir,
+        handleOpenEditModal,
+      }}
+    >
       <EditModal
         itemInfos={{
           id,
@@ -62,15 +76,11 @@ export const Stock = () => {
         setIsEditModalOpen={setIsEditModalOpen}
       />
       <StockLayout
-        handleOpenEditModal={handleOpenEditModal}
         filters={filters}
         setFilters={setFilters}
         orderBy={orderBy}
         setOrderBy={setOrderBy}
-        handleToggleOrderByDir={handleToggleOrderByDir}
-        orderByDir={orderByDir}
       />
-      ;
-    </>
+    </StockContext.Provider>
   );
 };
