@@ -24,7 +24,8 @@
     "react/jsx-no-bind": "off",
     "react/no-unescaped-entities": "off",
     "no-use-before-define": "off",
-    "import/no-cycle": "off"
+    "import/no-cycle": "off",
+    "react/require-default-props": "off"
   },
   "settings": {
     "import/resolver": {

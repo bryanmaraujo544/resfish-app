@@ -4,7 +4,9 @@ import { Layout } from 'components/Layout';
 
 export const HomeLayout = () => (
   <Layout>
-    <Header />
+    <Header>
+      <p>home</p>
+    </Header>
     <Text>HomeLayout</Text>
   </Layout>
 );

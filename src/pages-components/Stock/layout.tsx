@@ -21,7 +21,7 @@ export const StockLayout = ({
 
   return (
     <Layout>
-      <Header />
+      <Header>'stock'</Header>
       <NavHeader
         filters={filters}
         setFilters={setFilters}

@@ -4,7 +4,7 @@ import { Layout } from 'components/Layout';
 
 export const KitchenLayout = () => (
   <Layout>
-    <Header />
+    <Header>'kitchen'</Header>
     <Text>Kitchen</Text>
   </Layout>
 );
