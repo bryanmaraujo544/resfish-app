@@ -13,9 +13,9 @@ interface Props {
 }
 
 export const EditModal = ({
-  itemInfos,
   isEditModalOpen,
   setIsEditModalOpen,
+  itemInfos,
 }: Props) => {
   const toast = useToast();
 
@@ -30,7 +30,6 @@ export const EditModal = ({
     const isUnitPriceValid =
       !!Number(formattedUnitPrice) || Number(formattedUnitPrice) === 0; // 44.9 = true | 44,9 = false | 33,fd = false
 
-    console.log({ formattedUnitPrice });
     if (!isUnitPriceValid) {
       toast({
         status: 'error',
@@ -46,6 +45,8 @@ export const EditModal = ({
       title: 'Item atualizado',
     });
     onClose();
+
+    console.log(itemInfos);
     // TODO: update the globalState
   }
 
@@ -54,7 +55,6 @@ export const EditModal = ({
   }
 
   function handleChangeUnitPrice(e: any) {
-    console.log(e.target.value);
     itemInfos.setUnitPrice(formatPrice(e.target.value));
   }
 

@@ -13,6 +13,10 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { FaArrowUp } from 'react-icons/fa';
+// import { AiOutlineDelete } from 'react-icons/ai';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { FiEdit2 } from 'react-icons/fi';
+
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 
 const stockColumns = [
@@ -83,6 +87,7 @@ export const ItemsTableLayout = ({
                 </Flex>
               </Th>
             ))}
+            <Th />
           </Tr>
         </Thead>
         <Tbody>
@@ -93,16 +98,6 @@ export const ItemsTableLayout = ({
               _hover={{
                 bg: 'blue.50',
               }}
-              onClick={() =>
-                handleOpenEditModal({
-                  name,
-                  image,
-                  id,
-                  amount,
-                  unitPrice,
-                  category,
-                })
-              }
             >
               <Td>
                 <Image
@@ -119,6 +114,31 @@ export const ItemsTableLayout = ({
               <Td>
                 R${' '}
                 {formatDecimalNum({ num: unitPrice.toString(), to: 'comma' })}
+              </Td>
+              <Td>
+                {/* <Button></Button> */}
+                <Flex gap={2} align="center" color="blue.800">
+                  <Icon
+                    onClick={() =>
+                      handleOpenEditModal({
+                        name,
+                        image,
+                        id,
+                        amount,
+                        unitPrice,
+                        category,
+                      })
+                    }
+                    as={FiEdit2}
+                    fontSize={[16, 18]}
+                    _hover={{ color: 'blue.500' }}
+                  />
+                  <Icon
+                    as={AiOutlineDelete}
+                    fontSize={[20, 22]}
+                    _hover={{ color: 'red.400' }}
+                  />
+                </Flex>
               </Td>
             </Tr>
           ))}

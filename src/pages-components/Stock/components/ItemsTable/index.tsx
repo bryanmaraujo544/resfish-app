@@ -1,7 +1,11 @@
+/* eslint-disable no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useMemo } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { StockContext } from 'pages-components/Stock';
+import { formatDecimalNum } from 'utils/formatDecimalNum';
+import { Item } from 'pages-components/Stock/types/Item';
 import { ItemsTableLayout } from './layout';
+import { EditModal } from '../EditModal';
 
 const mockProducts = [
   {
@@ -34,15 +38,22 @@ const mockProducts = [
 ];
 
 export const ItemsTable = () => {
+  const [id, setId] = useState(null as null | number | string);
+  const [name, setName] = useState('');
+  const [image, setImage] = useState('');
+  const [category, setCategory] = useState('');
+  const [amount, setAmount] = useState(null as null | number);
+  const [unitPrice, setUnitPrice] = useState('R$');
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   const {
-    handleOpenEditModal,
     handleToggleOrderByDir,
     orderByDir,
     orderBy,
     filters,
     searchContent,
   } = useContext(StockContext);
-  console.log('searchContent', searchContent);
 
   const filteredByFilter = useMemo(() => {
     const filtered = mockProducts.filter(
@@ -76,8 +87,6 @@ export const ItemsTable = () => {
     [orderBy, orderByDir, filteredByFilter]
   );
 
-  // console.log({ filteredByFilter });
-
   const filteredBySearch = useMemo(
     () =>
       filteredBySort.filter((item) => {
@@ -90,13 +99,48 @@ export const ItemsTable = () => {
     [searchContent, filteredBySort, orderByDir]
   );
 
+  const handleOpenEditModal = useCallback((itemInfos: Item) => {
+    setId(itemInfos.id);
+    setName(itemInfos.name);
+    setImage(itemInfos.image);
+    setAmount(itemInfos.amount);
+    setUnitPrice(
+      `R$ ${formatDecimalNum({
+        num: itemInfos.unitPrice.toString(),
+        to: 'comma',
+      })}`
+    );
+    setCategory(itemInfos.category);
+
+    setIsEditModalOpen(true);
+  }, []);
+
   return (
-    <ItemsTableLayout
-      orderBy={orderBy}
-      orderByDir={orderByDir}
-      handleOpenEditModal={handleOpenEditModal}
-      handleToggleOrderByDir={handleToggleOrderByDir}
-      items={filteredBySearch}
-    />
+    <>
+      <ItemsTableLayout
+        orderBy={orderBy}
+        orderByDir={orderByDir}
+        handleOpenEditModal={handleOpenEditModal}
+        handleToggleOrderByDir={handleToggleOrderByDir}
+        items={filteredBySearch}
+      />
+      <EditModal
+        isEditModalOpen={isEditModalOpen}
+        setIsEditModalOpen={setIsEditModalOpen}
+        itemInfos={{
+          id,
+          name,
+          setName,
+          category,
+          setCategory,
+          image,
+          setImage,
+          amount,
+          setAmount,
+          unitPrice,
+          setUnitPrice,
+        }}
+      />
+    </>
   );
 };
