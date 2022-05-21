@@ -11,6 +11,7 @@ import {
 import { StockLayout } from './layout';
 import { EditModal } from './components/EditModal';
 import type { Item } from './types/Item';
+import { AddItemModal } from './components/AddItemModal';
 
 type StockContextProps = {
   filters: string;
@@ -40,6 +41,7 @@ export const Stock = () => {
   const [searchContent, setSearchContent] = useState('');
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   useEffect(() => {
     if (orderByDir === 'asc') {
@@ -97,11 +99,16 @@ export const Stock = () => {
         isEditModalOpen={isEditModalOpen}
         setIsEditModalOpen={setIsEditModalOpen}
       />
+      <AddItemModal
+        isAddItemModalOpen={isAddItemModalOpen}
+        setIsAddItemModalOpen={setIsAddItemModalOpen}
+      />
       <StockLayout
         filters={filters}
         setFilters={setFilters}
         orderBy={orderBy}
         setOrderBy={setOrderBy}
+        setIsAddItemModalOpen={setIsAddItemModalOpen}
       />
     </StockContext.Provider>
   );

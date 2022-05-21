@@ -102,6 +102,7 @@ export const NavHeaderLayout = ({
             <MenuItemsContainer>
               {filterOptions.map((text) => (
                 <ItemContainer
+                  key={`filter-${text}`}
                   onClick={() => handleSetFilter(text)}
                   bg={
                     checkIsMenuItemChecked({ menu: 'filter', item: text })
@@ -132,6 +133,7 @@ export const NavHeaderLayout = ({
             <MenuItemsContainer>
               {sortOptions.map(({ text, prop }) => (
                 <ItemContainer
+                  key={`sort#${prop}`}
                   onClick={() => handleSetOrderBy(prop)}
                   bg={
                     checkIsMenuItemChecked({ menu: 'sort', item: prop })

@@ -109,7 +109,7 @@ export const HeaderLayout = ({
           <DrawerHeader>Menu</DrawerHeader>
 
           <DrawerBody>
-            <Flex direction="column" gap={[2, 4, 6]} mt={[2, 4, 6]}>
+            <Flex direction="column" gap={[6]} mt={[2, 4, 6]}>
               {headerButtons.map(({ text, icon: BtnIcon, path }) => (
                 <Button
                   key={`header-btn-${path}`}
@@ -130,7 +130,7 @@ export const HeaderLayout = ({
                     bg: 'blue.100',
                     color: 'blue.800',
                   }}
-                  h={[12]}
+                  h={[12, 14]}
                   w="100%"
                 >
                   <Icon as={BtnIcon} />

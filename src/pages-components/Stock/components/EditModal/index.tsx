@@ -27,7 +27,8 @@ export const EditModal = ({
       num: unitPrice,
       to: 'point',
     }); // 33,90 -> 33.90
-    const isUnitPriceValid = Number(formattedUnitPrice) !== null; // 44.9 = true | 44,9 = false | 33,fd = false
+    const isUnitPriceValid =
+      !!Number(formattedUnitPrice) || Number(formattedUnitPrice) === 0; // 44.9 = true | 44,9 = false | 33,fd = false
 
     console.log({ formattedUnitPrice });
     if (!isUnitPriceValid) {
