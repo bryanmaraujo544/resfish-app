@@ -1,7 +1,8 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-children-prop */
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import {
   Flex,
   Text,
@@ -63,9 +64,6 @@ export const NavHeaderLayout = ({
     'filter' | 'sort' | ''
   >('');
 
-  const sortMenuRef = useClickOutsideToClose(() => closeMenu());
-  const filterMenuRef = useClickOutsideToClose(() => closeMenu());
-
   function handleToggleFilterMenu() {
     setWhichMenuIsOpened((prevState) =>
       prevState === 'filter' ? '' : 'filter'
@@ -84,10 +82,20 @@ export const NavHeaderLayout = ({
     return item === orderBy;
   }
 
-  function closeMenu() {
-    setWhichMenuIsOpened('');
+  function closeSortMenu() {
+    if (whichMenuIsOpened === 'sort') {
+      setWhichMenuIsOpened('');
+    }
   }
 
+  function closeFilterMenu() {
+    if (whichMenuIsOpened === 'filter') {
+      setWhichMenuIsOpened('');
+    }
+  }
+
+  const sortMenuRef = useClickOutsideToClose(() => closeSortMenu());
+  const filterMenuRef = useClickOutsideToClose(() => closeFilterMenu());
   return (
     <Flex mb={8} w="100%">
       <Flex
@@ -132,14 +140,14 @@ export const NavHeaderLayout = ({
         </MenuBtnContainer>
 
         {/* Sort Button */}
-        <MenuBtnContainer>
-          <MenuBtn onClick={() => handleToggleSortMenu()} oi="oi">
+        <MenuBtnContainer className="MENY BTN SORT">
+          <MenuBtn onClick={() => handleToggleSortMenu()}>
             <Icon as={CgSortAz} fontSize={[16, 20, 24]} />
             Ordenar
             {orderBy && <Circle />}
           </MenuBtn>
           {whichMenuIsOpened === 'sort' && (
-            <MenuItemsContainer ref={sortMenuRef}>
+            <MenuItemsContainer className="ITEMS CONTAINER" ref={sortMenuRef}>
               {sortOptions.map(({ text, prop }) => (
                 <ItemContainer
                   key={`sort#${prop}`}
@@ -210,7 +218,7 @@ const MenuBtnContainer = (props: any) => (
     direction="column"
     w={['auto', 'auto', 200]}
     flex={[1, 1, 'auto']}
-    h={[10, 12, '100%']}
+    h={[10, 12, 'auto']}
     position="relative"
   >
     {props.children}
@@ -240,9 +248,10 @@ const MenuBtn = (props: any) => (
   </Button>
 );
 
-const MenuItemsContainer = (props: any) => (
+const MenuItemsContainer = forwardRef((props: any, ref: any) => (
   <Flex
     {...props}
+    ref={ref}
     position="absolute"
     direction="column"
     gap={0.5}
@@ -258,7 +267,7 @@ const MenuItemsContainer = (props: any) => (
   >
     {props.children}
   </Flex>
-);
+));
 
 const ItemContainer = (props: any) => (
   <>
