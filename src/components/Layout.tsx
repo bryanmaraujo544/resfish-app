@@ -6,5 +6,5 @@ interface Props {
 }
 
 export const Layout = ({ children }: Props) => (
-  <Box px={[8, 12, 14, 16]}>{children}</Box>
+  <Box px={[4, 8, 12, 14]}>{children}</Box>
 );

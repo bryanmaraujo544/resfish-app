@@ -67,7 +67,7 @@ export const NavHeaderLayout = ({
       <Box
         display={['grid', 'grid', 'flex']}
         gridTemplateColumns="repeat(2, 1fr)"
-        gap={4}
+        gap={[2, 4]}
         justifyContent="space-between"
         flexWrap="wrap"
       >
@@ -77,6 +77,7 @@ export const NavHeaderLayout = ({
             as={Button}
             bg="blue.50"
             color="blue.800"
+            fontSize={[12, 14, 16]}
             _hover={{
               bg: 'blue.100',
             }}
@@ -89,7 +90,7 @@ export const NavHeaderLayout = ({
             display="flex"
             gap={2}
           >
-            <Flex gap={2} alignItems="center">
+            <Flex gap={[1, 1, 2]} alignItems="center" justify="center">
               <Icon as={AiFillFilter} />
               Filtrar por
               {filter && <Square />}
@@ -99,6 +100,7 @@ export const NavHeaderLayout = ({
             {filterOptions.map((filterText) => (
               <>
                 <MenuItem
+                  key={`commands-${filterText}`}
                   onClick={() => handleChangeFilter(filterText)}
                   display="flex"
                   flexDir="column"
@@ -129,6 +131,7 @@ export const NavHeaderLayout = ({
             as={Button}
             bg="blue.50"
             color="blue.800"
+            fontSize={[12, 14, 16]}
             _hover={{
               bg: 'blue.100',
             }}
@@ -141,9 +144,9 @@ export const NavHeaderLayout = ({
             display="flex"
             flexDirection="row"
             alignItems="center"
-            justifyContent="space-between"
+            justifyContent="center"
           >
-            <Flex gap={2} alignItems="center">
+            <Flex gap={[1, 1, 2]} align="center" justify="center">
               <Icon as={BiSortAlt2} fontSize={[16, 18]} />
               Ordenar por
               {orderBy && <Square />}
@@ -153,6 +156,7 @@ export const NavHeaderLayout = ({
             {sortOptions.map(({ text, prop }) => (
               <>
                 <MenuItem
+                  key={`commands-${prop}`}
                   onClick={() => handleChangeOrderBy(prop)}
                   display="flex"
                   flexDir="column"
@@ -199,5 +203,12 @@ export const NavHeaderLayout = ({
 };
 
 const Square = () => (
-  <Box w={2} h={2} mt={1} ml={1} rounded={2} bg="blue.200" />
+  <Box
+    w={[1, 1, 2]}
+    h={[1, 1, 2]}
+    mt={[0, 0, 1]}
+    ml={[0, 0, 1]}
+    rounded={2}
+    bg="blue.200"
+  />
 );
