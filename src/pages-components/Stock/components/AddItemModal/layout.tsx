@@ -41,65 +41,58 @@ export const AddItemModalLayout = ({
   setImage,
   amount,
   setAmount,
-}: Props) => {
-  console.log('add item layout');
-  return (
-    <Modal
-      isOpen={isModalOpen}
-      title="Adicionar Item"
-      onClose={handleCloseModal}
+}: Props) => (
+  <Modal isOpen={isModalOpen} title="Adicionar Item" onClose={handleCloseModal}>
+    <FormControl
+      as="form"
+      onSubmit={(e) => handleSubmit(e)}
+      display="flex"
+      flexDirection="column"
+      gap={4}
     >
-      <FormControl
-        as="form"
-        onSubmit={(e) => handleSubmit(e)}
-        display="flex"
-        flexDirection="column"
-        gap={4}
+      <Input
+        placeholder="Nome do produto *"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <Input
+        placeholder="URL da imagem"
+        value={image}
+        onChange={(e) => setImage(e.target.value)}
+      />
+      <Input
+        placeholder="Categoria *"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+      />
+      <NumberInput
+        defaultValue={15}
+        precision={2}
+        step={5}
+        placeholder="Quantidade"
+        value={amount}
+        onChange={(value) => setAmount(Number(value))}
       >
-        <Input
-          placeholder="Nome do produto *"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <Input
-          placeholder="URL da imagem"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-        />
-        <Input
-          placeholder="Categoria *"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
-        <NumberInput
-          defaultValue={15}
-          precision={2}
-          step={5}
-          placeholder="Quantidade"
-          value={amount}
-          onChange={(value) => setAmount(Number(value))}
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
-        <Input
-          placeholder="R$ Preço da Unidade *"
-          value={unitPrice}
-          onChange={(e) => handleChangeUnitPrice(e)}
-        />
-        <Button
-          type="submit"
-          bg="blue.400"
-          color="white"
-          _hover={{ bg: 'blue.500' }}
-          _active={{ bg: 'blue.300' }}
-        >
-          Adicionar
-        </Button>
-      </FormControl>
-    </Modal>
-  );
-};
+        <NumberInputField />
+        <NumberInputStepper>
+          <NumberIncrementStepper />
+          <NumberDecrementStepper />
+        </NumberInputStepper>
+      </NumberInput>
+      <Input
+        placeholder="R$ Preço da Unidade *"
+        value={unitPrice}
+        onChange={(e) => handleChangeUnitPrice(e)}
+      />
+      <Button
+        type="submit"
+        bg="blue.400"
+        color="white"
+        _hover={{ bg: 'blue.500' }}
+        _active={{ bg: 'blue.300' }}
+      >
+        Adicionar
+      </Button>
+    </FormControl>
+  </Modal>
+);

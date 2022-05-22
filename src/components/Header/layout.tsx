@@ -53,7 +53,6 @@ export const HeaderLayout = ({
   children,
 }: Props) => {
   const { pathname } = useRouter();
-  console.log('pathname');
 
   return (
     <>
@@ -77,7 +76,7 @@ export const HeaderLayout = ({
           w={['100%', null, 'auto']}
           justify="center"
           align="center"
-          h={[8, 10, 12]}
+          h={[10, 12]}
         >
           {children}
           <Button

@@ -21,44 +21,40 @@ export const StockLayout = ({
   orderBy,
   setOrderBy,
   setIsAddItemModalOpen,
-}: Props) => {
-  console.log('oi');
-
-  return (
-    <Layout>
-      <Header>
-        <Button
-          onClick={() => setIsAddItemModalOpen(true)}
-          alignItems="center"
-          gap={[1, 1, 2]}
-          bg="blue.400"
-          color="blue.50"
-          boxShadow="base"
-          fontSize={['sm', 'md', 'lg']}
-          fontWeight={600}
-          p={[2, 4, 6]}
-          _hover={{
-            bg: 'blue.500',
-            color: 'blue.50',
-          }}
-          _active={{
-            bg: 'blue.400',
-            color: 'blue.50',
-          }}
-          h="100%"
-          w="100%"
-        >
-          <Icon as={MdOutlineAddBox} />
-          Adicionar Item
-        </Button>
-      </Header>
-      <NavHeader
-        filters={filters}
-        setFilters={setFilters}
-        orderBy={orderBy}
-        setOrderBy={setOrderBy}
-      />
-      <ItemsTable />
-    </Layout>
-  );
-};
+}: Props) => (
+  <Layout>
+    <Header>
+      <Button
+        onClick={() => setIsAddItemModalOpen(true)}
+        alignItems="center"
+        gap={[1, 1, 2]}
+        bg="blue.400"
+        color="blue.50"
+        boxShadow="base"
+        fontSize={['sm', 'md', 'lg']}
+        fontWeight={600}
+        p={[2, 4, 6]}
+        _hover={{
+          bg: 'blue.500',
+          color: 'blue.50',
+        }}
+        _active={{
+          bg: 'blue.400',
+          color: 'blue.50',
+        }}
+        h="100%"
+        w="100%"
+      >
+        <Icon as={MdOutlineAddBox} />
+        Adicionar Item
+      </Button>
+    </Header>
+    <NavHeader
+      filters={filters}
+      setFilters={setFilters}
+      orderBy={orderBy}
+      setOrderBy={setOrderBy}
+    />
+    <ItemsTable />
+  </Layout>
+);

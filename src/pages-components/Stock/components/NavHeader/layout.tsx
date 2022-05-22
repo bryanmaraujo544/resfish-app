@@ -164,7 +164,7 @@ export const NavHeaderLayout = ({
           boxSizing="border-box"
           gridColumnStart="1"
           gridColumnEnd="3"
-          h={[14, 14, '100%']}
+          h={[10, 12, '100%']}
         >
           <InputLeftElement
             pointerEvents="none"
@@ -209,7 +209,7 @@ const MenuBtnContainer = (props: any) => (
     direction="column"
     w={['auto', 'auto', 200]}
     flex={[1, 1, 'auto']}
-    h={[12, 12, '100%']}
+    h={[10, 12, '100%']}
     position="relative"
   >
     {props.children}

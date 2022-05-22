@@ -51,9 +51,7 @@ export const ItemsTableLayout = ({
   orderBy,
   items,
 }: LayoutProps) => {
-  console.log('items table layout');
   function isColumnSelectedToOrder(column: string) {
-    console.log({ column, orderBy });
     return column.toLocaleLowerCase() === orderBy.toLocaleLowerCase();
   }
 

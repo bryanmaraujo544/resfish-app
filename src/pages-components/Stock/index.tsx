@@ -4,7 +4,6 @@ import {
   Dispatch,
   SetStateAction,
   useCallback,
-  useEffect,
   useState,
 } from 'react';
 
@@ -31,15 +30,6 @@ export const Stock = () => {
   const [searchContent, setSearchContent] = useState('');
 
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (orderByDir === 'asc') {
-      console.log({ orderBy, orderByDir });
-      return;
-    }
-
-    console.log('é desc', { orderBy, orderByDir });
-  }, [orderByDir, orderBy]);
 
   const handleToggleOrderByDir = useCallback(
     () => setOrderByDir((prev) => (prev === 'asc' ? 'desc' : 'asc')),

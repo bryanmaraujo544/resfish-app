@@ -8,8 +8,6 @@ type Props = {
 };
 
 export const DeleteItemModal = ({ id, isModalOpen, setIsModalOpen }: Props) => {
-  console.log('delete', id);
-
   function handleCloseModal() {
     setIsModalOpen(false);
   }
