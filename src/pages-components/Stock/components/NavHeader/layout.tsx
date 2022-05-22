@@ -4,7 +4,6 @@
 import { useState } from 'react';
 import {
   Flex,
-  Button,
   Text,
   Icon,
   Divider,
@@ -16,6 +15,8 @@ import {
 import { AiFillFilter } from 'react-icons/ai';
 import { BiSearchAlt2 } from 'react-icons/bi';
 import { CgSortAz } from 'react-icons/cg';
+
+import { Button } from 'components/Button';
 import { useClickOutsideToClose } from 'hooks/useClickOutsideToClose';
 
 const sortOptions = [
@@ -221,8 +222,6 @@ const MenuBtn = (props: any) => (
     {...props}
     display="flex"
     alignItems="center"
-    width="100%"
-    h="100%"
     bg="blue.50"
     gap={2}
     boxShadow="base"
@@ -234,6 +233,8 @@ const MenuBtn = (props: any) => (
     _active={{
       bg: 'blue.50',
     }}
+    width="100%"
+    h="100%"
   >
     {props.children}
   </Button>

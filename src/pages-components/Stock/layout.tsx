@@ -1,7 +1,8 @@
 import { SetStateAction, Dispatch } from 'react';
-import { Button, Icon } from '@chakra-ui/react';
+import { Icon } from '@chakra-ui/react';
 import { MdOutlineAddBox } from 'react-icons/md';
 
+import { Button } from 'components/Button';
 import { Header } from 'components/Header';
 import { Layout } from 'components/Layout';
 import { NavHeader } from './components/NavHeader';
@@ -26,22 +27,7 @@ export const StockLayout = ({
     <Header>
       <Button
         onClick={() => setIsAddItemModalOpen(true)}
-        alignItems="center"
-        gap={[1, 1, 2]}
-        bg="blue.400"
-        color="blue.50"
-        boxShadow="base"
-        fontSize={['sm', 'md', 'lg']}
-        fontWeight={600}
-        p={[2, 4, 6]}
-        _hover={{
-          bg: 'blue.500',
-          color: 'blue.50',
-        }}
-        _active={{
-          bg: 'blue.400',
-          color: 'blue.50',
-        }}
+        isCallAction
         h="100%"
         w="100%"
       >
