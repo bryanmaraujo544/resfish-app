@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import {
   Flex,
   TableContainer,
-  // Text,
   Table,
   Th,
   Thead,
@@ -13,7 +12,6 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { FaArrowUp } from 'react-icons/fa';
-// import { AiOutlineDelete } from 'react-icons/ai';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { FiEdit2 } from 'react-icons/fi';
 
@@ -39,6 +37,7 @@ type Item = {
 type LayoutProps = {
   handleOpenEditModal: any;
   handleToggleOrderByDir: any;
+  handleOpenDeleteItemModal: any;
   orderByDir: 'asc' | 'desc';
   orderBy: string;
   items: Item[];
@@ -48,6 +47,7 @@ export const ItemsTableLayout = ({
   orderByDir,
   handleToggleOrderByDir,
   handleOpenEditModal,
+  handleOpenDeleteItemModal,
   orderBy,
   items,
 }: LayoutProps) => {
@@ -134,6 +134,7 @@ export const ItemsTableLayout = ({
                     _hover={{ color: 'blue.500' }}
                   />
                   <Icon
+                    onClick={() => handleOpenDeleteItemModal({ itemId: id })}
                     as={AiOutlineDelete}
                     fontSize={[20, 22]}
                     _hover={{ color: 'red.400' }}

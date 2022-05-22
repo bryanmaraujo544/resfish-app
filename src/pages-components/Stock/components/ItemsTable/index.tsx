@@ -6,6 +6,7 @@ import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { Item } from 'pages-components/Stock/types/Item';
 import { ItemsTableLayout } from './layout';
 import { EditModal } from '../EditModal';
+import { DeleteItemModal } from '../DeleteItemModal';
 
 const mockProducts = [
   {
@@ -46,6 +47,7 @@ export const ItemsTable = () => {
   const [unitPrice, setUnitPrice] = useState('R$');
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteItemModalOpen, setIsDeleteItemModalOpen] = useState(false);
 
   const {
     handleToggleOrderByDir,
@@ -115,6 +117,14 @@ export const ItemsTable = () => {
     setIsEditModalOpen(true);
   }, []);
 
+  const handleOpenDeleteItemModal = useCallback(
+    ({ itemId }: { itemId: string }) => {
+      setId(itemId);
+      setIsDeleteItemModalOpen(true);
+    },
+    []
+  );
+
   return (
     <>
       <ItemsTableLayout
@@ -122,6 +132,7 @@ export const ItemsTable = () => {
         orderByDir={orderByDir}
         handleOpenEditModal={handleOpenEditModal}
         handleToggleOrderByDir={handleToggleOrderByDir}
+        handleOpenDeleteItemModal={handleOpenDeleteItemModal}
         items={filteredBySearch}
       />
       <EditModal
@@ -140,6 +151,11 @@ export const ItemsTable = () => {
           unitPrice,
           setUnitPrice,
         }}
+      />
+      <DeleteItemModal
+        id={id}
+        isModalOpen={isDeleteItemModalOpen}
+        setIsModalOpen={setIsDeleteItemModalOpen}
       />
     </>
   );
