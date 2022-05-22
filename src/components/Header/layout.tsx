@@ -63,7 +63,7 @@ export const HeaderLayout = ({
         gap={6}
         flexDirection={['column', null, 'row']}
         py={[4, 6, 8, 10]}
-        mb={[8, 10, 12, 14, 16]}
+        mb={[1, 2]}
         w="100%"
       >
         <Box>

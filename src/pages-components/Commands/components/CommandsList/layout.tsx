@@ -11,28 +11,56 @@ import {
   Th,
   Thead,
   Tr,
+  Flex,
 } from '@chakra-ui/react';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { BiAddToQueue } from 'react-icons/bi';
 import { CgOptions } from 'react-icons/cg';
 import { FiEdit2 } from 'react-icons/fi';
+import { FaArrowUp } from 'react-icons/fa';
+
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 
-const listColumns = ['Mesa', 'Garçom', 'Total', ''];
+const listColumns = [
+  {
+    text: 'Mesa',
+    prop: 'table',
+  },
+  {
+    text: 'Garçom',
+    prop: 'waiter',
+  },
+  {
+    text: 'Total',
+    prop: 'total',
+  },
+  {
+    text: '',
+    prop: '*',
+  },
+];
 
 type Props = {
   items: any[];
+  orderBy: string;
 };
 
-export const CommandsListLayout = ({ items }: Props) => {
+export const CommandsListLayout = ({ items, orderBy }: Props) => {
   console.log('commands layout');
   return (
     <TableContainer>
-      <Table>
+      <Table variant="striped" colorScheme="blue">
         <Thead>
           <Tr>
-            {listColumns.map((listItem) => (
-              <Th key={`command-list-${listItem}`}>{listItem}</Th>
+            {listColumns.map(({ text: listItem, prop }) => (
+              <Th key={`command-list-${listItem}`}>
+                <Flex align="center" gap={2}>
+                  {listItem}{' '}
+                  {orderBy.toLowerCase() === prop.toLowerCase() && (
+                    <Icon as={FaArrowUp} />
+                  )}
+                </Flex>
+              </Th>
             ))}
           </Tr>
         </Thead>
@@ -44,10 +72,16 @@ export const CommandsListLayout = ({ items }: Props) => {
               <Td>
                 R$ {formatDecimalNum({ num: total.toString(), to: 'comma' })}
               </Td>
-              <Td>
+              <Td isNumeric>
                 <Menu>
-                  <MenuButton>
-                    <Icon as={CgOptions} fontSize={[14, 18]} color="blue.800" />
+                  <MenuButton
+                    p={1}
+                    rounded={4}
+                    _hover={{
+                      bg: 'blue.50',
+                    }}
+                  >
+                    <Icon as={CgOptions} fontSize={[16, 22]} color="blue.800" />
                   </MenuButton>
                   <MenuList>
                     <MenuItem icon={<BiAddToQueue />}>

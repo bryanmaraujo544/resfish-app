@@ -1,4 +1,4 @@
-import { Icon } from '@chakra-ui/react';
+import { Heading, Icon } from '@chakra-ui/react';
 import { MdPlaylistAdd } from 'react-icons/md';
 
 import { Button } from 'components/Button';
@@ -19,6 +19,9 @@ export const CommandsLayout = ({ handleOpenAddCommandModal }: Props) => (
         Adicionar Comanda
       </Button>
     </Header>
+    <Heading mb={8} color="blue.800" fontSize={[16, 20, 24, 32]}>
+      Comandas
+    </Heading>
     <NavHeader />
     <CommandsList />
   </Layout>

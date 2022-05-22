@@ -1,5 +1,5 @@
 import { SetStateAction, Dispatch } from 'react';
-import { Icon } from '@chakra-ui/react';
+import { Heading, Icon } from '@chakra-ui/react';
 import { MdOutlineAddBox } from 'react-icons/md';
 
 import { Button } from 'components/Button';
@@ -35,6 +35,9 @@ export const StockLayout = ({
         Adicionar Item
       </Button>
     </Header>
+    <Heading mb={8} color="blue.800" fontSize={[16, 20, 24, 32]}>
+      Estoque
+    </Heading>
     <NavHeader
       filters={filters}
       setFilters={setFilters}

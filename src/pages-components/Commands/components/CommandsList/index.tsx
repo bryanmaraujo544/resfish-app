@@ -1,3 +1,5 @@
+import { CommandsContext } from 'pages-components/Commands';
+import { useContext } from 'react';
 import { CommandsListLayout } from './layout';
 
 const mockCommands = [
@@ -41,6 +43,7 @@ const mockCommands = [
 
 export const CommandsList = () => {
   console.log('commands list');
+  const { orderBy } = useContext(CommandsContext);
 
-  return <CommandsListLayout items={mockCommands} />;
+  return <CommandsListLayout items={mockCommands} orderBy={orderBy} />;
 };
