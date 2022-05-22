@@ -1,10 +1,13 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/destructuring-assignment */
 
 import { Button as ChakraButton } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
-export const Button = (props: any) => (
+export const Button = forwardRef((props: any, ref: any) => (
   <ChakraButton
     {...props}
+    ref={ref}
     alignItems="center"
     gap={[1, 1, 2]}
     bg={props.isCallAction ? 'blue.400' : 'blue.50'}
@@ -24,4 +27,8 @@ export const Button = (props: any) => (
   >
     {props.children}
   </ChakraButton>
-);
+));
+
+// export const Button = (props: any) => (
+
+// );

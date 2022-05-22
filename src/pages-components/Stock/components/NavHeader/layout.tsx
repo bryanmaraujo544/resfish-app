@@ -14,8 +14,7 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { AiFillFilter } from 'react-icons/ai';
-import { BiSearchAlt2 } from 'react-icons/bi';
-import { CgSortAz } from 'react-icons/cg';
+import { BiSearchAlt2, BiSortAlt2 } from 'react-icons/bi';
 
 import { Button } from 'components/Button';
 import { useClickOutsideToClose } from 'hooks/useClickOutsideToClose';
@@ -142,7 +141,7 @@ export const NavHeaderLayout = ({
         {/* Sort Button */}
         <MenuBtnContainer className="MENY BTN SORT">
           <MenuBtn onClick={() => handleToggleSortMenu()}>
-            <Icon as={CgSortAz} fontSize={[16, 20, 24]} />
+            <Icon as={BiSortAlt2} fontSize={[16, 20, 24]} />
             Ordenar
             {orderBy && <Circle />}
           </MenuBtn>
@@ -169,6 +168,8 @@ export const NavHeaderLayout = ({
             </MenuItemsContainer>
           )}
         </MenuBtnContainer>
+
+        {/* Search */}
         <InputGroup
           boxSizing="border-box"
           gridColumnStart="1"
