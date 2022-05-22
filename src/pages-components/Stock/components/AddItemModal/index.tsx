@@ -23,7 +23,7 @@ export const AddItemModal = ({
 
   const handleCloseModal = useCallback(() => {
     setIsAddItemModalOpen(false);
-  }, []);
+  }, [setIsAddItemModalOpen]);
 
   function handleSubmit(e: any) {
     e.preventDefault();
@@ -35,11 +35,12 @@ export const AddItemModal = ({
       amount === undefined ||
       !unitPrice
     ) {
-      return toast({
+      toast({
         status: 'error',
         title: 'Preencha os campos necessários',
         isClosable: true,
       });
+      return;
     }
 
     const unitPriceNum = unitPrice.split(' ')[1];
@@ -48,10 +49,7 @@ export const AddItemModal = ({
       to: 'point',
     }); // 33,90 -> 33.90
 
-    console.log({ formattedUnitPriceStr });
-
     const formattedUnitPrice = Number(formattedUnitPriceStr);
-    console.log({ formattedUnitPrice });
 
     const isUnitPriceValid = !!formattedUnitPrice || formattedUnitPrice === 0; // 44.9 = true | 44,9 = false | 33,fd = false
     if (!isUnitPriceValid) {
