@@ -21,7 +21,6 @@ import { Button } from 'components/Button';
 import { useClickOutsideToClose } from 'hooks/useClickOutsideToClose';
 
 const sortOptions = [
-  { text: 'Imagem', prop: 'image' },
   { text: 'Nome', prop: 'name' },
   { text: 'Categoria', prop: 'category' },
   { text: 'Preço unid.', prop: 'unitPrice' },
@@ -31,11 +30,12 @@ const sortOptions = [
 const filterOptions = [
   'Pesca',
   'Peixes',
-  'Bebidas',
   'Pratos',
+  'Bebidas',
+  'Doses',
   'Sobremesas',
   'Porções',
-  'Doses',
+  'Misturas Congeladas',
 ];
 
 interface CheckIsMenuItemChecked {
