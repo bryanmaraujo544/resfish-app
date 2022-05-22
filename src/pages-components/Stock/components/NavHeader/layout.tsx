@@ -16,6 +16,7 @@ import {
 import { AiFillFilter } from 'react-icons/ai';
 import { BiSearchAlt2 } from 'react-icons/bi';
 import { CgSortAz } from 'react-icons/cg';
+import { useClickOutsideToClose } from 'hooks/useClickOutsideToClose';
 
 const sortOptions = [
   { text: 'Imagem', prop: 'image' },
@@ -61,6 +62,9 @@ export const NavHeaderLayout = ({
     'filter' | 'sort' | ''
   >('');
 
+  const sortMenuRef = useClickOutsideToClose(() => closeMenu());
+  const filterMenuRef = useClickOutsideToClose(() => closeMenu());
+
   function handleToggleFilterMenu() {
     setWhichMenuIsOpened((prevState) =>
       prevState === 'filter' ? '' : 'filter'
@@ -77,6 +81,10 @@ export const NavHeaderLayout = ({
     }
 
     return item === orderBy;
+  }
+
+  function closeMenu() {
+    setWhichMenuIsOpened('');
   }
 
   return (
@@ -99,7 +107,7 @@ export const NavHeaderLayout = ({
             {filters.length > 0 && <Circle />}
           </MenuBtn>
           {whichMenuIsOpened === 'filter' && (
-            <MenuItemsContainer>
+            <MenuItemsContainer ref={filterMenuRef}>
               {filterOptions.map((text) => (
                 <ItemContainer
                   key={`filter-${text}`}
@@ -130,7 +138,7 @@ export const NavHeaderLayout = ({
             {orderBy && <Circle />}
           </MenuBtn>
           {whichMenuIsOpened === 'sort' && (
-            <MenuItemsContainer>
+            <MenuItemsContainer ref={sortMenuRef}>
               {sortOptions.map(({ text, prop }) => (
                 <ItemContainer
                   key={`sort#${prop}`}
