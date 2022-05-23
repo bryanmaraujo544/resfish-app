@@ -5,7 +5,7 @@ import { ReactNode, useState } from 'react';
 import { HeaderLayout } from './layout';
 
 type Props = {
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 export const Header = ({ children }: Props) => {

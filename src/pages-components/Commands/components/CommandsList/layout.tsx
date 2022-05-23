@@ -55,6 +55,7 @@ export const CommandsListLayout = ({
   handleToggleOrderByDir,
 }: Props) => {
   console.log('commands layout');
+
   return (
     <TableContainer>
       <Table variant="striped" colorScheme="blue">
