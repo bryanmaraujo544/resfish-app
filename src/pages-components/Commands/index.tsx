@@ -9,8 +9,9 @@ export const CommandsContext = createContext({} as ContextProps);
 export const Commands = () => {
   const [filter, setFilter] = useState('');
   const [orderBy, setOrderBy] = useState('');
+  const [orderByDir, setOrderByDir] = useState('asc' as 'asc' | 'desc');
+  const [searchContent, setSearchContent] = useState('');
 
-  console.log('Commands');
   const [isAddCommandModalOpen, setIsAddCommandModalOpen] = useState(false);
 
   function handleOpenAddCommandModal() {
@@ -23,8 +24,12 @@ export const Commands = () => {
       setFilter,
       orderBy,
       setOrderBy,
+      orderByDir,
+      setOrderByDir,
+      searchContent,
+      setSearchContent,
     }),
-    [filter, orderBy]
+    [filter, orderBy, orderByDir, searchContent]
   );
 
   return (

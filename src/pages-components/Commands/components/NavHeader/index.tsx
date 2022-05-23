@@ -3,10 +3,14 @@ import { useCallback, useContext } from 'react';
 import { NavHeaderLayout } from './layout';
 
 export const NavHeader = () => {
-  const { filter, setFilter, orderBy, setOrderBy } =
-    useContext(CommandsContext);
-
-  console.log({ filter, orderBy });
+  const {
+    filter,
+    setFilter,
+    orderBy,
+    setOrderBy,
+    searchContent,
+    setSearchContent,
+  } = useContext(CommandsContext);
 
   const handleChangeFilter = useCallback(
     (newFilter: string) => {
@@ -27,6 +31,8 @@ export const NavHeader = () => {
       handleChangeOrderBy={handleChangeOrderBy}
       filter={filter}
       orderBy={orderBy}
+      searchContent={searchContent}
+      setSearchContent={setSearchContent}
     />
   );
 };

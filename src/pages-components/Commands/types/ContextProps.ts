@@ -5,4 +5,8 @@ export type ContextProps = {
   setFilter: Dispatch<SetStateAction<string>>;
   orderBy: string;
   setOrderBy: Dispatch<SetStateAction<string>>;
+  orderByDir: 'asc' | 'desc';
+  setOrderByDir: Dispatch<SetStateAction<'asc' | 'desc'>>;
+  searchContent: string;
+  setSearchContent: Dispatch<SetStateAction<string>>;
 };

@@ -13,6 +13,7 @@ import {
   Tr,
   Flex,
 } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { BiAddToQueue } from 'react-icons/bi';
 import { CgOptions } from 'react-icons/cg';
@@ -43,9 +44,16 @@ const listColumns = [
 type Props = {
   items: any[];
   orderBy: string;
+  orderByDir: 'asc' | 'desc';
+  handleToggleOrderByDir: () => void;
 };
 
-export const CommandsListLayout = ({ items, orderBy }: Props) => {
+export const CommandsListLayout = ({
+  items,
+  orderBy,
+  orderByDir,
+  handleToggleOrderByDir,
+}: Props) => {
   console.log('commands layout');
   return (
     <TableContainer>
@@ -57,7 +65,18 @@ export const CommandsListLayout = ({ items, orderBy }: Props) => {
                 <Flex align="center" gap={2}>
                   {listItem}{' '}
                   {orderBy.toLowerCase() === prop.toLowerCase() && (
-                    <Icon as={FaArrowUp} />
+                    <motion.div
+                      onClick={() => handleToggleOrderByDir()}
+                      style={{
+                        transform:
+                          orderByDir === 'asc'
+                            ? 'rotate(0deg)'
+                            : 'rotate(180deg)',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <Icon as={FaArrowUp} fontSize={14} />
+                    </motion.div>
                   )}
                 </Flex>
               </Th>

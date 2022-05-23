@@ -1,4 +1,5 @@
 /* eslint-disable react/no-children-prop */
+import { Dispatch, SetStateAction } from 'react';
 import {
   Divider,
   Flex,
@@ -40,6 +41,8 @@ type Props = {
   handleChangeOrderBy: (newOrderBy: string) => void;
   filter: string;
   orderBy: string;
+  searchContent: string;
+  setSearchContent: Dispatch<SetStateAction<string>>;
 };
 
 export const NavHeaderLayout = ({
@@ -47,6 +50,8 @@ export const NavHeaderLayout = ({
   handleChangeOrderBy,
   filter,
   orderBy,
+  searchContent,
+  setSearchContent,
 }: Props) => {
   const isFilterItemSelected = (filterText: string) => {
     const isSelected =
@@ -181,6 +186,8 @@ export const NavHeaderLayout = ({
 
         {/* Search Bar */}
         <Input
+          value={searchContent}
+          onChange={(e) => setSearchContent(e.target.value)}
           flex={3}
           placeholder="Encontrar comanda..."
           minWidth={64}
