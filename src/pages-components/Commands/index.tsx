@@ -12,6 +12,8 @@ export const Commands = () => {
   const [orderByDir, setOrderByDir] = useState('asc' as 'asc' | 'desc');
   const [searchContent, setSearchContent] = useState('');
 
+  console.log('commands rendered');
+
   const [isAddCommandModalOpen, setIsAddCommandModalOpen] = useState(false);
 
   function handleOpenAddCommandModal() {

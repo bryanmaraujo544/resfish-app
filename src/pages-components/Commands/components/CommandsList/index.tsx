@@ -81,13 +81,14 @@ export const CommandsList = () => {
 
   const filteredBySearch = useMemo(() => {
     const filtered = filteredBySort.filter((command) => {
-      const commandStr = Object.values(command).join('');
-      if (commandStr.includes(searchContent)) {
+      const commandStr = Object.values(command).join('').toLowerCase();
+      if (commandStr.includes(searchContent.toLowerCase())) {
         return true;
       }
       return false;
     });
     return filtered;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchContent, filteredBySort, orderByDir]);
 
   return (

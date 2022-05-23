@@ -66,7 +66,6 @@ export const NavHeaderLayout = ({
 
     return isSelected;
   };
-  console.log('nav header');
   return (
     <Flex direction="column" gap={4} mb={10}>
       <Box
