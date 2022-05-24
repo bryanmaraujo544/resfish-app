@@ -1,4 +1,7 @@
 import {
+  Flex,
+  Icon,
+  Button,
   Table,
   TableContainer,
   Thead,
@@ -6,7 +9,10 @@ import {
   Th,
   Tbody,
   Td,
+  Text,
 } from '@chakra-ui/react';
+import { BsPlus, BsDash, BsFillTrashFill } from 'react-icons/bs';
+
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 
 const columns = [
@@ -16,7 +22,7 @@ const columns = [
   },
   {
     text: 'Quantidade',
-    prop: 'name',
+    prop: 'amount',
   },
   {
     text: 'Preço Unid',
@@ -28,7 +34,11 @@ const columns = [
   },
 ];
 
-export const ProductsListLayout = ({ products }: any) => (
+export const ProductsListLayout = ({
+  products,
+  handleOpenDeleteModal,
+  productsDispatch,
+}: any) => (
   <TableContainer mt={16}>
     <Table>
       <Thead>
@@ -39,10 +49,42 @@ export const ProductsListLayout = ({ products }: any) => (
         </Tr>
       </Thead>
       <Tbody>
-        {products.map(({ name, amount, unitPrice }: any) => (
+        {products?.map(({ id, name, amount, unitPrice }: any) => (
           <Tr key={`product-list${name}`} h={20}>
             <Td>{name}</Td>
-            <Td>{amount}</Td>
+            <Td>
+              <Flex gap={4}>
+                <Icon
+                  as={BsDash}
+                  fontSize={[20, 22, 24]}
+                  rounded={2}
+                  bg="gray.50"
+                  boxShadow="sm"
+                  cursor="pointer"
+                  _hover={{ bg: 'blue.100' }}
+                  _active={{ bg: 'blue.50' }}
+                />
+                <Text>{amount}</Text>
+                <Icon
+                  onClick={() =>
+                    productsDispatch({
+                      type: 'increment-amount',
+                      payload: {
+                        id,
+                      },
+                    })
+                  }
+                  as={BsPlus}
+                  fontSize={[20, 22, 24]}
+                  rounded={2}
+                  bg="gray.50"
+                  boxShadow="sm"
+                  cursor="pointer"
+                  _hover={{ bg: 'blue.100' }}
+                  _active={{ bg: 'blue.50' }}
+                />
+              </Flex>
+            </Td>
             <Td>
               R$ {formatDecimalNum({ num: unitPrice.toString(), to: 'comma' })}
             </Td>
@@ -52,6 +94,11 @@ export const ProductsListLayout = ({ products }: any) => (
                 num: (amount * unitPrice).toString(),
                 to: 'comma',
               })}
+            </Td>
+            <Td isNumeric>
+              <Button bg="red.50" p={0} onClick={() => handleOpenDeleteModal()}>
+                <Icon as={BsFillTrashFill} color="red.600" />
+              </Button>
             </Td>
           </Tr>
         ))}

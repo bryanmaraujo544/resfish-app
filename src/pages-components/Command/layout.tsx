@@ -15,7 +15,7 @@ export const CommandLayout = ({ command }: Props) => {
       <Header />
       <Heading color="blue.800">Comanda: {command?.table}</Heading>
       <NavHeader />
-      <ProductsList products={command?.products} />
+      <ProductsList />
     </Layout>
   );
 };

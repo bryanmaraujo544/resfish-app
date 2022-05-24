@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useMemo, useReducer, useState } from 'react';
+import { DeleteProductModal } from './DeleteProductModal';
 import { CommandLayout } from './layout';
 
 const mockCommands = [
@@ -9,16 +10,19 @@ const mockCommands = [
     total: 458.9,
     products: [
       {
+        id: 'coca123',
         name: 'Coca-Cola',
         amount: 5,
         unitPrice: 7.9,
       },
       {
+        id: 'fritas123',
         name: 'Porção Batata Frita',
         amount: 2,
         unitPrice: 32.5,
       },
       {
+        id: 'peixe123',
         name: 'Peixe Baiacu',
         amount: 3,
         unitPrice: 24.5,
@@ -57,19 +61,81 @@ const mockCommands = [
   },
 ];
 
+type ContextProps = {
+  products: { value: any[] };
+  productsDispatch: any;
+};
+
+export const CommandContext = createContext({} as ContextProps);
+
 type Props = {
   commandId: string | string[] | undefined;
 };
 
+const initialState = {
+  value: [] as any[],
+};
+
+const reducer = (state: any, action: any) => {
+  switch (action.type) {
+    case 'add-products': {
+      return { value: action.payload };
+    }
+    case 'add':
+      return { value: [...state.value, action.payload] };
+    case 'increment-amount': {
+      const newState = state.value.map((product: any) => {
+        if (product.id === action.payload.id) {
+          return { ...product, amount: product.amount + 1 };
+        }
+        return product;
+      });
+      return { value: [...newState] };
+    }
+    default:
+      throw new Error('This type is invalid');
+  }
+};
+
 export const Command = ({ commandId }: Props) => {
   const [command, setCommand] = useState({});
+  const [products, productsDispatch] = useReducer(reducer, initialState);
+
+  console.log('products', products);
+
+  // const [productIdToDelete, setCommandIdToDelete] = useState('');
+
+  const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
+    useState(false);
 
   useEffect(() => {
     const [commandFound] = mockCommands.filter(
       ({ id }) => id.toString() === commandId
     );
     setCommand(commandFound);
+
+    productsDispatch({ type: 'add-products', payload: commandFound?.products });
   }, [commandId]);
 
-  return <CommandLayout command={command} />;
+  // Create the context to share the value of product id to delete and function
+  // to open modal and assing these values based on product clicked
+
+  const ctxValues = useMemo(
+    () => ({
+      productsDispatch,
+      products,
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [products, productsDispatch, commandId]
+  );
+
+  return (
+    <CommandContext.Provider value={ctxValues}>
+      <CommandLayout command={command} />
+      <DeleteProductModal
+        isModalOpen={isDeleteProductModalOpen}
+        setIsModalOpen={setIsDeleteProductModalOpen}
+      />
+    </CommandContext.Provider>
+  );
 };
