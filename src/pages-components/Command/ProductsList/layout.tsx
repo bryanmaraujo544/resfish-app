@@ -36,8 +36,9 @@ const columns = [
 
 export const ProductsListLayout = ({
   products,
+  handleIncrementProductAmount,
+  handleDecrementProductAmount,
   handleOpenDeleteModal,
-  productsDispatch,
 }: any) => (
   <TableContainer mt={16}>
     <Table>
@@ -55,6 +56,7 @@ export const ProductsListLayout = ({
             <Td>
               <Flex gap={4}>
                 <Icon
+                  onClick={() => handleDecrementProductAmount({ id })}
                   as={BsDash}
                   fontSize={[20, 22, 24]}
                   rounded={2}
@@ -66,14 +68,7 @@ export const ProductsListLayout = ({
                 />
                 <Text>{amount}</Text>
                 <Icon
-                  onClick={() =>
-                    productsDispatch({
-                      type: 'increment-amount',
-                      payload: {
-                        id,
-                      },
-                    })
-                  }
+                  onClick={() => handleIncrementProductAmount({ id })}
                   as={BsPlus}
                   fontSize={[20, 22, 24]}
                   rounded={2}
@@ -91,12 +86,16 @@ export const ProductsListLayout = ({
             <Td>
               R${' '}
               {formatDecimalNum({
-                num: (amount * unitPrice).toString(),
+                num: (amount * unitPrice).toFixed(2).toString(),
                 to: 'comma',
               })}
             </Td>
             <Td isNumeric>
-              <Button bg="red.50" p={0} onClick={() => handleOpenDeleteModal()}>
+              <Button
+                bg="red.50"
+                p={0}
+                onClick={() => handleOpenDeleteModal({ productId: id })}
+              >
                 <Icon as={BsFillTrashFill} color="red.600" />
               </Button>
             </Td>

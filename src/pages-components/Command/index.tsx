@@ -1,4 +1,13 @@
-import { createContext, useEffect, useMemo, useReducer, useState } from 'react';
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react';
 import { DeleteProductModal } from './DeleteProductModal';
 import { CommandLayout } from './layout';
 
@@ -64,6 +73,12 @@ const mockCommands = [
 type ContextProps = {
   products: { value: any[] };
   productsDispatch: any;
+  isDeleteProductModalOpen: boolean;
+  setIsDeleteProductModalOpen: Dispatch<SetStateAction<boolean>>;
+  productIdToDelete: string;
+  setProductIdToDelete: Dispatch<SetStateAction<string>>;
+  // eslint-disable-next-line no-unused-vars
+  handleOpenDeleteModal: ({ productId }: { productId: string }) => void;
 };
 
 export const CommandContext = createContext({} as ContextProps);
@@ -92,6 +107,25 @@ const reducer = (state: any, action: any) => {
       });
       return { value: [...newState] };
     }
+    case 'decrement-amount': {
+      const newState = state.value.map((product: any) => {
+        if (product.id === action.payload.id) {
+          return {
+            ...product,
+            amount: product.amount > 0 ? product.amount - 1 : product.amount,
+          };
+        }
+        return product;
+      });
+      return { value: [...newState] };
+    }
+    case 'delete': {
+      console.log('DELETE DISPATCH WAS CALLED', action);
+      const newState = state.value.filter(
+        (product: any) => product.id !== action.payload.id
+      );
+      return { value: newState };
+    }
     default:
       throw new Error('This type is invalid');
   }
@@ -101,9 +135,7 @@ export const Command = ({ commandId }: Props) => {
   const [command, setCommand] = useState({});
   const [products, productsDispatch] = useReducer(reducer, initialState);
 
-  console.log('products', products);
-
-  // const [productIdToDelete, setCommandIdToDelete] = useState('');
+  const [productIdToDelete, setProductIdToDelete] = useState('');
 
   const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
     useState(false);
@@ -120,13 +152,32 @@ export const Command = ({ commandId }: Props) => {
   // Create the context to share the value of product id to delete and function
   // to open modal and assing these values based on product clicked
 
+  const handleOpenDeleteModal = useCallback(
+    ({ productId }: { productId: string }) => {
+      setProductIdToDelete(productId);
+      setIsDeleteProductModalOpen(true);
+    },
+    []
+  );
+
   const ctxValues = useMemo(
     () => ({
       productsDispatch,
       products,
+      isDeleteProductModalOpen,
+      setIsDeleteProductModalOpen,
+      productIdToDelete,
+      setProductIdToDelete,
+      handleOpenDeleteModal,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [products, productsDispatch, commandId]
+    [
+      products,
+      productsDispatch,
+      commandId,
+      productIdToDelete,
+      isDeleteProductModalOpen,
+    ]
   );
 
   return (
