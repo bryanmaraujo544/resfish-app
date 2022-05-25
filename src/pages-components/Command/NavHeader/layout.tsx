@@ -28,16 +28,16 @@ const filterOptions = [
 
 const sortOptions = [
   {
-    text: 'Mesa',
-    prop: 'table',
+    text: 'Nome',
+    prop: 'name',
   },
   {
-    text: 'Garçom',
-    prop: 'waiter',
+    text: 'Quantidade',
+    prop: 'amount',
   },
   {
-    text: 'Total',
-    prop: 'total',
+    text: 'Preço Unid',
+    prop: 'unitPrice',
   },
 ];
 

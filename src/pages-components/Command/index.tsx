@@ -26,6 +26,13 @@ const mockCommands = [
         unitPrice: 7.9,
       },
       {
+        id: 'skol123',
+        name: 'Skol 700ml',
+        category: 'Bebidas',
+        amount: 12,
+        unitPrice: 5.5,
+      },
+      {
         id: 'fritas123',
         name: 'Porção Batata Frita',
         category: 'Porções',
@@ -86,8 +93,8 @@ type ContextProps = {
   setFilter: Dispatch<SetStateAction<string>>;
   orderBy: string;
   setOrderBy: Dispatch<SetStateAction<string>>;
-  orderByDir: string;
-  setOrderByDir: Dispatch<SetStateAction<string>>;
+  orderByDir: 'asc' | 'desc';
+  setOrderByDir: Dispatch<SetStateAction<'asc' | 'desc'>>;
   searchContent: string;
   setSearchContent: Dispatch<SetStateAction<string>>;
 };
@@ -150,7 +157,7 @@ export const Command = ({ commandId }: Props) => {
 
   const [filter, setFilter] = useState('');
   const [orderBy, setOrderBy] = useState('');
-  const [orderByDir, setOrderByDir] = useState('');
+  const [orderByDir, setOrderByDir] = useState('' as 'asc' | 'desc');
   const [searchContent, setSearchContent] = useState('');
 
   const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =

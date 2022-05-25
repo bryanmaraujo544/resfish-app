@@ -1,12 +1,20 @@
-import { useContext, useMemo } from 'react';
+import { useContext, useMemo, useCallback } from 'react';
 import { CommandContext } from '..';
 import { ProductsListLayout } from './layout';
 
 type Id = { id: string };
 
 export const ProductsList = () => {
-  const { products, productsDispatch, handleOpenDeleteModal, filter } =
-    useContext(CommandContext);
+  const {
+    products,
+    productsDispatch,
+    handleOpenDeleteModal,
+    filter,
+    orderBy,
+    orderByDir,
+    setOrderByDir,
+    searchContent,
+  } = useContext(CommandContext);
 
   function handleIncrementProductAmount({ id }: Id) {
     // Logic to diminish the amount of this product on the stock
@@ -38,6 +46,10 @@ export const ProductsList = () => {
     }
   }
 
+  const handleToggleOrderByDir = useCallback(() => {
+    setOrderByDir((prev: string) => (prev === 'asc' ? 'desc' : 'asc'));
+  }, [setOrderByDir]);
+
   const filteredByFilter = useMemo(() => {
     const filtered = products?.value?.filter(
       ({ category }) => category === filter
@@ -45,12 +57,50 @@ export const ProductsList = () => {
     return filter ? filtered : products.value;
   }, [filter, products.value]);
 
+  const filteredBySearch = useMemo(() => {
+    const filtered = filteredByFilter?.filter((product) => {
+      const productValuesStr = Object.values(product).join('').toLowerCase();
+      if (productValuesStr.includes(searchContent.toLowerCase())) {
+        return true;
+      }
+      return false;
+    });
+    return filtered;
+  }, [filteredByFilter, searchContent]);
+
+  const filteredBySort = useMemo(() => {
+    const filtered = filteredBySearch?.sort((a: any, b: any) => {
+      if (orderByDir === 'asc') {
+        if (a[orderBy] < b[orderBy]) {
+          return -1;
+        }
+        if (b[orderBy] < a[orderBy]) {
+          return 1;
+        }
+        return 0;
+      }
+
+      if (a[orderBy] > b[orderBy]) {
+        return -1;
+      }
+      if (b[orderBy] > a[orderBy]) {
+        return 1;
+      }
+      return 0;
+    });
+
+    return filtered;
+  }, [orderByDir, filteredBySearch, orderBy]);
+
   return (
     <ProductsListLayout
-      products={filteredByFilter}
+      products={filteredBySort}
       handleIncrementProductAmount={handleIncrementProductAmount}
       handleDecrementProductAmount={handleDecrementProductAmount}
       handleOpenDeleteModal={handleOpenDeleteModal}
+      orderBy={orderBy}
+      orderByDir={orderByDir}
+      handleToggleOrderByDir={handleToggleOrderByDir}
     />
   );
 };

@@ -11,10 +11,12 @@ import {
   Td,
   Text,
 } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { BsPlus, BsDash, BsFillTrashFill } from 'react-icons/bs';
 import { BiSad } from 'react-icons/bi';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
+import { FaArrowUp } from 'react-icons/fa';
 
 const columns = [
   {
@@ -35,18 +37,53 @@ const columns = [
   },
 ];
 
+type Props = {
+  products: any[];
+  // eslint-disable-next-line no-unused-vars
+  handleIncrementProductAmount: ({ id }: { id: string }) => void;
+  // eslint-disable-next-line no-unused-vars
+  handleDecrementProductAmount: ({ id }: { id: string }) => void;
+  // eslint-disable-next-line no-unused-vars
+  handleOpenDeleteModal: ({ productId }: { productId: string }) => void;
+  handleToggleOrderByDir: () => void;
+
+  orderBy: string;
+  orderByDir: 'asc' | 'desc';
+};
+
 export const ProductsListLayout = ({
   products,
   handleIncrementProductAmount,
   handleDecrementProductAmount,
   handleOpenDeleteModal,
-}: any) => (
+  orderBy,
+  orderByDir,
+  handleToggleOrderByDir,
+}: Props) => (
   <TableContainer mt={16}>
     <Table>
       <Thead>
         <Tr>
           {columns.map(({ text, prop }) => (
-            <Th key={`products-list-header${prop}`}>{text}</Th>
+            <Th key={`products-list-header${prop}`}>
+              <Flex align="center" gap={2}>
+                {text}
+                {orderBy.toLowerCase() === prop.toLowerCase() && (
+                  <motion.div
+                    onClick={() => handleToggleOrderByDir()}
+                    style={{
+                      transform:
+                        orderByDir === 'asc'
+                          ? 'rotate(0deg)'
+                          : 'rotate(180deg)',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <Icon as={FaArrowUp} fontSize={14} />
+                  </motion.div>
+                )}
+              </Flex>
+            </Th>
           ))}
         </Tr>
       </Thead>
