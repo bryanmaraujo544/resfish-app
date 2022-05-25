@@ -58,7 +58,7 @@ export const CommandsListLayout = ({
 
   return (
     <TableContainer>
-      <Table variant="striped" colorScheme="blue">
+      <Table variant="striped" colorScheme="gray">
         <Thead>
           <Tr>
             {listColumns.map(({ text: listItem, prop }) => (

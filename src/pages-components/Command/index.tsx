@@ -1,10 +1,10 @@
+/* eslint-disable react/jsx-no-constructed-context-values */
 import {
   createContext,
   Dispatch,
   SetStateAction,
   useCallback,
   useEffect,
-  useMemo,
   useReducer,
   useState,
 } from 'react';
@@ -21,18 +21,21 @@ const mockCommands = [
       {
         id: 'coca123',
         name: 'Coca-Cola',
+        category: 'Bebidas',
         amount: 5,
         unitPrice: 7.9,
       },
       {
         id: 'fritas123',
         name: 'Porção Batata Frita',
+        category: 'Porções',
         amount: 2,
         unitPrice: 32.5,
       },
       {
         id: 'peixe123',
         name: 'Peixe Baiacu',
+        category: 'Peixes',
         amount: 3,
         unitPrice: 24.5,
       },
@@ -79,6 +82,14 @@ type ContextProps = {
   setProductIdToDelete: Dispatch<SetStateAction<string>>;
   // eslint-disable-next-line no-unused-vars
   handleOpenDeleteModal: ({ productId }: { productId: string }) => void;
+  filter: string;
+  setFilter: Dispatch<SetStateAction<string>>;
+  orderBy: string;
+  setOrderBy: Dispatch<SetStateAction<string>>;
+  orderByDir: string;
+  setOrderByDir: Dispatch<SetStateAction<string>>;
+  searchContent: string;
+  setSearchContent: Dispatch<SetStateAction<string>>;
 };
 
 export const CommandContext = createContext({} as ContextProps);
@@ -137,6 +148,11 @@ export const Command = ({ commandId }: Props) => {
 
   const [productIdToDelete, setProductIdToDelete] = useState('');
 
+  const [filter, setFilter] = useState('');
+  const [orderBy, setOrderBy] = useState('');
+  const [orderByDir, setOrderByDir] = useState('');
+  const [searchContent, setSearchContent] = useState('');
+
   const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
     useState(false);
 
@@ -160,28 +176,26 @@ export const Command = ({ commandId }: Props) => {
     []
   );
 
-  const ctxValues = useMemo(
-    () => ({
-      productsDispatch,
-      products,
-      isDeleteProductModalOpen,
-      setIsDeleteProductModalOpen,
-      productIdToDelete,
-      setProductIdToDelete,
-      handleOpenDeleteModal,
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      products,
-      productsDispatch,
-      commandId,
-      productIdToDelete,
-      isDeleteProductModalOpen,
-    ]
-  );
-
   return (
-    <CommandContext.Provider value={ctxValues}>
+    <CommandContext.Provider
+      value={{
+        productsDispatch,
+        products,
+        isDeleteProductModalOpen,
+        setIsDeleteProductModalOpen,
+        productIdToDelete,
+        setProductIdToDelete,
+        handleOpenDeleteModal,
+        filter,
+        setFilter,
+        orderBy,
+        setOrderBy,
+        orderByDir,
+        setOrderByDir,
+        searchContent,
+        setSearchContent,
+      }}
+    >
       <CommandLayout command={command} />
       <DeleteProductModal
         isModalOpen={isDeleteProductModalOpen}

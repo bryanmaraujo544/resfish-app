@@ -13,7 +13,9 @@ export const CommandLayout = ({ command }: Props) => {
   return (
     <Layout>
       <Header />
-      <Heading color="blue.800">Comanda: {command?.table}</Heading>
+      <Heading color="blue.800" mb={5} fontSize={32}>
+        Comanda: {command?.table}
+      </Heading>
       <NavHeader />
       <ProductsList />
     </Layout>

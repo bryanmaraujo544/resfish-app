@@ -1,14 +1,12 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { CommandContext } from '..';
 import { ProductsListLayout } from './layout';
 
 type Id = { id: string };
 
 export const ProductsList = () => {
-  const { products, productsDispatch, handleOpenDeleteModal } =
+  const { products, productsDispatch, handleOpenDeleteModal, filter } =
     useContext(CommandContext);
-  console.log('products list', products);
-  // console.log('products list');
 
   function handleIncrementProductAmount({ id }: Id) {
     // Logic to diminish the amount of this product on the stock
@@ -40,9 +38,16 @@ export const ProductsList = () => {
     }
   }
 
+  const filteredByFilter = useMemo(() => {
+    const filtered = products?.value?.filter(
+      ({ category }) => category === filter
+    );
+    return filter ? filtered : products.value;
+  }, [filter, products.value]);
+
   return (
     <ProductsListLayout
-      products={products.value}
+      products={filteredByFilter}
       handleIncrementProductAmount={handleIncrementProductAmount}
       handleDecrementProductAmount={handleDecrementProductAmount}
       handleOpenDeleteModal={handleOpenDeleteModal}
