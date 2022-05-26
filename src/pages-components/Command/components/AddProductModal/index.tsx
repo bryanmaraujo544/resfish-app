@@ -1,3 +1,4 @@
+import { useToast } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
@@ -44,6 +45,8 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   const [productToSetAmount, setProductToSetAmount] = useState({} as any);
   const [amount, setAmount] = useState(0);
 
+  const toast = useToast();
+
   function handleCloseModal() {
     setIsModalOpen(false);
   }
@@ -51,12 +54,23 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   // This function add in selected products list. Takes the object with infos based on the click of the user,
   // and add the amount propertie containing the amount selected by the user in modal
   function handleAddProduct() {
-    // check if the product has already been selected;
-    // check if there are enough amount of product selected in stock
+    // TODO: check if there are enough amount of product selected in stock
+    const hasBeenSelected = selectedProducts.some(
+      (selectedProduct: any) => selectedProduct.name === productToSetAmount.name
+    );
+    if (hasBeenSelected) {
+      toast({
+        title: 'Produto já foi selecionado',
+        status: 'warning',
+      });
+      setIsSetAmountModalOpen(false);
+      return;
+    }
     setSelectedProducts((prev: any) => [
       ...prev,
       { ...productToSetAmount, amount },
     ]);
+    setIsSetAmountModalOpen(false);
   }
 
   // This function receives the product infos of the product clicked and opens the modal to select the amount of this
