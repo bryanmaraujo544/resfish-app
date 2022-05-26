@@ -175,9 +175,6 @@ export const Command = ({ commandId }: Props) => {
     productsDispatch({ type: 'add-products', payload: commandFound?.products });
   }, [commandId]);
 
-  // Create the context to share the value of product id to delete and function
-  // to open modal and assing these values based on product clicked
-
   const handleOpenDeleteModal = useCallback(
     ({ productId }: { productId: string }) => {
       setProductIdToDelete(productId);

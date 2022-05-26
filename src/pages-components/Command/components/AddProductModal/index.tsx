@@ -1,5 +1,6 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { AddProductModalLayout } from './layout';
+import { SetAmountModal } from './SetAmountModal';
 
 const mockProducts = [
   {
@@ -37,15 +38,50 @@ type Props = {
 };
 
 export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
+  const [selectedProducts, setSelectedProducts] = useState([] as any);
+
+  const [isSetAmountModalOpen, setIsSetAmountModalOpen] = useState(false);
+  const [productToSetAmount, setProductToSetAmount] = useState({} as any);
+  const [amount, setAmount] = useState(0);
+
   function handleCloseModal() {
     setIsModalOpen(false);
   }
 
+  // This function add in selected products list. Takes the object with infos based on the click of the user,
+  // and add the amount propertie containing the amount selected by the user in modal
+  function handleAddProduct() {
+    // check if the product has already been selected;
+    // check if there are enough amount of product selected in stock
+    setSelectedProducts((prev: any) => [
+      ...prev,
+      { ...productToSetAmount, amount },
+    ]);
+  }
+
+  // This function receives the product infos of the product clicked and opens the modal to select the amount of this
+  function handleOpenAmountModal({ product }: { product: any }) {
+    setProductToSetAmount(product);
+    setIsSetAmountModalOpen(true);
+  }
+
   return (
-    <AddProductModalLayout
-      isModalOpen={isModalOpen}
-      handleCloseModal={handleCloseModal}
-      products={mockProducts}
-    />
+    <>
+      <AddProductModalLayout
+        products={mockProducts}
+        isModalOpen={isModalOpen}
+        handleCloseModal={handleCloseModal}
+        selectedProducts={selectedProducts}
+        handleOpenAmountModal={handleOpenAmountModal}
+      />
+      {/* Set amount of product modal */}
+      <SetAmountModal
+        isSetAmountModalOpen={isSetAmountModalOpen}
+        setIsSetAmountModalOpen={setIsSetAmountModalOpen}
+        amount={amount}
+        setAmount={setAmount}
+        handleAddProduct={handleAddProduct}
+      />
+    </>
   );
 };

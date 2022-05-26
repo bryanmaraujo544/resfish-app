@@ -7,7 +7,6 @@ const Command: NextPage = () => {
   const {
     query: { id },
   } = useRouter();
-  console.log({ id });
 
   return <CommandComponent commandId={id} />;
 };

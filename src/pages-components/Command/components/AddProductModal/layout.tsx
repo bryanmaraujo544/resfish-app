@@ -11,6 +11,8 @@ import {
   MenuList,
   MenuItem,
   Button,
+  Flex,
+  Text,
   Table,
   TableContainer,
   Thead,
@@ -40,12 +42,16 @@ type Props = {
   isModalOpen: boolean;
   handleCloseModal: () => void;
   products: any[];
+  selectedProducts: any[];
+  handleOpenAmountModal: any;
 };
 
 export const AddProductModalLayout = ({
   isModalOpen,
   handleCloseModal,
   products,
+  selectedProducts,
+  handleOpenAmountModal,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -75,6 +81,17 @@ export const AddProductModalLayout = ({
         </InputGroup>
       </Grid>
 
+      {/* Products selected */}
+      <Grid gridTemplateColumns="repeat(2, 1fr)">
+        {selectedProducts.map(({ id, name, amount }) => (
+          <Flex key={`selected-product-${id}`}>
+            <Text>{name}</Text>
+            <Text>{amount}</Text>
+          </Flex>
+        ))}
+      </Grid>
+
+      {/* List of products to add in command */}
       <TableContainer>
         <Table w="100%" mt={[2, 4]}>
           <Thead>
@@ -92,7 +109,17 @@ export const AddProductModalLayout = ({
                 <Td>{amount}</Td>
                 <Td>{unitPrice}</Td>
                 <Td isNumeric>
-                  <Button colorScheme="blue" bg="blue.400">
+                  <Button
+                    colorScheme="blue"
+                    bg="blue.400"
+                    onClick={
+                      () =>
+                        handleOpenAmountModal({
+                          product: { id, name, unitPrice },
+                        })
+                      // handleAddProduct({ id, name, unitPrice, amount })
+                    }
+                  >
                     Adicionar
                   </Button>
                 </Td>

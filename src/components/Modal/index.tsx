@@ -8,14 +8,23 @@ interface Props {
   onClose: any;
   size?: string;
   children: ReactNode;
+  initialFocusRef?: any;
 }
 
-export const Modal = ({ title, isOpen, onClose, children, size }: Props) => (
+export const Modal = ({
+  title,
+  isOpen,
+  onClose,
+  children,
+  size,
+  initialFocusRef,
+}: Props) => (
   <ModalLayout
     title={title}
     isOpen={isOpen}
     onClose={onClose}
     children={children}
     size={size}
+    initialFocusRef={initialFocusRef}
   />
 );

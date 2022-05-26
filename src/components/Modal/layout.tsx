@@ -13,6 +13,7 @@ interface Props {
   isOpen: boolean;
   onClose: any;
   children: ReactNode;
+  initialFocusRef: any;
   size?: string;
 }
 
@@ -21,9 +22,16 @@ export const ModalLayout = ({
   isOpen,
   onClose,
   size,
+  initialFocusRef,
   children,
 }: Props) => (
-  <Modal isOpen={isOpen} onClose={onClose} isCentered size={size || 'lg'}>
+  <Modal
+    isOpen={isOpen}
+    onClose={onClose}
+    isCentered
+    size={size || 'lg'}
+    initialFocusRef={initialFocusRef}
+  >
     <ModalOverlay bg="blackAlpha.500" backdropFilter="blur(3px)" />
     <ModalContent py={2} mx={2}>
       <ModalHeader>{title}</ModalHeader>
