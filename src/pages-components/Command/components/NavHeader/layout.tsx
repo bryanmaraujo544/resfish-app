@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
 import { AiFillFilter } from 'react-icons/ai';
-import { BiSortAlt2 } from 'react-icons/bi';
+import { BiAddToQueue, BiSortAlt2 } from 'react-icons/bi';
 
 const filterOptions = [
   'Pesca',
@@ -50,6 +50,7 @@ type Props = {
   orderBy: string;
   searchContent: string;
   setSearchContent: Dispatch<SetStateAction<string>>;
+  handleOpenAddProductModal: () => void;
 };
 
 export const NavHeaderLayout = ({
@@ -59,6 +60,7 @@ export const NavHeaderLayout = ({
   orderBy,
   searchContent,
   setSearchContent,
+  handleOpenAddProductModal,
 }: Props) => {
   const isFilterItemSelected = (filterText: string) => {
     const isSelected =
@@ -203,6 +205,26 @@ export const NavHeaderLayout = ({
           variant="filled"
           bg="blue.50"
         />
+
+        <Button
+          onClick={() => handleOpenAddProductModal()}
+          bg="blue.400"
+          color="blue.50"
+          _hover={{
+            bg: 'blue.500',
+          }}
+          _active={{
+            bg: 'blue.300',
+          }}
+          display="flex"
+          alignItems="center"
+          gap={2}
+          gridColumnStart={1}
+          gridColumnEnd={3}
+        >
+          Adicionar Produto
+          <Icon as={BiAddToQueue} />
+        </Button>
       </Box>
       {filter && (
         <Text fontSize={[12, 14]} color="blue.700">

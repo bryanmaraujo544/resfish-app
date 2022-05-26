@@ -1,5 +1,5 @@
 import { useContext, useMemo, useCallback } from 'react';
-import { CommandContext } from '..';
+import { CommandContext } from '../../index';
 import { ProductsListLayout } from './layout';
 
 type Id = { id: string };
@@ -29,7 +29,7 @@ export const ProductsList = () => {
 
   function handleDecrementProductAmount({ id }: Id) {
     const amountOfProduct = products.value.find(
-      (product) => product.id === id
+      (product: any) => product.id === id
     ).amount;
 
     if (amountOfProduct === 1) {
@@ -52,13 +52,13 @@ export const ProductsList = () => {
 
   const filteredByFilter = useMemo(() => {
     const filtered = products?.value?.filter(
-      ({ category }) => category === filter
+      ({ category }: { category: string }) => category === filter
     );
     return filter ? filtered : products.value;
   }, [filter, products.value]);
 
   const filteredBySearch = useMemo(() => {
-    const filtered = filteredByFilter?.filter((product) => {
+    const filtered = filteredByFilter?.filter((product: any) => {
       const productValuesStr = Object.values(product).join('').toLowerCase();
       if (productValuesStr.includes(searchContent.toLowerCase())) {
         return true;

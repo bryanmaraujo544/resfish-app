@@ -6,14 +6,16 @@ interface Props {
   title: string;
   isOpen: boolean;
   onClose: any;
+  size?: string;
   children: ReactNode;
 }
 
-export const Modal = ({ title, isOpen, onClose, children }: Props) => (
+export const Modal = ({ title, isOpen, onClose, children, size }: Props) => (
   <ModalLayout
     title={title}
     isOpen={isOpen}
     onClose={onClose}
     children={children}
+    size={size}
   />
 );

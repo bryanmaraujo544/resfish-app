@@ -8,7 +8,8 @@ import {
   useReducer,
   useState,
 } from 'react';
-import { DeleteProductModal } from './DeleteProductModal';
+import { AddProductModal } from './components/AddProductModal';
+import { DeleteProductModal } from './components/DeleteProductModal';
 import { CommandLayout } from './layout';
 
 const mockCommands = [
@@ -87,6 +88,7 @@ type ContextProps = {
   setIsDeleteProductModalOpen: Dispatch<SetStateAction<boolean>>;
   productIdToDelete: string;
   setProductIdToDelete: Dispatch<SetStateAction<string>>;
+  setIsAddProductModalOpen: Dispatch<SetStateAction<boolean>>;
   // eslint-disable-next-line no-unused-vars
   handleOpenDeleteModal: ({ productId }: { productId: string }) => void;
   filter: string;
@@ -160,6 +162,7 @@ export const Command = ({ commandId }: Props) => {
   const [orderByDir, setOrderByDir] = useState('' as 'asc' | 'desc');
   const [searchContent, setSearchContent] = useState('');
 
+  const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
     useState(false);
 
@@ -190,6 +193,7 @@ export const Command = ({ commandId }: Props) => {
         products,
         isDeleteProductModalOpen,
         setIsDeleteProductModalOpen,
+        setIsAddProductModalOpen,
         productIdToDelete,
         setProductIdToDelete,
         handleOpenDeleteModal,
@@ -207,6 +211,10 @@ export const Command = ({ commandId }: Props) => {
       <DeleteProductModal
         isModalOpen={isDeleteProductModalOpen}
         setIsModalOpen={setIsDeleteProductModalOpen}
+      />
+      <AddProductModal
+        isModalOpen={isAddProductModalOpen}
+        setIsModalOpen={setIsAddProductModalOpen}
       />
     </CommandContext.Provider>
   );

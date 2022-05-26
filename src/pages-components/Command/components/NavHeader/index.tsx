@@ -1,5 +1,5 @@
 import { useContext, useCallback } from 'react';
-import { CommandContext } from '..';
+import { CommandContext } from '../../index';
 import { NavHeaderLayout } from './layout';
 
 export const NavHeader = () => {
@@ -11,6 +11,7 @@ export const NavHeader = () => {
     setOrderBy,
     searchContent,
     setSearchContent,
+    setIsAddProductModalOpen,
   } = useContext(CommandContext);
 
   const handleChangeFilter = useCallback(
@@ -27,6 +28,10 @@ export const NavHeader = () => {
     [setOrderBy]
   );
 
+  const handleOpenAddProductModal = useCallback(() => {
+    setIsAddProductModalOpen(true);
+  }, []);
+
   return (
     <NavHeaderLayout
       filter={filter}
@@ -35,6 +40,7 @@ export const NavHeader = () => {
       handleChangeOrderBy={handleChangeOrderBy}
       handleChangeFilter={handleChangeFilter}
       setSearchContent={setSearchContent}
+      handleOpenAddProductModal={handleOpenAddProductModal}
     />
   );
 };

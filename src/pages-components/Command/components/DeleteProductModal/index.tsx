@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useContext } from 'react';
-import { CommandContext } from '..';
+import { CommandContext } from '../../index';
 import { DeleteProductModalLayout } from './layout';
 
 type Props = {
