@@ -1,5 +1,6 @@
 import { useToast } from '@chakra-ui/react';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { CommandContext } from 'pages-components/Command';
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
 
@@ -43,8 +44,10 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
 
   const [isSetAmountModalOpen, setIsSetAmountModalOpen] = useState(false);
   const [productToSetAmount, setProductToSetAmount] = useState({} as any);
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(1);
 
+  const { productsDispatch, products: commandProducts } =
+    useContext(CommandContext);
   const toast = useToast();
 
   function handleCloseModal() {
@@ -85,6 +88,27 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     );
   }
 
+  function handleAddProductsInCommand() {
+    const hasSomeSelectedProductInCommand = commandProducts.value.find(
+      (product) =>
+        selectedProducts.some(
+          (selectedProduct: any) => selectedProduct.name === product.name
+        )
+    );
+
+    if (hasSomeSelectedProductInCommand) {
+      toast({
+        title: `O produto: ${hasSomeSelectedProductInCommand.name} já está na comanda`,
+        status: 'error',
+      });
+      return;
+    }
+    selectedProducts.forEach((product: any) => {
+      productsDispatch({ type: 'add', payload: product });
+    });
+    handleCloseModal();
+  }
+
   return (
     <>
       <AddProductModalLayout
@@ -94,6 +118,7 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         selectedProducts={selectedProducts}
         handleOpenAmountModal={handleOpenAmountModal}
         handleRemoveSelectedProduct={handleRemoveSelectedProduct}
+        handleAddProductsInCommand={handleAddProductsInCommand}
       />
       {/* Set amount of product modal */}
       <SetAmountModal

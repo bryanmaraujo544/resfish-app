@@ -26,6 +26,7 @@ export const SetAmountModalLayout = ({
   handleAddProduct,
 }: Props) => {
   const inputRef = useRef(null);
+
   return (
     <Modal
       isOpen={isModalOpen}
@@ -36,8 +37,10 @@ export const SetAmountModalLayout = ({
       <Stack spacing={4}>
         <NumberInput
           value={amount}
-          min={0}
+          min={1}
           onChange={(numStr) => setAmount(Number(numStr))}
+          color="blue.800"
+          fontWeight={700}
         >
           <NumberInputField ref={inputRef} />
           <NumberInputStepper>

@@ -47,6 +47,7 @@ type Props = {
   handleOpenAmountModal: any;
   // eslint-disable-next-line no-unused-vars
   handleRemoveSelectedProduct: ({ id }: { id: string }) => void;
+  handleAddProductsInCommand: () => void;
 };
 
 export const AddProductModalLayout = ({
@@ -56,6 +57,7 @@ export const AddProductModalLayout = ({
   selectedProducts,
   handleOpenAmountModal,
   handleRemoveSelectedProduct,
+  handleAddProductsInCommand,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -160,9 +162,12 @@ export const AddProductModalLayout = ({
           </Tbody>
         </Table>
       </TableContainer>
-      <Button colorScheme="red" onClick={() => handleCloseModal()}>
-        Cancelar
-      </Button>
+      <Grid gridTemplateColumns={['1fr', '1fr 1fr']} gap={4}>
+        <Button onClick={() => handleCloseModal()}>Cancelar</Button>
+        <Button onClick={() => handleAddProductsInCommand()} colorScheme="blue">
+          Adicionar Produtos
+        </Button>
+      </Grid>
     </Stack>
 
     {/* <h1>Add Product</h1> */}
