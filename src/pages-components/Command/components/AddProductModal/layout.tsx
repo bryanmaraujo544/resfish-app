@@ -1,4 +1,5 @@
 /* eslint-disable react/no-children-prop */
+import { Dispatch, SetStateAction } from 'react';
 import {
   InputGroup,
   InputLeftElement,
@@ -6,6 +7,7 @@ import {
   Icon,
   Input,
   Grid,
+  Box,
   Menu,
   MenuButton,
   MenuList,
@@ -21,7 +23,7 @@ import {
   Tr,
   Td,
 } from '@chakra-ui/react';
-import { BiSearchAlt } from 'react-icons/bi';
+import { BiSad, BiSearchAlt } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
 
 import { Modal } from 'components/Modal';
@@ -48,6 +50,11 @@ type Props = {
   // eslint-disable-next-line no-unused-vars
   handleRemoveSelectedProduct: ({ id }: { id: string }) => void;
   handleAddProductsInCommand: () => void;
+  filter: string;
+  searchContent: string;
+  setSearchContent: Dispatch<SetStateAction<string>>;
+  // eslint-disable-next-line no-unused-vars
+  handleChangeFilter: (selectedFilter: string) => void;
 };
 
 export const AddProductModalLayout = ({
@@ -58,6 +65,10 @@ export const AddProductModalLayout = ({
   handleOpenAmountModal,
   handleRemoveSelectedProduct,
   handleAddProductsInCommand,
+  filter,
+  handleChangeFilter,
+  searchContent,
+  setSearchContent,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -67,12 +78,34 @@ export const AddProductModalLayout = ({
   >
     <Stack spacing={[4, 6]}>
       {/* Header */}
-      <Grid gridTemplateColumns={['1fr', '1fr 2fr']} gap={[2, 4]}>
+      <Grid gridTemplateColumns={['1fr', '1fr 3fr']} gap={[2, 4]}>
         <Menu>
-          <MenuButton as={Button}>Filtrar</MenuButton>
-          <MenuList overflow="scroll">
+          <MenuButton
+            bg="blue.50"
+            color="blue.800"
+            _active={{
+              bg: 'blue.300',
+              color: 'white',
+            }}
+            as={Button}
+          >
+            <Flex align="center" justify="center" gap={[1, 3]}>
+              Filtrar
+              {filter && <Square />}
+            </Flex>
+          </MenuButton>
+          <MenuList overflow="scroll" bg="blue.50" p={2}>
             {filterOptions.map((filterText) => (
-              <MenuItem key={`add-product-filter-${filterText}`}>
+              <MenuItem
+                key={`add-product-filter-${filterText}`}
+                onClick={() => handleChangeFilter(filterText)}
+                bg={filter === filterText ? 'blue.300' : 'none'}
+                color={filter === filterText ? 'white' : 'blue.800'}
+                rounded={4}
+                _focus={{
+                  bg: 'blue.100',
+                }}
+              >
                 {filterText}
               </MenuItem>
             ))}
@@ -83,7 +116,11 @@ export const AddProductModalLayout = ({
             pointerEvents="none"
             children={<Icon as={BiSearchAlt} />}
           />
-          <Input placeholder="Pesquise por algum produto" />
+          <Input
+            placeholder="Pesquise por algum produto"
+            value={searchContent}
+            onChange={(e) => setSearchContent(e.target.value)}
+          />
         </InputGroup>
       </Grid>
 
@@ -137,28 +174,41 @@ export const AddProductModalLayout = ({
             </Tr>
           </Thead>
           <Tbody>
-            {products?.map(({ id, name, unitPrice, amount }) => (
-              <Tr key={`add-product-modal-product-${id}`}>
-                <Td>{name}</Td>
-                <Td>{amount}</Td>
-                <Td>{unitPrice}</Td>
-                <Td isNumeric>
-                  <Button
-                    colorScheme="blue"
-                    bg="blue.400"
-                    onClick={
-                      () =>
-                        handleOpenAmountModal({
-                          product: { id, name, unitPrice },
-                        })
-                      // handleAddProduct({ id, name, unitPrice, amount })
-                    }
-                  >
-                    Adicionar
-                  </Button>
+            {products?.length > 0 &&
+              products?.map(({ id, name, unitPrice, amount }) => (
+                <Tr key={`add-product-modal-product-${id}`}>
+                  <Td>{name}</Td>
+                  <Td>{amount}</Td>
+                  <Td>{unitPrice}</Td>
+                  <Td isNumeric>
+                    <Button
+                      colorScheme="blue"
+                      bg="blue.400"
+                      onClick={
+                        () =>
+                          handleOpenAmountModal({
+                            product: { id, name, unitPrice },
+                          })
+                        // handleAddProduct({ id, name, unitPrice, amount })
+                      }
+                    >
+                      Adicionar
+                    </Button>
+                  </Td>
+                </Tr>
+              ))}
+            {products?.length === 0 && (
+              <Tr>
+                <Td>
+                  <Flex align="center" gap={4} mt={4} color="blue.700">
+                    <Icon as={BiSad} fontSize={32} />
+                    <Text fontSize={20} fontWeight={600}>
+                      Nenhum Produto com essa categoria
+                    </Text>
+                  </Flex>
                 </Td>
               </Tr>
-            ))}
+            )}
           </Tbody>
         </Table>
       </TableContainer>
@@ -172,4 +222,15 @@ export const AddProductModalLayout = ({
 
     {/* <h1>Add Product</h1> */}
   </Modal>
+);
+
+const Square = () => (
+  <Box
+    w={[1, 1, 2]}
+    h={[1, 1, 2]}
+    mt={[0, 0, 1]}
+    ml={[0, 0, 1]}
+    rounded={2}
+    bg="blue.200"
+  />
 );

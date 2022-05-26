@@ -3,7 +3,6 @@ import { CommandContext } from '../../index';
 import { NavHeaderLayout } from './layout';
 
 export const NavHeader = () => {
-  console.log('nav header');
   const {
     filter,
     setFilter,

@@ -1,6 +1,6 @@
 import { useToast } from '@chakra-ui/react';
 import { CommandContext } from 'pages-components/Command';
-import { Dispatch, SetStateAction, useContext, useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useState, useMemo } from 'react';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
 
@@ -45,6 +45,9 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   const [isSetAmountModalOpen, setIsSetAmountModalOpen] = useState(false);
   const [productToSetAmount, setProductToSetAmount] = useState({} as any);
   const [amount, setAmount] = useState(1);
+
+  const [filter, setFilter] = useState('');
+  const [searchContent, setSearchContent] = useState('');
 
   const { productsDispatch, products: commandProducts } =
     useContext(CommandContext);
@@ -109,16 +112,48 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     handleCloseModal();
   }
 
+  function handleChangeFilter(selectedFilter: string) {
+    setFilter((prevFilter) => {
+      if (selectedFilter === prevFilter) {
+        return '';
+      }
+      return selectedFilter;
+    });
+  }
+
+  const filteredByFilter = useMemo(() => {
+    if (filter === '') {
+      return mockProducts;
+    }
+    const filtered = mockProducts.filter(({ category }) => category === filter);
+    return filtered;
+  }, [filter]);
+
+  const filteredBySearch = useMemo(() => {
+    const filtered = filteredByFilter.filter((product: any) => {
+      const productObjStr = Object.values(product).join('').toLocaleLowerCase();
+      if (productObjStr.includes(searchContent.toLowerCase())) {
+        return true;
+      }
+      return false;
+    });
+    return filtered;
+  }, [filteredByFilter, searchContent]);
+
   return (
     <>
       <AddProductModalLayout
-        products={mockProducts}
+        products={filteredBySearch}
         isModalOpen={isModalOpen}
         handleCloseModal={handleCloseModal}
         selectedProducts={selectedProducts}
         handleOpenAmountModal={handleOpenAmountModal}
         handleRemoveSelectedProduct={handleRemoveSelectedProduct}
         handleAddProductsInCommand={handleAddProductsInCommand}
+        filter={filter}
+        handleChangeFilter={handleChangeFilter}
+        searchContent={searchContent}
+        setSearchContent={setSearchContent}
       />
       {/* Set amount of product modal */}
       <SetAmountModal
