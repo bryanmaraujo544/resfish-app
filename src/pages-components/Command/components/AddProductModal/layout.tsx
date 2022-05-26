@@ -22,6 +22,7 @@ import {
   Td,
 } from '@chakra-ui/react';
 import { BiSearchAlt } from 'react-icons/bi';
+import { IoClose } from 'react-icons/io5';
 
 import { Modal } from 'components/Modal';
 
@@ -44,6 +45,8 @@ type Props = {
   products: any[];
   selectedProducts: any[];
   handleOpenAmountModal: any;
+  // eslint-disable-next-line no-unused-vars
+  handleRemoveSelectedProduct: ({ id }: { id: string }) => void;
 };
 
 export const AddProductModalLayout = ({
@@ -52,6 +55,7 @@ export const AddProductModalLayout = ({
   products,
   selectedProducts,
   handleOpenAmountModal,
+  handleRemoveSelectedProduct,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -59,7 +63,7 @@ export const AddProductModalLayout = ({
     title="Adicionar Produto"
     size="6xl"
   >
-    <Stack spacing={2}>
+    <Stack spacing={[4, 6]}>
       {/* Header */}
       <Grid gridTemplateColumns={['1fr', '1fr 2fr']} gap={[2, 4]}>
         <Menu>
@@ -82,11 +86,39 @@ export const AddProductModalLayout = ({
       </Grid>
 
       {/* Products selected */}
-      <Grid gridTemplateColumns="repeat(2, 1fr)">
+      <Grid gridTemplateColumns="repeat(3, 1fr)" gap={[2, 4]}>
         {selectedProducts.map(({ id, name, amount }) => (
-          <Flex key={`selected-product-${id}`}>
-            <Text>{name}</Text>
-            <Text>{amount}</Text>
+          <Flex
+            key={`selected-product-${id}`}
+            // direction="column"
+            align="center"
+            justify="space-between"
+            bg="gray.100"
+            p={2}
+            rounded="md"
+            color="blue.700"
+          >
+            <Flex gap={6} align="center">
+              <Text fontSize={14} fontWeight={600}>
+                {name}
+              </Text>
+              <Text fontSize={14} fontWeight={600}>
+                Qntd: {amount}
+              </Text>
+            </Flex>
+            <Icon
+              as={IoClose}
+              onClick={() => handleRemoveSelectedProduct({ id })}
+              cursor="pointer"
+              fontSize={[16, 18]}
+              _hover={{
+                bg: 'blue.100',
+                rounded: 3,
+              }}
+              _active={{
+                bg: 'blue.200',
+              }}
+            />
           </Flex>
         ))}
       </Grid>
@@ -128,10 +160,10 @@ export const AddProductModalLayout = ({
           </Tbody>
         </Table>
       </TableContainer>
+      <Button colorScheme="red" onClick={() => handleCloseModal()}>
+        Cancelar
+      </Button>
     </Stack>
-    <Button colorScheme="red" onClick={() => handleCloseModal()}>
-      Cancelar
-    </Button>
 
     {/* <h1>Add Product</h1> */}
   </Modal>

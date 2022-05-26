@@ -51,6 +51,12 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     setIsModalOpen(false);
   }
 
+  // This function receives the product infos of the product clicked and opens the modal to select the amount of this
+  function handleOpenAmountModal({ product }: { product: any }) {
+    setProductToSetAmount(product);
+    setIsSetAmountModalOpen(true);
+  }
+
   // This function add in selected products list. Takes the object with infos based on the click of the user,
   // and add the amount propertie containing the amount selected by the user in modal
   function handleAddProduct() {
@@ -73,10 +79,10 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     setIsSetAmountModalOpen(false);
   }
 
-  // This function receives the product infos of the product clicked and opens the modal to select the amount of this
-  function handleOpenAmountModal({ product }: { product: any }) {
-    setProductToSetAmount(product);
-    setIsSetAmountModalOpen(true);
+  function handleRemoveSelectedProduct({ id }: { id: string }) {
+    setSelectedProducts((prev: any) =>
+      prev.filter((product: any) => product.id !== id)
+    );
   }
 
   return (
@@ -87,6 +93,7 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         handleCloseModal={handleCloseModal}
         selectedProducts={selectedProducts}
         handleOpenAmountModal={handleOpenAmountModal}
+        handleRemoveSelectedProduct={handleRemoveSelectedProduct}
       />
       {/* Set amount of product modal */}
       <SetAmountModal

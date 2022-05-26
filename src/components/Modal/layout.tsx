@@ -31,8 +31,13 @@ export const ModalLayout = ({
     isCentered
     size={size || 'lg'}
     initialFocusRef={initialFocusRef}
+    scrollBehavior="inside"
   >
-    <ModalOverlay bg="blackAlpha.500" backdropFilter="blur(3px)" />
+    <ModalOverlay
+      bg="blackAlpha.500"
+      backdropFilter="blur(3px)"
+      overflowY="scroll"
+    />
     <ModalContent py={2} mx={2}>
       <ModalHeader>{title}</ModalHeader>
       <ModalCloseButton />

@@ -33,7 +33,7 @@ export const SetAmountModalLayout = ({
       title="Quantidade do produto"
       initialFocusRef={inputRef}
     >
-      <Stack>
+      <Stack spacing={4}>
         <NumberInput
           value={amount}
           min={0}
