@@ -1,44 +1,19 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+
 import { StockContext } from 'pages-components/Stock';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { Item } from 'pages-components/Stock/types/Item';
+import { Product } from 'pages-components/Stock/types/Product';
+import StockService from '../../services/index';
 import { ItemsTableLayout } from './layout';
 import { EditModal } from '../EditModal';
 import { DeleteItemModal } from '../DeleteItemModal';
 
-const mockProducts = [
-  {
-    image:
-      'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aHVtYW58ZW58MHx8MHx8&w=1000&q=80',
-    name: 'Pesque-Pague',
-    category: 'Pesca',
-    amount: null,
-    unitPrice: 0,
-    id: Math.random().toFixed(4),
-  },
-  {
-    image:
-      'https://user-images.githubusercontent.com/62571814/168487287-6b0c1c98-d2d6-4827-87dd-998048561057.png',
-    name: 'Pesca Esportiva',
-    category: 'Pesca',
-    amount: null,
-    unitPrice: 25.9,
-    id: Math.random().toFixed(4),
-  },
-  {
-    image:
-      'https://user-images.githubusercontent.com/62571814/168487287-6b0c1c98-d2d6-4827-87dd-998048561057.png',
-    name: 'Pesca Esportiva',
-    category: 'Bebidas',
-    amount: null,
-    unitPrice: 25.9,
-    id: Math.random().toFixed(4),
-  },
-];
-
 export const ItemsTable = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+
   const [id, setId] = useState(null as null | number | string);
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
@@ -57,13 +32,23 @@ export const ItemsTable = () => {
     searchContent,
   } = useContext(StockContext);
 
-  const filteredByFilter = useMemo(() => {
-    const filtered = mockProducts.filter(
-      ({ category }) => category === filters
-    );
+  useEffect(() => {
+    (async () => {
+      const allProducts = await StockService.getAllProducts();
+      setProducts(allProducts);
+    })();
+  }, []);
 
-    return filtered.length > 0 ? filtered : mockProducts;
-  }, [filters]);
+  console.log('PRODUCTS', products);
+
+  const filteredByFilter = useMemo(() => {
+    if (filters) {
+      const filtered = products.filter(({ category }) => category === filters);
+      return filtered;
+    }
+
+    return products;
+  }, [filters, products]);
 
   const filteredBySort = useMemo(
     () =>

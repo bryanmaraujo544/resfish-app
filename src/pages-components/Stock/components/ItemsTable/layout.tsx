@@ -16,6 +16,7 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import { FiEdit2 } from 'react-icons/fi';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
+import { Product } from 'pages-components/Stock/types/Product';
 
 const stockColumns = [
   { text: 'Imagem', prop: 'image' },
@@ -25,22 +26,13 @@ const stockColumns = [
   { text: 'Preço unid.', prop: 'unitPrice' },
 ];
 
-type Item = {
-  id: number | string;
-  name: string;
-  image: string;
-  category: string;
-  amount: null | number;
-  unitPrice: number;
-};
-
 type LayoutProps = {
   handleOpenEditModal: any;
   handleToggleOrderByDir: any;
   handleOpenDeleteItemModal: any;
   orderByDir: 'asc' | 'desc';
   orderBy: string;
-  items: Item[];
+  items: Product[];
 };
 
 export const ItemsTableLayout = ({
@@ -51,6 +43,8 @@ export const ItemsTableLayout = ({
   orderBy,
   items,
 }: LayoutProps) => {
+  console.log({ items });
+
   function isColumnSelectedToOrder(column: string) {
     return column.toLocaleLowerCase() === orderBy.toLocaleLowerCase();
   }
@@ -89,7 +83,7 @@ export const ItemsTableLayout = ({
           </Tr>
         </Thead>
         <Tbody>
-          {items.map(({ id, image, amount, category, unitPrice, name }) => (
+          {items.map(({ id, imageURL, amount, category, unitPrice, name }) => (
             <Tr
               key={id}
               cursor="pointer"
@@ -99,7 +93,9 @@ export const ItemsTableLayout = ({
             >
               <Td>
                 <Image
-                  src={image}
+                  src={
+                    imageURL || 'https://wallpaperaccess.com/full/5227230.png'
+                  }
                   width={32}
                   height={32}
                   objectFit="cover"
@@ -120,7 +116,7 @@ export const ItemsTableLayout = ({
                     onClick={() =>
                       handleOpenEditModal({
                         name,
-                        image,
+                        image: imageURL,
                         id,
                         amount,
                         unitPrice,
