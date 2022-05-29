@@ -11,6 +11,11 @@ class StockService {
     const { data } = await serverApi.post('/products', product);
     return data;
   }
+
+  async deleteProduct(id: string) {
+    const { data } = await serverApi.delete(`/products/${id}`);
+    return data;
+  }
 }
 
 export default new StockService();
