@@ -1,8 +1,10 @@
 /* eslint-disable consistent-return */
-import { useToast } from '@chakra-ui/react';
 import { useCallback, Dispatch, SetStateAction, useState } from 'react';
+import { useToast } from '@chakra-ui/react';
+
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { formatPrice } from 'utils/formatPrice';
+import StockService from '../../services/index';
 import { AddItemModalLayout } from './layout';
 
 type Props = {
@@ -14,26 +16,36 @@ export const AddItemModal = ({
   isAddItemModalOpen,
   setIsAddItemModalOpen,
 }: Props) => {
-  const toast = useToast();
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [category, setCategory] = useState('');
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(1);
   const [unitPrice, setUnitPrice] = useState('R$ ');
+
+  const toast = useToast();
 
   const handleCloseModal = useCallback(() => {
     setIsAddItemModalOpen(false);
   }, [setIsAddItemModalOpen]);
 
-  function handleSubmit(e: any) {
+  async function handleSubmit(e: any) {
     e.preventDefault();
+
+    // taking out the "R$" of the string and getting only the number;
+    const unitPriceNum = unitPrice.split(' ')[1];
+    const formattedUnitPriceStr = formatDecimalNum({
+      num: unitPriceNum,
+      to: 'point',
+    }); // 33,90 -> 33.90
+
+    const formattedUnitPrice = Number(formattedUnitPriceStr);
 
     if (
       !name ||
       !category ||
       amount === null ||
       amount === undefined ||
-      !unitPrice
+      !formattedUnitPrice
     ) {
       toast({
         status: 'error',
@@ -42,14 +54,6 @@ export const AddItemModal = ({
       });
       return;
     }
-
-    const unitPriceNum = unitPrice.split(' ')[1];
-    const formattedUnitPriceStr = formatDecimalNum({
-      num: unitPriceNum,
-      to: 'point',
-    }); // 33,90 -> 33.90
-
-    const formattedUnitPrice = Number(formattedUnitPriceStr);
 
     const isUnitPriceValid = !!formattedUnitPrice || formattedUnitPrice === 0; // 44.9 = true | 44,9 = false | 33,fd = false
     if (!isUnitPriceValid) {
@@ -63,19 +67,24 @@ export const AddItemModal = ({
     }
 
     toast({
-      status: 'success',
-      title: 'Item atualizado',
-      duration: 5000,
+      status: 'loading',
+      isClosable: true,
+      title: 'Adicionando Item',
     });
 
-    // TODO: update the globalState
-    console.log({
+    const data = await StockService.storeProduct({
       name,
       unitPrice: formattedUnitPrice,
       amount,
       category,
-      image,
+      imageURL: image,
     });
+
+    toast.closeAll();
+
+    // TODO: update the globalState
+    console.log(data);
+    // console.log({ unitPrice: formattedUnitPrice });
 
     cleanFields();
     handleCloseModal();

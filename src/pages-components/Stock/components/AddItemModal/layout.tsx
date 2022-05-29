@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import {
   FormControl,
   Input,
@@ -7,9 +8,23 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  Flex,
+  Text,
+  Select,
 } from '@chakra-ui/react';
 import { Modal } from 'components/Modal';
 import { Dispatch, SetStateAction } from 'react';
+
+const categories = [
+  'Pesca',
+  'Peixes',
+  'Pratos',
+  'Bebidas',
+  'Doses',
+  'Sobremesas',
+  'Porções',
+  'Misturas Congeladas',
+];
 
 type Props = {
   handleSubmit: any;
@@ -42,7 +57,12 @@ export const AddItemModalLayout = ({
   amount,
   setAmount,
 }: Props) => (
-  <Modal isOpen={isModalOpen} title="Adicionar Item" onClose={handleCloseModal}>
+  <Modal
+    isOpen={isModalOpen}
+    title="Adicionar Item"
+    onClose={handleCloseModal}
+    size="2xl"
+  >
     <FormControl
       as="form"
       onSubmit={(e) => handleSubmit(e)}
@@ -50,40 +70,62 @@ export const AddItemModalLayout = ({
       flexDirection="column"
       gap={4}
     >
-      <Input
-        placeholder="Nome do produto *"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <Input
-        placeholder="URL da imagem"
-        value={image}
-        onChange={(e) => setImage(e.target.value)}
-      />
-      <Input
-        placeholder="Categoria *"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-      />
-      <NumberInput
-        defaultValue={15}
-        precision={2}
-        step={5}
-        placeholder="Quantidade"
-        value={amount}
-        onChange={(value) => setAmount(Number(value))}
-      >
-        <NumberInputField />
-        <NumberInputStepper>
-          <NumberIncrementStepper />
-          <NumberDecrementStepper />
-        </NumberInputStepper>
-      </NumberInput>
-      <Input
-        placeholder="R$ Preço da Unidade *"
-        value={unitPrice}
-        onChange={(e) => handleChangeUnitPrice(e)}
-      />
+      <InputGroup>
+        <Text>Nome do produto *</Text>
+        <Input
+          placeholder="Coca-Cola"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </InputGroup>
+      <InputGroup>
+        <Text>URL da imagem</Text>
+        <Input
+          placeholder="URL da imagem"
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
+        />
+      </InputGroup>
+      <InputGroup>
+        <Text>Categoria *</Text>
+        <Select
+          placeholder="Selecione uma categoria"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          {categories.map((categorie) => (
+            <option key={`categorie-select-list-${categorie}`}>
+              {categorie}
+            </option>
+          ))}
+        </Select>
+      </InputGroup>
+      <InputGroup>
+        <Text>Quantidade *</Text>
+        <NumberInput
+          defaultValue={1}
+          precision={2}
+          step={1}
+          placeholder="Quantidade"
+          value={amount}
+          onChange={(value) => setAmount(Number(value))}
+          min={1}
+        >
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+      </InputGroup>
+      <InputGroup>
+        <Text>Preço da unidade *</Text>
+        <Input
+          placeholder="R$ Preço da Unidade *"
+          value={unitPrice}
+          onChange={(e) => handleChangeUnitPrice(e)}
+        />
+      </InputGroup>
       <Button
         type="submit"
         bg="blue.400"
@@ -95,4 +137,10 @@ export const AddItemModalLayout = ({
       </Button>
     </FormControl>
   </Modal>
+);
+
+const InputGroup = (props: any) => (
+  <Flex direction="column" gap={2} {...props}>
+    {props.children}
+  </Flex>
 );

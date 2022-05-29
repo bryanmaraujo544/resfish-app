@@ -7,6 +7,7 @@ const nextConfig = {
       'images.unsplash.com',
       'user-images.githubusercontent.com',
       'wallpaperaccess.com',
+      'http2.mlstatic.com',
     ],
   },
 };

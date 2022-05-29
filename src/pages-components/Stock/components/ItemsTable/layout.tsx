@@ -43,8 +43,6 @@ export const ItemsTableLayout = ({
   orderBy,
   items,
 }: LayoutProps) => {
-  console.log({ items });
-
   function isColumnSelectedToOrder(column: string) {
     return column.toLocaleLowerCase() === orderBy.toLocaleLowerCase();
   }
@@ -83,9 +81,9 @@ export const ItemsTableLayout = ({
           </Tr>
         </Thead>
         <Tbody>
-          {items.map(({ id, imageURL, amount, category, unitPrice, name }) => (
+          {items.map(({ _id, imageURL, amount, category, unitPrice, name }) => (
             <Tr
-              key={id}
+              key={_id}
               cursor="pointer"
               _hover={{
                 bg: 'blue.50',
@@ -117,7 +115,7 @@ export const ItemsTableLayout = ({
                       handleOpenEditModal({
                         name,
                         image: imageURL,
-                        id,
+                        id: _id,
                         amount,
                         unitPrice,
                         category,
@@ -128,7 +126,7 @@ export const ItemsTableLayout = ({
                     _hover={{ color: 'blue.500' }}
                   />
                   <Icon
-                    onClick={() => handleOpenDeleteItemModal({ itemId: id })}
+                    onClick={() => handleOpenDeleteItemModal({ itemId: _id })}
                     as={AiOutlineDelete}
                     fontSize={[20, 22]}
                     _hover={{ color: 'red.400' }}
