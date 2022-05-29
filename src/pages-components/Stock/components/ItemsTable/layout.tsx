@@ -16,6 +16,7 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import { FiEdit2 } from 'react-icons/fi';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
+import { Product } from 'pages-components/Stock/types/Product';
 
 const stockColumns = [
   { text: 'Imagem', prop: 'image' },
@@ -25,22 +26,13 @@ const stockColumns = [
   { text: 'Preço unid.', prop: 'unitPrice' },
 ];
 
-type Item = {
-  id: number | string;
-  name: string;
-  image: string;
-  category: string;
-  amount: null | number;
-  unitPrice: number;
-};
-
 type LayoutProps = {
   handleOpenEditModal: any;
   handleToggleOrderByDir: any;
   handleOpenDeleteItemModal: any;
   orderByDir: 'asc' | 'desc';
   orderBy: string;
-  items: Item[];
+  items: Product[];
 };
 
 export const ItemsTableLayout = ({
@@ -89,9 +81,9 @@ export const ItemsTableLayout = ({
           </Tr>
         </Thead>
         <Tbody>
-          {items.map(({ id, image, amount, category, unitPrice, name }) => (
+          {items.map(({ _id, imageURL, amount, category, unitPrice, name }) => (
             <Tr
-              key={id}
+              key={_id}
               cursor="pointer"
               _hover={{
                 bg: 'blue.50',
@@ -99,7 +91,9 @@ export const ItemsTableLayout = ({
             >
               <Td>
                 <Image
-                  src={image}
+                  src={
+                    imageURL || 'https://wallpaperaccess.com/full/5227230.png'
+                  }
                   width={32}
                   height={32}
                   objectFit="cover"
@@ -120,8 +114,8 @@ export const ItemsTableLayout = ({
                     onClick={() =>
                       handleOpenEditModal({
                         name,
-                        image,
-                        id,
+                        image: imageURL,
+                        id: _id,
                         amount,
                         unitPrice,
                         category,
@@ -132,7 +126,7 @@ export const ItemsTableLayout = ({
                     _hover={{ color: 'blue.500' }}
                   />
                   <Icon
-                    onClick={() => handleOpenDeleteItemModal({ itemId: id })}
+                    onClick={() => handleOpenDeleteItemModal({ itemId: _id })}
                     as={AiOutlineDelete}
                     fontSize={[20, 22]}
                     _hover={{ color: 'red.400' }}

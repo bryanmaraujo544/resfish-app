@@ -25,7 +25,8 @@
     "react/no-unescaped-entities": "off",
     "no-use-before-define": "off",
     "import/no-cycle": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "class-methods-use-this": "off"
   },
   "settings": {
     "import/resolver": {

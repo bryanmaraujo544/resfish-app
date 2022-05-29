@@ -6,6 +6,8 @@ const nextConfig = {
       'drive.google.com',
       'images.unsplash.com',
       'user-images.githubusercontent.com',
+      'wallpaperaccess.com',
+      'http2.mlstatic.com',
     ],
   },
 };
