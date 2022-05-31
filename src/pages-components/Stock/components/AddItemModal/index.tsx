@@ -1,10 +1,20 @@
 /* eslint-disable consistent-return */
-import { useCallback, Dispatch, SetStateAction, useState } from 'react';
+import {
+  useCallback,
+  Dispatch,
+  SetStateAction,
+  useState,
+  useContext,
+} from 'react';
 import { useToast } from '@chakra-ui/react';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { formatPrice } from 'utils/formatPrice';
+<<<<<<< HEAD
 import { checkImageURL } from 'utils/checkImageURL';
+=======
+import { StockContext } from 'pages-components/Stock';
+>>>>>>> feature/adding-db
 import StockService from '../../services/index';
 import { AddItemModalLayout } from './layout';
 
@@ -23,6 +33,7 @@ export const AddItemModal = ({
   const [amount, setAmount] = useState(1);
   const [unitPrice, setUnitPrice] = useState('R$ ');
 
+  const { productsDispatch } = useContext(StockContext);
   const toast = useToast();
 
   const handleCloseModal = useCallback(() => {
@@ -95,6 +106,10 @@ export const AddItemModal = ({
 
     // TODO: update the globalState
     console.log(data);
+    productsDispatch({
+      type: 'ADD-ONE-PRODUCT',
+      payload: { product: data.product },
+    });
     // console.log({ unitPrice: formattedUnitPrice });
 
     cleanFields();

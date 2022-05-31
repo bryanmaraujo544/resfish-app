@@ -1,19 +1,15 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 
 import { StockContext } from 'pages-components/Stock';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { Item } from 'pages-components/Stock/types/Item';
-import { Product } from 'pages-components/Stock/types/Product';
-import StockService from '../../services/index';
 import { ItemsTableLayout } from './layout';
 import { EditModal } from '../EditModal';
 import { DeleteItemModal } from '../DeleteItemModal';
 
 export const ItemsTable = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-
   const [id, setId] = useState(null as null | number | string);
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
@@ -30,16 +26,8 @@ export const ItemsTable = () => {
     orderBy,
     filters,
     searchContent,
+    products,
   } = useContext(StockContext);
-
-  useEffect(() => {
-    (async () => {
-      const allProducts = await StockService.getAllProducts();
-      setProducts(allProducts);
-    })();
-  }, []);
-
-  console.log('PRODUCTS', products);
 
   const filteredByFilter = useMemo(() => {
     if (filters) {

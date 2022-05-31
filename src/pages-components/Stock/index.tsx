@@ -4,13 +4,23 @@ import {
   Dispatch,
   SetStateAction,
   useCallback,
+  useReducer,
   useState,
+  useEffect,
 } from 'react';
 
+import StockService from './services/index';
 import { StockLayout } from './layout';
 import { AddItemModal } from './components/AddItemModal';
+import { productsReducer } from './reducers/productsReducer';
+import { Product } from './types/Product';
 
-type StockContextProps = {
+interface Action {
+  type: 'ADD-PRODUCTS' | 'ADD-ONE-PRODUCT' | 'REMOVE-ONE-PRODUCT';
+  payload: any;
+}
+
+interface StockContextProps {
   filters: string;
   setFilters: Dispatch<SetStateAction<string>>;
   orderBy: string;
@@ -19,17 +29,30 @@ type StockContextProps = {
   handleToggleOrderByDir: any;
   searchContent: string;
   setSearchContent: Dispatch<SetStateAction<string>>;
-};
+  products: Product[] | [];
+  productsDispatch: Dispatch<Action>;
+}
 
 export const StockContext = createContext({} as StockContextProps);
 
 export const Stock = () => {
+  const [products, productsDispatch] = useReducer(productsReducer, {
+    value: [],
+  });
+
   const [filters, setFilters] = useState('');
   const [orderBy, setOrderBy] = useState('');
   const [orderByDir, setOrderByDir] = useState<'asc' | 'desc'>('asc');
   const [searchContent, setSearchContent] = useState('');
 
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const allProducts = await StockService.getAllProducts();
+      productsDispatch({ type: 'ADD-PRODUCTS', payload: allProducts });
+    })();
+  }, []);
 
   const handleToggleOrderByDir = useCallback(
     () => setOrderByDir((prev) => (prev === 'asc' ? 'desc' : 'asc')),
@@ -47,6 +70,8 @@ export const Stock = () => {
         handleToggleOrderByDir,
         searchContent,
         setSearchContent,
+        products: products.value,
+        productsDispatch,
       }}
     >
       <AddItemModal
