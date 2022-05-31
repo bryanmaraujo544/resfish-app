@@ -20,17 +20,24 @@ export const DeleteItemModal = ({ id, isModalOpen, setIsModalOpen }: Props) => {
   }
 
   async function handleDeleteItem() {
-    productsDispatch({ type: 'REMOVE-ONE-PRODUCT', payload: { id } });
-    const { message } = await StockService.deleteProduct(id as string);
+    try {
+      productsDispatch({ type: 'REMOVE-ONE-PRODUCT', payload: { id } });
+      const { message } = await StockService.deleteProduct(id as string);
 
-    toast({
-      status: 'success',
-      title: message,
-      duration: 2000,
-      isClosable: true,
-    });
+      toast({
+        status: 'success',
+        title: message,
+        duration: 2000,
+        isClosable: true,
+      });
 
-    handleCloseModal();
+      handleCloseModal();
+    } catch (error: any) {
+      toast({
+        status: 'error',
+        title: error?.response.data.message,
+      });
+    }
   }
 
   return (

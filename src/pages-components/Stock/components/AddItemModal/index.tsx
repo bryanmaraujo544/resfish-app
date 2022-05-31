@@ -40,77 +40,81 @@ export const AddItemModal = ({
   async function handleSubmit(e: any) {
     e.preventDefault();
 
-    // taking out the "R$" of the string and getting only the number;
-    const unitPriceNum = unitPrice.split(' ')[1];
-    const formattedUnitPriceStr = formatDecimalNum({
-      num: unitPriceNum,
-      to: 'point',
-    }); // 33,90 -> 33.90
+    try {
+      // taking out the "R$" of the string and getting only the number;
+      const unitPriceNum = unitPrice.split(' ')[1];
+      const formattedUnitPriceStr = formatDecimalNum({
+        num: unitPriceNum,
+        to: 'point',
+      }); // 33,90 -> 33.90
 
-    const formattedUnitPrice = Number(formattedUnitPriceStr);
+      const formattedUnitPrice = Number(formattedUnitPriceStr);
 
-    if (
-      !name ||
-      !category ||
-      amount === null ||
-      amount === undefined ||
-      !formattedUnitPrice
-    ) {
+      if (
+        !name ||
+        !category ||
+        amount === null ||
+        amount === undefined ||
+        !formattedUnitPrice
+      ) {
+        toast({
+          status: 'error',
+          title: 'Preencha os campos necessários',
+          isClosable: true,
+        });
+        return;
+      }
+
+      const isUnitPriceValid = !!formattedUnitPrice || formattedUnitPrice === 0; // 44.9 = true | 44,9 = false | 33,fd = false
+      if (!isUnitPriceValid) {
+        toast({
+          status: 'error',
+          title: 'Preço inválido :(',
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      // check if image url is valid
+      const isImageURLValid = checkImageURL(image);
+      if (!isImageURLValid) {
+        return toast({
+          status: 'error',
+          title: 'A URL da imagem está inválida',
+          isClosable: true,
+        });
+      }
+
+      toast({
+        status: 'loading',
+        isClosable: true,
+        title: 'Adicionando Item',
+      });
+
+      const data = await StockService.storeProduct({
+        name,
+        unitPrice: formattedUnitPrice,
+        amount,
+        category,
+        imageURL: image,
+      });
+
+      toast.closeAll();
+
+      productsDispatch({
+        type: 'ADD-ONE-PRODUCT',
+        payload: { product: data.product },
+      });
+
+      cleanFields();
+      handleCloseModal();
+    } catch (error: any) {
       toast({
         status: 'error',
-        title: 'Preencha os campos necessários',
-        isClosable: true,
-      });
-      return;
-    }
-
-    const isUnitPriceValid = !!formattedUnitPrice || formattedUnitPrice === 0; // 44.9 = true | 44,9 = false | 33,fd = false
-    if (!isUnitPriceValid) {
-      toast({
-        status: 'error',
-        title: 'Preço inválido :(',
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    // check if image url is valid
-    const isImageURLValid = checkImageURL(image);
-    if (!isImageURLValid) {
-      return toast({
-        status: 'error',
-        title: 'A URL da imagem está inválida',
-        isClosable: true,
+        title: error?.response.data.message,
       });
     }
-
-    toast({
-      status: 'loading',
-      isClosable: true,
-      title: 'Adicionando Item',
-    });
-
-    const data = await StockService.storeProduct({
-      name,
-      unitPrice: formattedUnitPrice,
-      amount,
-      category,
-      imageURL: image,
-    });
-
-    toast.closeAll();
-
-    // TODO: update the globalState
-    console.log(data);
-    productsDispatch({
-      type: 'ADD-ONE-PRODUCT',
-      payload: { product: data.product },
-    });
-    // console.log({ unitPrice: formattedUnitPrice });
-
-    cleanFields();
-    handleCloseModal();
   }
 
   function handleChangeUnitPrice(e: any) {
