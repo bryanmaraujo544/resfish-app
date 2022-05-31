@@ -8,6 +8,8 @@ import {
   useReducer,
   useState,
 } from 'react';
+
+import { productsReducer } from './reducers/productsReducer';
 import { AddProductModal } from './components/AddProductModal';
 import { DeleteProductModal } from './components/DeleteProductModal';
 import { CommandLayout } from './layout';
@@ -111,49 +113,12 @@ const initialState = {
   value: [] as any[],
 };
 
-const reducer = (state: any, action: any) => {
-  switch (action.type) {
-    case 'add-products': {
-      return { value: action.payload };
-    }
-    case 'add':
-      return { value: [...state.value, action.payload] };
-    case 'increment-amount': {
-      const newState = state.value.map((product: any) => {
-        if (product.id === action.payload.id) {
-          return { ...product, amount: product.amount + 1 };
-        }
-        return product;
-      });
-      return { value: [...newState] };
-    }
-    case 'decrement-amount': {
-      const newState = state.value.map((product: any) => {
-        if (product.id === action.payload.id) {
-          return {
-            ...product,
-            amount: product.amount > 0 ? product.amount - 1 : product.amount,
-          };
-        }
-        return product;
-      });
-      return { value: [...newState] };
-    }
-    case 'delete': {
-      console.log('DELETE DISPATCH WAS CALLED', action);
-      const newState = state.value.filter(
-        (product: any) => product.id !== action.payload.id
-      );
-      return { value: newState };
-    }
-    default:
-      throw new Error('This type is invalid');
-  }
-};
-
 export const Command = ({ commandId }: Props) => {
   const [command, setCommand] = useState({});
-  const [products, productsDispatch] = useReducer(reducer, initialState);
+  const [products, productsDispatch] = useReducer(
+    productsReducer,
+    initialState
+  );
 
   const [productIdToDelete, setProductIdToDelete] = useState('');
 
