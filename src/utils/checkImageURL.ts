@@ -1,5 +1,7 @@
 export const checkImageURL = (str: string) => {
   const regex = /http(s)?.+\..+/;
 
-  return regex.test(str);
+  const isValid = str.length > 0 ? regex.test(str) : true;
+
+  return isValid;
 };
