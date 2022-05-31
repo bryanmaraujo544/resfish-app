@@ -17,6 +17,7 @@
     "eslint-import-resolver-typescript": "^2.7.1",
     "framer-motion": "^6",
     "next": "12.1.6",
+    "nookies": "^2.5.2",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-hook-form": "^7.31.1",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "17.0.33",
+    "@types/nookies": "^2.0.3",
     "@types/react": "18.0.9",
     "@types/react-dom": "18.0.4",
     "@types/react-icons": "^3.0.0",
