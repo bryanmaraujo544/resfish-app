@@ -60,13 +60,8 @@ export const EditModal = ({
           title: 'Preencha os campos obrigatórios',
           isClosable: true,
         });
+        return;
       }
-
-      toast({
-        status: 'success',
-        title: 'Item atualizado',
-      });
-      onClose();
 
       const { product: newProduct, message } = await StockService.updateProduct(
         {
@@ -79,14 +74,22 @@ export const EditModal = ({
         }
       );
 
-      console.log({ newProduct, message });
-
       productsDispatch({
         type: 'UPDATE-ONE-PRODUCT',
         payload: { product: newProduct },
       });
+
+      toast({
+        status: 'success',
+        title: message,
+      });
+
+      onClose();
     } catch (err: any) {
-      console.log(err.message);
+      toast({
+        status: 'error',
+        title: err?.response.data.message,
+      });
     }
   }
 
