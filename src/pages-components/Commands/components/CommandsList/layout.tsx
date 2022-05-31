@@ -46,6 +46,8 @@ type Props = {
   orderBy: string;
   orderByDir: 'asc' | 'desc';
   handleToggleOrderByDir: () => void;
+  handleGoToCommandPage: ({ commandId }: { commandId: string }) => void;
+  handleOpenAddProductsModal: (commandId: string) => void;
 };
 
 export const CommandsListLayout = ({
@@ -53,12 +55,14 @@ export const CommandsListLayout = ({
   orderBy,
   orderByDir,
   handleToggleOrderByDir,
+  handleGoToCommandPage,
+  handleOpenAddProductsModal,
 }: Props) => {
   console.log('commands layout');
 
   return (
     <TableContainer>
-      <Table variant="striped" colorScheme="gray">
+      <Table colorScheme="gray">
         <Thead>
           <Tr>
             {listColumns.map(({ text: listItem, prop }) => (
@@ -86,10 +90,19 @@ export const CommandsListLayout = ({
         </Thead>
         <Tbody>
           {items.map(({ id, table, waiter, total }) => (
-            <Tr key={`list-command-${id}`} h={20}>
-              <Td>{table}</Td>
-              <Td>{waiter}</Td>
-              <Td>
+            <Tr
+              key={`list-command-${id}`}
+              h={20}
+              cursor="pointer"
+              _hover={{ bg: 'blue.50' }}
+            >
+              <Td onClick={() => handleGoToCommandPage({ commandId: id })}>
+                {table}
+              </Td>
+              <Td onClick={() => handleGoToCommandPage({ commandId: id })}>
+                {waiter}
+              </Td>
+              <Td onClick={() => handleGoToCommandPage({ commandId: id })}>
                 R$ {formatDecimalNum({ num: total.toString(), to: 'comma' })}
               </Td>
               <Td isNumeric>
@@ -104,7 +117,10 @@ export const CommandsListLayout = ({
                     <Icon as={CgOptions} fontSize={[16, 22]} color="blue.800" />
                   </MenuButton>
                   <MenuList>
-                    <MenuItem icon={<BiAddToQueue />}>
+                    <MenuItem
+                      icon={<BiAddToQueue />}
+                      onClick={() => handleOpenAddProductsModal(id)}
+                    >
                       Adicionar Produtos
                     </MenuItem>
                     <MenuItem icon={<FiEdit2 />}>Editar</MenuItem>

@@ -1,5 +1,8 @@
+import { useCallback, useContext, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
+
 import { CommandsContext } from 'pages-components/Commands';
-import { useCallback, useContext, useMemo } from 'react';
+import { AddProductsModal } from '../AddProductsModal';
 import { CommandsListLayout } from './layout';
 
 const mockCommands = [
@@ -42,12 +45,28 @@ const mockCommands = [
 ];
 
 export const CommandsList = () => {
+  const [commandIdToAddProducts, setCommandIdToAddProducts] = useState('');
+  const [isAddProductsModalOpen, setIsAddProductsOpen] = useState(false);
+
+  const router = useRouter();
   const { searchContent, filter, orderBy, orderByDir, setOrderByDir } =
     useContext(CommandsContext);
 
   const handleToggleOrderByDir = useCallback(() => {
     setOrderByDir((prev: string) => (prev === 'asc' ? 'desc' : 'asc'));
   }, [setOrderByDir]);
+
+  const handleGoToCommandPage = useCallback(
+    ({ commandId }: { commandId: string }) => {
+      router.push(`/command/${commandId}`);
+    },
+    []
+  );
+
+  const handleOpenAddProductsModal = useCallback((commandId: string) => {
+    setCommandIdToAddProducts(commandId);
+    setIsAddProductsOpen(true);
+  }, []);
 
   const filteredByFilter = useMemo(() => {
     const filtered = mockCommands.filter(
@@ -92,11 +111,20 @@ export const CommandsList = () => {
   }, [searchContent, filteredBySort, orderByDir]);
 
   return (
-    <CommandsListLayout
-      items={filteredBySearch}
-      orderBy={orderBy}
-      orderByDir={orderByDir}
-      handleToggleOrderByDir={handleToggleOrderByDir}
-    />
+    <>
+      <CommandsListLayout
+        items={filteredBySearch}
+        orderBy={orderBy}
+        orderByDir={orderByDir}
+        handleToggleOrderByDir={handleToggleOrderByDir}
+        handleGoToCommandPage={handleGoToCommandPage}
+        handleOpenAddProductsModal={handleOpenAddProductsModal}
+      />
+      <AddProductsModal
+        isModalOpen={isAddProductsModalOpen}
+        setIsModalOpen={setIsAddProductsOpen}
+        commandId={commandIdToAddProducts}
+      />
+    </>
   );
 };
