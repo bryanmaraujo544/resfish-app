@@ -4,6 +4,7 @@ import { useToast } from '@chakra-ui/react';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { formatPrice } from 'utils/formatPrice';
+import { checkImageURL } from 'utils/checkImageURL';
 import StockService from '../../services/index';
 import { AddItemModalLayout } from './layout';
 
@@ -64,6 +65,16 @@ export const AddItemModal = ({
         isClosable: true,
       });
       return;
+    }
+
+    // check if image url is valid
+    const isImageURLValid = checkImageURL(image);
+    if (!isImageURLValid) {
+      return toast({
+        status: 'error',
+        title: 'A URL da imagem está inválida',
+        isClosable: true,
+      });
     }
 
     toast({

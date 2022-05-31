@@ -8,6 +8,7 @@ const nextConfig = {
       'user-images.githubusercontent.com',
       'wallpaperaccess.com',
       'http2.mlstatic.com',
+      'etecspgov-my.sharepoint.com',
     ],
   },
 };

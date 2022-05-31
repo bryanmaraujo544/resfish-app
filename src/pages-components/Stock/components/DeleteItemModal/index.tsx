@@ -18,7 +18,6 @@ export const DeleteItemModal = ({ id, isModalOpen, setIsModalOpen }: Props) => {
   }
 
   async function handleDeleteItem() {
-    console.log(`Item with the id: ${id} was deleted`);
     const { message } = await StockService.deleteProduct(id as string);
     toast({
       status: 'success',
