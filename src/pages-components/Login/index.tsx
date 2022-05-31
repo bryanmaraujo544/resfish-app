@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-access-key */
 import { useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import { setCookie } from 'nookies';
 import { useState } from 'react';
 import { LoginLayout } from './layout';
 import LoginService from './services/LoginService';
@@ -43,6 +44,11 @@ export const Login = () => {
         title: message,
         duration: 1000,
       });
+
+      setCookie(null, 'isAuthorized', 'true', {
+        maxAge: 60 * 60 * 24 * 20,
+      });
+
       router.push('/');
     } catch (error: any) {
       toast({
