@@ -10,11 +10,8 @@ import { useToast } from '@chakra-ui/react';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { formatPrice } from 'utils/formatPrice';
-<<<<<<< HEAD
 import { checkImageURL } from 'utils/checkImageURL';
-=======
 import { StockContext } from 'pages-components/Stock';
->>>>>>> feature/adding-db
 import StockService from '../../services/index';
 import { AddItemModalLayout } from './layout';
 
