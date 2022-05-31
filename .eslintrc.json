@@ -26,7 +26,8 @@
     "no-use-before-define": "off",
     "import/no-cycle": "off",
     "react/require-default-props": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "no-underscore-dangle": "no-underscore-dangle"
   },
   "settings": {
     "import/resolver": {
