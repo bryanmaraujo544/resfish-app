@@ -4,7 +4,11 @@
 import { Product } from '../types/Product';
 
 interface Action {
-  type: 'ADD-PRODUCTS' | 'ADD-ONE-PRODUCT' | 'REMOVE-ONE-PRODUCT';
+  type:
+    | 'ADD-PRODUCTS'
+    | 'ADD-ONE-PRODUCT'
+    | 'REMOVE-ONE-PRODUCT'
+    | 'UPDATE-ONE-PRODUCT';
   payload: any;
 }
 
@@ -29,6 +33,15 @@ export const productsReducer = (state: ProductsState, action: Action) => {
       const updatedProducts = state.value.filter(
         (product) => product._id !== action.payload.id
       );
+      return { value: updatedProducts };
+    }
+    case 'UPDATE-ONE-PRODUCT': {
+      const updatedProducts = state.value.map((product) => {
+        if (product._id === action.payload.product._id) {
+          return action.payload.product;
+        }
+        return product;
+      });
       return { value: updatedProducts };
     }
     default:

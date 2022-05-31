@@ -1,10 +1,12 @@
-import { SetStateAction, Dispatch } from 'react';
+import { SetStateAction, Dispatch, useContext } from 'react';
 import { useToast } from '@chakra-ui/react';
 
+import StockService from '../../services/index';
 import { formatPrice } from 'utils/formatPrice';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { EditModalLayout } from './layout';
 import type { Item } from '../../types/Item';
+import { StockContext } from 'pages-components/Stock';
 
 interface Props {
   itemInfos: Item;
@@ -17,37 +19,75 @@ export const EditModal = ({
   setIsEditModalOpen,
   itemInfos,
 }: Props) => {
+  const { productsDispatch } = useContext(StockContext);
   const toast = useToast();
 
-  function handleSubmit(e: any) {
+  async function handleSubmit(e: any) {
     e.preventDefault();
 
-    const unitPrice = itemInfos.unitPrice.split(' ')[1];
-    const formattedUnitPrice = formatDecimalNum({
-      num: unitPrice,
-      to: 'point',
-    }); // 33,90 -> 33.90
-    const isUnitPriceValid =
-      !!Number(formattedUnitPrice) || Number(formattedUnitPrice) === 0; // 44.9 = true | 44,9 = false | 33,fd = false
+    try {
+      const {
+        name,
+        amount,
+        unitPrice: updatedUnitPrice,
+        category,
+        image,
+        id,
+      }: any = itemInfos;
 
-    if (!isUnitPriceValid) {
+      const unitPrice = updatedUnitPrice.split(' ')[1];
+      const formattedUnitPrice = Number(
+        formatDecimalNum({
+          num: unitPrice,
+          to: 'point',
+        })
+      ); // 33,90 -> 33.90
+      const isUnitPriceValid = !!formattedUnitPrice || formattedUnitPrice === 0; // 44.9 = true | 44,9 = false | 33,fd = false
+
+      if (!isUnitPriceValid) {
+        toast({
+          status: 'error',
+          title: 'Preço inválido :(',
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      if (!name || !amount || !category) {
+        toast({
+          status: 'error',
+          title: 'Preencha os campos obrigatórios',
+          isClosable: true,
+        });
+      }
+
       toast({
-        status: 'error',
-        title: 'Preço inválido :(',
-        duration: 5000,
-        isClosable: true,
+        status: 'success',
+        title: 'Item atualizado',
       });
-      return;
+      onClose();
+
+      const { product: newProduct, message } = await StockService.updateProduct(
+        {
+          _id: id,
+          name,
+          amount,
+          category,
+          imageURL: image,
+          unitPrice: formattedUnitPrice,
+        }
+      );
+
+      console.log({ newProduct, message });
+
+      productsDispatch({
+        type: 'UPDATE-ONE-PRODUCT',
+        payload: { product: newProduct },
+      });
+    } catch (err: any) {
+      console.log(err.message);
     }
-
-    toast({
-      status: 'success',
-      title: 'Item atualizado',
-    });
-    onClose();
-
-    console.log(itemInfos);
-    // TODO: update the globalState
   }
 
   function onClose() {

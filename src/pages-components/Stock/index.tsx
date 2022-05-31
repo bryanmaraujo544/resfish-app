@@ -16,7 +16,11 @@ import { productsReducer } from './reducers/productsReducer';
 import { Product } from './types/Product';
 
 interface Action {
-  type: 'ADD-PRODUCTS' | 'ADD-ONE-PRODUCT' | 'REMOVE-ONE-PRODUCT';
+  type:
+    | 'ADD-PRODUCTS'
+    | 'ADD-ONE-PRODUCT'
+    | 'REMOVE-ONE-PRODUCT'
+    | 'UPDATE-ONE-PRODUCT';
   payload: any;
 }
 
