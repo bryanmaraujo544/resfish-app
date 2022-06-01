@@ -21,6 +21,7 @@ import { FiEdit2 } from 'react-icons/fi';
 import { FaArrowUp } from 'react-icons/fa';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
+import { Command } from 'pages-components/Commands/types/Command';
 
 const listColumns = [
   {
@@ -48,7 +49,7 @@ type Props = {
   handleToggleOrderByDir: () => void;
   handleGoToCommandPage: ({ commandId }: { commandId: string }) => void;
   handleOpenAddProductsModal: (commandId: string) => void;
-  handleOpenEditCommandModal: (commandId: string) => void;
+  handleOpenEditCommandModal: (command: Command) => void;
 };
 
 export const CommandsListLayout = ({
@@ -91,7 +92,7 @@ export const CommandsListLayout = ({
           </Tr>
         </Thead>
         <Tbody>
-          {items.map(({ id, table, waiter, total }) => (
+          {items.map(({ id, table, waiter, total, fishingType }) => (
             <Tr
               key={`list-command-${id}`}
               h={20}
@@ -127,7 +128,14 @@ export const CommandsListLayout = ({
                     </MenuItem>
                     <MenuItem
                       icon={<FiEdit2 />}
-                      onClick={() => handleOpenEditCommandModal(id)}
+                      onClick={() =>
+                        handleOpenEditCommandModal({
+                          _id: id,
+                          fishingType,
+                          table,
+                          waiter,
+                        })
+                      }
                     >
                       Editar
                     </MenuItem>

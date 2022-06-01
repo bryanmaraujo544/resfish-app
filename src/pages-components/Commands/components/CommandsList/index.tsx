@@ -5,6 +5,7 @@ import { CommandsContext } from 'pages-components/Commands';
 import { AddProductsModal } from '../AddProductsModal';
 import { CommandsListLayout } from './layout';
 import { EditCommandModal } from '../EditCommandModal';
+import { Command } from 'pages-components/Commands/types/Command';
 
 const mockCommands = [
   {
@@ -49,7 +50,7 @@ export const CommandsList = () => {
   const [commandIdToAddProducts, setCommandIdToAddProducts] = useState('');
   const [isAddProductsModalOpen, setIsAddProductsOpen] = useState(false);
 
-  const [commandIdToEdit, setCommandIdToEdit] = useState('');
+  const [commandToEdit, setCommandToEdit] = useState<Command>({} as Command);
   const [isEditCommandModalOpen, setIsEditCommandModalOpen] = useState(false);
 
   const router = useRouter();
@@ -72,8 +73,8 @@ export const CommandsList = () => {
     setIsAddProductsOpen(true);
   }, []);
 
-  const handleOpenEditCommandModal = useCallback((commandId: string) => {
-    setCommandIdToEdit(commandId);
+  const handleOpenEditCommandModal = useCallback((command: Command) => {
+    setCommandToEdit(command);
     setIsEditCommandModalOpen(true);
   }, []);
 
@@ -116,6 +117,7 @@ export const CommandsList = () => {
       return false;
     });
     return filtered;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchContent, filteredBySort, orderByDir]);
 
@@ -138,7 +140,7 @@ export const CommandsList = () => {
       <EditCommandModal
         isModalOpen={isEditCommandModalOpen}
         setIsModalOpen={setIsEditCommandModalOpen}
-        commandId={commandIdToEdit}
+        command={commandToEdit}
       />
     </>
   );

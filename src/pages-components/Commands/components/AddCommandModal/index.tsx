@@ -29,7 +29,6 @@ export const AddCommandModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     handleCloseModal();
   };
 
-  console.log('add comman');
   return (
     <AddCommandModalLayout
       isModalOpen={isModalOpen}
