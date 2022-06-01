@@ -16,7 +16,7 @@ import { CommandLayout } from './layout';
 
 const mockCommands = [
   {
-    id: 2,
+    id: 'kjfd3343kdkkklldxdJ',
     table: 'João Gomes',
     waiter: 'Diego',
     total: 458.9,

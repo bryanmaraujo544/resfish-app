@@ -62,6 +62,7 @@ export const CommandsListLayout = ({
   handleOpenEditCommandModal,
 }: Props) => {
   console.log('commands layout');
+  console.log({ items });
 
   return (
     <TableContainer>
@@ -92,20 +93,20 @@ export const CommandsListLayout = ({
           </Tr>
         </Thead>
         <Tbody>
-          {items.map(({ id, table, waiter, total, fishingType }) => (
+          {items.map(({ _id, table, waiter, total, fishingType }) => (
             <Tr
-              key={`list-command-${id}`}
+              key={`list-command-${_id}`}
               h={20}
               cursor="pointer"
               _hover={{ bg: 'blue.50' }}
             >
-              <Td onClick={() => handleGoToCommandPage({ commandId: id })}>
+              <Td onClick={() => handleGoToCommandPage({ commandId: _id })}>
                 {table}
               </Td>
-              <Td onClick={() => handleGoToCommandPage({ commandId: id })}>
+              <Td onClick={() => handleGoToCommandPage({ commandId: _id })}>
                 {waiter}
               </Td>
-              <Td onClick={() => handleGoToCommandPage({ commandId: id })}>
+              <Td onClick={() => handleGoToCommandPage({ commandId: _id })}>
                 R$ {formatDecimalNum({ num: total.toString(), to: 'comma' })}
               </Td>
               <Td isNumeric>
@@ -122,7 +123,7 @@ export const CommandsListLayout = ({
                   <MenuList>
                     <MenuItem
                       icon={<BiAddToQueue />}
-                      onClick={() => handleOpenAddProductsModal(id)}
+                      onClick={() => handleOpenAddProductsModal(_id)}
                     >
                       Adicionar Produtos
                     </MenuItem>
@@ -130,7 +131,7 @@ export const CommandsListLayout = ({
                       icon={<FiEdit2 />}
                       onClick={() =>
                         handleOpenEditCommandModal({
-                          _id: id,
+                          _id: _id,
                           fishingType,
                           table,
                           waiter,

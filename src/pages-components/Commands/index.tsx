@@ -1,20 +1,41 @@
-import { createContext, useMemo, useState } from 'react';
+import { createContext, useMemo, useState, useReducer, useEffect } from 'react';
 
 import { ContextProps } from './types/ContextProps';
 import { AddCommandModal } from './components/AddCommandModal';
 import { CommandsLayout } from './layout';
+import { commandsReducer } from './reducers/commandsReducer';
+
+const mockCommands = [
+  {
+    _id: 'kjfd3343kdkkklldxdJ',
+    table: 'João Gomes',
+    waiter: 'Diego',
+    total: 458.9,
+  },
+];
 
 export const CommandsContext = createContext({} as ContextProps);
 
 export const Commands = () => {
+  const [allCommands, allCommandsDispatch] = useReducer(commandsReducer, {
+    value: [],
+  });
+
   const [filter, setFilter] = useState('');
   const [orderBy, setOrderBy] = useState('');
   const [orderByDir, setOrderByDir] = useState('asc' as 'asc' | 'desc');
   const [searchContent, setSearchContent] = useState('');
 
-  console.log('commands rendered');
-
   const [isAddCommandModalOpen, setIsAddCommandModalOpen] = useState(false);
+
+  useEffect(() => {
+    allCommandsDispatch({
+      type: 'ADD-ALL-COMMANDS',
+      payload: { commands: mockCommands },
+    });
+  }, []);
+
+  console.log({ allCommands });
 
   function handleOpenAddCommandModal() {
     setIsAddCommandModalOpen(true);
@@ -30,8 +51,17 @@ export const Commands = () => {
       setOrderByDir,
       searchContent,
       setSearchContent,
+      allCommands: allCommands.value,
+      allCommandsDispatch,
     }),
-    [filter, orderBy, orderByDir, searchContent]
+    [
+      filter,
+      orderBy,
+      orderByDir,
+      searchContent,
+      allCommands,
+      allCommandsDispatch,
+    ]
   );
 
   return (

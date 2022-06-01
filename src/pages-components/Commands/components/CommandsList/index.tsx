@@ -7,45 +7,6 @@ import { CommandsListLayout } from './layout';
 import { EditCommandModal } from '../EditCommandModal';
 import { Command } from 'pages-components/Commands/types/Command';
 
-const mockCommands = [
-  {
-    id: 2,
-    table: 'João Gomes',
-    waiter: 'Diego',
-    total: 458.9,
-  },
-  {
-    id: 3,
-    table: 'João Gomes',
-    waiter: 'Diego',
-    total: 458.9,
-  },
-  {
-    id: 4,
-    table: 'Mbappé',
-    waiter: 'Diego',
-    total: 4580.9,
-  },
-  {
-    id: 5,
-    table: 'Neymar',
-    waiter: 'Júlio',
-    total: 1259.9,
-  },
-  {
-    id: 6,
-    table: 'Amanda vermelho',
-    waiter: 'Bryan',
-    total: 458.9,
-  },
-  {
-    id: 7,
-    table: 'João Gomes',
-    waiter: 'Diego',
-    total: 358.9,
-  },
-];
-
 export const CommandsList = () => {
   const [commandIdToAddProducts, setCommandIdToAddProducts] = useState('');
   const [isAddProductsModalOpen, setIsAddProductsOpen] = useState(false);
@@ -54,8 +15,14 @@ export const CommandsList = () => {
   const [isEditCommandModalOpen, setIsEditCommandModalOpen] = useState(false);
 
   const router = useRouter();
-  const { searchContent, filter, orderBy, orderByDir, setOrderByDir } =
-    useContext(CommandsContext);
+  const {
+    searchContent,
+    filter,
+    orderBy,
+    orderByDir,
+    setOrderByDir,
+    allCommands,
+  } = useContext(CommandsContext);
 
   const handleToggleOrderByDir = useCallback(() => {
     setOrderByDir((prev: string) => (prev === 'asc' ? 'desc' : 'asc'));
@@ -79,11 +46,9 @@ export const CommandsList = () => {
   }, []);
 
   const filteredByFilter = useMemo(() => {
-    const filtered = mockCommands.filter(
-      (command) => command.waiter === filter
-    );
-    return filtered.length > 0 ? filtered : mockCommands;
-  }, [filter]);
+    const filtered = allCommands.filter((command) => command.waiter === filter);
+    return filtered.length > 0 ? filtered : allCommands;
+  }, [filter, allCommands]);
 
   const filteredBySort = useMemo(() => {
     const filtered = filteredByFilter.sort((a: any, b: any) => {
