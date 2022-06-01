@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { CommandsContext } from 'pages-components/Commands';
 import { AddProductsModal } from '../AddProductsModal';
 import { CommandsListLayout } from './layout';
+import { EditCommandModal } from '../EditCommandModal';
 
 const mockCommands = [
   {
@@ -48,6 +49,9 @@ export const CommandsList = () => {
   const [commandIdToAddProducts, setCommandIdToAddProducts] = useState('');
   const [isAddProductsModalOpen, setIsAddProductsOpen] = useState(false);
 
+  const [commandIdToEdit, setCommandIdToEdit] = useState('');
+  const [isEditCommandModalOpen, setIsEditCommandModalOpen] = useState(false);
+
   const router = useRouter();
   const { searchContent, filter, orderBy, orderByDir, setOrderByDir } =
     useContext(CommandsContext);
@@ -66,6 +70,11 @@ export const CommandsList = () => {
   const handleOpenAddProductsModal = useCallback((commandId: string) => {
     setCommandIdToAddProducts(commandId);
     setIsAddProductsOpen(true);
+  }, []);
+
+  const handleOpenEditCommandModal = useCallback((commandId: string) => {
+    setCommandIdToEdit(commandId);
+    setIsEditCommandModalOpen(true);
   }, []);
 
   const filteredByFilter = useMemo(() => {
@@ -119,11 +128,17 @@ export const CommandsList = () => {
         handleToggleOrderByDir={handleToggleOrderByDir}
         handleGoToCommandPage={handleGoToCommandPage}
         handleOpenAddProductsModal={handleOpenAddProductsModal}
+        handleOpenEditCommandModal={handleOpenEditCommandModal}
       />
       <AddProductsModal
         isModalOpen={isAddProductsModalOpen}
         setIsModalOpen={setIsAddProductsOpen}
         commandId={commandIdToAddProducts}
+      />
+      <EditCommandModal
+        isModalOpen={isEditCommandModalOpen}
+        setIsModalOpen={setIsEditCommandModalOpen}
+        commandId={commandIdToEdit}
       />
     </>
   );

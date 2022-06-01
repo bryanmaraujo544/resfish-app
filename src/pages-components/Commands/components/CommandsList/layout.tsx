@@ -48,6 +48,7 @@ type Props = {
   handleToggleOrderByDir: () => void;
   handleGoToCommandPage: ({ commandId }: { commandId: string }) => void;
   handleOpenAddProductsModal: (commandId: string) => void;
+  handleOpenEditCommandModal: (commandId: string) => void;
 };
 
 export const CommandsListLayout = ({
@@ -57,6 +58,7 @@ export const CommandsListLayout = ({
   handleToggleOrderByDir,
   handleGoToCommandPage,
   handleOpenAddProductsModal,
+  handleOpenEditCommandModal,
 }: Props) => {
   console.log('commands layout');
 
@@ -123,7 +125,12 @@ export const CommandsListLayout = ({
                     >
                       Adicionar Produtos
                     </MenuItem>
-                    <MenuItem icon={<FiEdit2 />}>Editar</MenuItem>
+                    <MenuItem
+                      icon={<FiEdit2 />}
+                      onClick={() => handleOpenEditCommandModal(id)}
+                    >
+                      Editar
+                    </MenuItem>
                     <MenuItem icon={<AiOutlineDelete />} color="red.500">
                       Deletar
                     </MenuItem>
