@@ -4,6 +4,7 @@ import { ContextProps } from './types/ContextProps';
 import { AddCommandModal } from './components/AddCommandModal';
 import { CommandsLayout } from './layout';
 import { commandsReducer } from './reducers/commandsReducer';
+import CommandsService from './services/CommandsService';
 
 const mockCommands = [
   {
@@ -29,10 +30,13 @@ export const Commands = () => {
   const [isAddCommandModalOpen, setIsAddCommandModalOpen] = useState(false);
 
   useEffect(() => {
-    allCommandsDispatch({
-      type: 'ADD-ALL-COMMANDS',
-      payload: { commands: mockCommands },
-    });
+    (async () => {
+      const commands = await CommandsService.getAllCommands();
+      allCommandsDispatch({
+        type: 'ADD-ALL-COMMANDS',
+        payload: { commands },
+      });
+    })();
   }, []);
 
   console.log({ allCommands });

@@ -6,7 +6,7 @@ interface Props {
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
   command: {
-    _id: string;
+    _id?: string;
     table: string;
     waiter: string;
     fishingType: string;
