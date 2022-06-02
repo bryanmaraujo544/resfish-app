@@ -37,7 +37,6 @@ export const EditCommandModal = ({
     setValue('waiter', command.waiter);
     setValue('fishingType', command.fishingType);
   }, [command]);
-  console.log({ command });
 
   function handleCloseModal() {
     setIsModalOpen(false);

@@ -11,6 +11,11 @@ class CommandsService {
     const { data } = await serverApi.post('/commands', command);
     return data;
   }
+
+  async deleteCommand(commandId: string) {
+    const { data } = await serverApi.delete(`/commands/${commandId}`);
+    return data;
+  }
 }
 
 export default new CommandsService();

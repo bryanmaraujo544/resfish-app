@@ -50,6 +50,7 @@ type Props = {
   handleGoToCommandPage: ({ commandId }: { commandId: string }) => void;
   handleOpenAddProductsModal: (commandId: string) => void;
   handleOpenEditCommandModal: (command: Command) => void;
+  handleOpenDeleteCommandModal: (commandId: string) => void;
 };
 
 export const CommandsListLayout = ({
@@ -60,6 +61,7 @@ export const CommandsListLayout = ({
   handleGoToCommandPage,
   handleOpenAddProductsModal,
   handleOpenEditCommandModal,
+  handleOpenDeleteCommandModal,
 }: Props) => {
   console.log('commands layout');
   console.log({ items });
@@ -140,7 +142,11 @@ export const CommandsListLayout = ({
                     >
                       Editar
                     </MenuItem>
-                    <MenuItem icon={<AiOutlineDelete />} color="red.500">
+                    <MenuItem
+                      icon={<AiOutlineDelete />}
+                      color="red.500"
+                      onClick={() => handleOpenDeleteCommandModal(_id)}
+                    >
                       Deletar
                     </MenuItem>
                   </MenuList>

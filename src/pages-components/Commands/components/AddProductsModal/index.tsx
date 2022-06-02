@@ -45,7 +45,6 @@ export const AddProductsModal = ({
   setIsModalOpen,
   commandId,
 }: Props) => {
-  console.log({ commandId });
   const [selectedProducts, setSelectedProducts] = useState([] as any);
 
   const [isSetAmountModalOpen, setIsSetAmountModalOpen] = useState(false);

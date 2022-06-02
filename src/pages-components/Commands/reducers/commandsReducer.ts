@@ -40,7 +40,7 @@ export const commandsReducer = (state: CommandsState, action: Action) => {
     }
     case 'REMOVE-ONE-COMMAND': {
       const updatedCommands = state.value.filter(
-        (command) => command._id !== action.payload.command._id
+        (command) => command._id !== action.payload.commandId
       );
       return { value: updatedCommands };
     }

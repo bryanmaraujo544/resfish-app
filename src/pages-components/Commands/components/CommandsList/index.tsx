@@ -6,6 +6,7 @@ import { AddProductsModal } from '../AddProductsModal';
 import { CommandsListLayout } from './layout';
 import { EditCommandModal } from '../EditCommandModal';
 import { Command } from 'pages-components/Commands/types/Command';
+import { DeleteCommandModal } from '../DeleteCommandModal';
 
 export const CommandsList = () => {
   const [commandIdToAddProducts, setCommandIdToAddProducts] = useState('');
@@ -13,6 +14,10 @@ export const CommandsList = () => {
 
   const [commandToEdit, setCommandToEdit] = useState<Command>({} as Command);
   const [isEditCommandModalOpen, setIsEditCommandModalOpen] = useState(false);
+
+  const [commandIdToDelete, setCommandIdToDelete] = useState('');
+  const [isDeleteCommandModalOpen, setIsDeleteCommandModalOpen] =
+    useState(false);
 
   const router = useRouter();
   const {
@@ -43,6 +48,11 @@ export const CommandsList = () => {
   const handleOpenEditCommandModal = useCallback((command: Command) => {
     setCommandToEdit(command);
     setIsEditCommandModalOpen(true);
+  }, []);
+
+  const handleOpenDeleteCommandModal = useCallback((commandId: string) => {
+    setCommandIdToDelete(commandId);
+    setIsDeleteCommandModalOpen(true);
   }, []);
 
   const filteredByFilter = useMemo(() => {
@@ -96,6 +106,7 @@ export const CommandsList = () => {
         handleGoToCommandPage={handleGoToCommandPage}
         handleOpenAddProductsModal={handleOpenAddProductsModal}
         handleOpenEditCommandModal={handleOpenEditCommandModal}
+        handleOpenDeleteCommandModal={handleOpenDeleteCommandModal}
       />
       <AddProductsModal
         isModalOpen={isAddProductsModalOpen}
@@ -106,6 +117,11 @@ export const CommandsList = () => {
         isModalOpen={isEditCommandModalOpen}
         setIsModalOpen={setIsEditCommandModalOpen}
         command={commandToEdit}
+      />
+      <DeleteCommandModal
+        commandId={commandIdToDelete}
+        isModalOpen={isDeleteCommandModalOpen}
+        setIsModalOpen={setIsDeleteCommandModalOpen}
       />
     </>
   );
