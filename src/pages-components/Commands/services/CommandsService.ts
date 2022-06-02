@@ -16,6 +16,26 @@ class CommandsService {
     const { data } = await serverApi.delete(`/commands/${commandId}`);
     return data;
   }
+
+  async updateCommand({
+    _id,
+    waiter,
+    table,
+    fishingType,
+    products,
+    total,
+    isActive,
+  }: Command) {
+    const { data } = await serverApi.put(`/commands/${_id}`, {
+      waiter,
+      table,
+      fishingType,
+      products,
+      total,
+      isActive,
+    });
+    return data;
+  }
 }
 
 export default new CommandsService();
