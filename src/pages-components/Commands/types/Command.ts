@@ -1,5 +1,5 @@
 export interface Command {
-  _id: string;
+  _id?: string;
   table: string;
   waiter: string;
   fishingType: string;

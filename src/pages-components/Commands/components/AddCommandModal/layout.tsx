@@ -74,7 +74,7 @@ export const AddCommandModalLayout = ({
         <Select {...rhfRegister('fishingType')} cursor="pointer">
           <option>Nenhum</option>
           <option>Pesca Esportiva</option>
-          <option>Pesque-Pague</option>
+          <option>Pesque Pague</option>
         </Select>
       </InputGroup>
       <Button type="submit">Adicionar</Button>
