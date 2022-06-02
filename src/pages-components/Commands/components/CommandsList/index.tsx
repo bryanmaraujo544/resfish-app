@@ -56,8 +56,14 @@ export const CommandsList = () => {
   }, []);
 
   const filteredByFilter = useMemo(() => {
-    const filtered = allCommands.filter((command) => command.waiter === filter);
-    return filtered.length > 0 ? filtered : allCommands;
+    if (!filter) {
+      return allCommands;
+    }
+
+    const filtered = allCommands.filter(
+      (command) => command.fishingType === filter
+    );
+    return filtered;
   }, [filter, allCommands]);
 
   const filteredBySort = useMemo(() => {
