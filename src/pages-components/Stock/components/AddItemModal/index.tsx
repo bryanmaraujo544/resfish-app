@@ -79,11 +79,12 @@ export const AddItemModal = ({
       // check if image url is valid
       const isImageURLValid = checkImageURL(image);
       if (!isImageURLValid) {
-        return toast({
+        toast({
           status: 'error',
           title: 'A URL da imagem está inválida',
           isClosable: true,
         });
+        return;
       }
 
       toast({
