@@ -13,6 +13,8 @@ import { productsReducer } from './reducers/productsReducer';
 import { AddProductModal } from './components/AddProductModal';
 import { DeleteProductModal } from './components/DeleteProductModal';
 import { CommandLayout } from './layout';
+import CommandService from './services/CommandService';
+import { useToast } from '@chakra-ui/react';
 
 const mockCommands = [
   {
@@ -106,7 +108,7 @@ type ContextProps = {
 export const CommandContext = createContext({} as ContextProps);
 
 type Props = {
-  commandId: string | string[] | undefined;
+  commandId: string;
 };
 
 const initialState = {
@@ -131,13 +133,37 @@ export const Command = ({ commandId }: Props) => {
   const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
     useState(false);
 
-  useEffect(() => {
-    const [commandFound] = mockCommands.filter(
-      ({ id }) => id.toString() === commandId
-    );
-    setCommand(commandFound);
+  const toast = useToast();
 
-    productsDispatch({ type: 'add-products', payload: commandFound?.products });
+  useEffect(() => {
+    (async () => {
+      const [commandFound] = mockCommands.filter(
+        ({ id }) => id.toString() === commandId
+      );
+
+      try {
+        // Grab command informations from database
+        const { command: commandFound, message } =
+          await CommandService.getOneCommand({
+            commandId,
+          });
+        setCommand(commandFound);
+
+        productsDispatch({
+          type: 'add-products',
+          payload: commandFound?.products,
+        });
+
+        toast.closeAll();
+      } catch (error: any) {
+        toast({
+          status: 'error',
+          title: error?.response?.data?.message,
+          duration: 2000,
+          isClosable: true,
+        });
+      }
+    })();
   }, [commandId]);
 
   const handleOpenDeleteModal = useCallback(

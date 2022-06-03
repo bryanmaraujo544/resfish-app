@@ -8,7 +8,6 @@ type Props = {
 };
 
 export const DeleteProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
-  console.log('delete');
   const { productIdToDelete, productsDispatch } = useContext(CommandContext);
   console.log('ID TO DELETE', productIdToDelete);
 
