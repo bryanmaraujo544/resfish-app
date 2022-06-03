@@ -1,7 +1,11 @@
 import { serverApi } from 'services/serverApi';
 
 class CommandService {
-  async getOneCommand({ commandId }: { commandId: string }) {
+  async getOneCommand({
+    commandId,
+  }: {
+    commandId: string | string[] | undefined;
+  }) {
     const { data } = await serverApi.get(`/commands/${commandId}`);
     return data;
   }

@@ -108,7 +108,7 @@ type ContextProps = {
 export const CommandContext = createContext({} as ContextProps);
 
 type Props = {
-  commandId: string;
+  commandId: string | string[] | undefined;
 };
 
 const initialState = {
