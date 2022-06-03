@@ -18,7 +18,7 @@ import { AiFillFilter } from 'react-icons/ai';
 import { BiSortAlt2 } from 'react-icons/bi';
 // import { CgSortAz } from 'react-icons/cg';
 
-const filterOptions = ['Pesca Esportiva', 'Pesque-Pague'];
+const filterOptions = ['Pesca Esportiva', 'Pesque Pague'];
 const sortOptions = [
   {
     text: 'Mesa',
