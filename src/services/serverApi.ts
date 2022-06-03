@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const devEnv = 'http://localhost:8080';
-// const prodEnf = '';
+const url = 'http://localhost:8080';
 
 export const serverApi = axios.create({
-  baseURL: devEnv,
+  baseURL: url,
 });
