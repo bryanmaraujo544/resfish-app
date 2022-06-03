@@ -9,81 +9,12 @@ import {
   useState,
 } from 'react';
 
+import { useToast } from '@chakra-ui/react';
 import { productsReducer } from './reducers/productsReducer';
 import { AddProductModal } from './components/AddProductModal';
 import { DeleteProductModal } from './components/DeleteProductModal';
 import { CommandLayout } from './layout';
 import CommandService from './services/CommandService';
-import { useToast } from '@chakra-ui/react';
-
-const mockCommands = [
-  {
-    id: 'kjfd3343kdkkklldxdJ',
-    table: 'João Gomes',
-    waiter: 'Diego',
-    total: 458.9,
-    products: [
-      {
-        id: 'coca123',
-        name: 'Coca-Cola',
-        category: 'Bebidas',
-        amount: 5,
-        unitPrice: 7.9,
-      },
-      {
-        id: 'skol123',
-        name: 'Skol 700ml',
-        category: 'Bebidas',
-        amount: 12,
-        unitPrice: 5.5,
-      },
-      {
-        id: 'fritas123',
-        name: 'Porção Batata Frita',
-        category: 'Porções',
-        amount: 2,
-        unitPrice: 32.5,
-      },
-      {
-        id: 'peixe123',
-        name: 'Peixe Baiacu',
-        category: 'Peixes',
-        amount: 3,
-        unitPrice: 24.5,
-      },
-    ],
-  },
-  {
-    id: 3,
-    table: 'João Gomes',
-    waiter: 'Diego',
-    total: 458.9,
-  },
-  {
-    id: 4,
-    table: 'Mbappé',
-    waiter: 'Diego',
-    total: 4580.9,
-  },
-  {
-    id: 5,
-    table: 'Neymar',
-    waiter: 'Júlio',
-    total: 1259.9,
-  },
-  {
-    id: 6,
-    table: 'Amanda vermelho',
-    waiter: 'Bryan',
-    total: 458.9,
-  },
-  {
-    id: 7,
-    table: 'João Gomes',
-    waiter: 'Diego',
-    total: 358.9,
-  },
-];
 
 type ContextProps = {
   products: { value: any[] };
@@ -137,16 +68,11 @@ export const Command = ({ commandId }: Props) => {
 
   useEffect(() => {
     (async () => {
-      const [commandFound] = mockCommands.filter(
-        ({ id }) => id.toString() === commandId
-      );
-
       try {
         // Grab command informations from database
-        const { command: commandFound, message } =
-          await CommandService.getOneCommand({
-            commandId,
-          });
+        const { command: commandFound } = await CommandService.getOneCommand({
+          commandId,
+        });
         setCommand(commandFound);
 
         productsDispatch({
