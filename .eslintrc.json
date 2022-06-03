@@ -27,7 +27,7 @@
     "import/no-cycle": "off",
     "react/require-default-props": "off",
     "class-methods-use-this": "off",
-    "no-underscore-dangle": "no-underscore-dangle"
+    "no-underscore-dangle": "off"
   },
   "settings": {
     "import/resolver": {
