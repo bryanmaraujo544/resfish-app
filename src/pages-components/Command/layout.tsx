@@ -1,4 +1,4 @@
-import { Heading } from '@chakra-ui/react';
+import { Heading, Spinner } from '@chakra-ui/react';
 import { Header } from 'components/Header';
 import { Layout } from 'components/Layout';
 import { Command } from 'types/Command';
@@ -13,10 +13,22 @@ interface Props {
 export const CommandLayout = ({ command, isLoading }: Props) => (
   <Layout>
     <Header />
-    <Heading color="blue.800" mb={5} fontSize={[18, 24, 28]}>
-      Comanda: {command?.table}
-    </Heading>
-    <NavHeader />
-    <ProductsList />
+    {isLoading ? (
+      <Spinner
+        size="xl"
+        position="absolute"
+        left="50%"
+        top="50%"
+        transform="translate(-50%, -50%)"
+      />
+    ) : (
+      <>
+        <Heading color="blue.800" mb={5} fontSize={[18, 24, 28]}>
+          Comanda: {command?.table}
+        </Heading>
+        <NavHeader />
+        <ProductsList />
+      </>
+    )}
   </Layout>
 );

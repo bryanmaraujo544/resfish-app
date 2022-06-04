@@ -1,10 +1,8 @@
+/* eslint-disable react/destructuring-assignment */
 import { Box } from '@chakra-ui/react';
-import { ReactNode } from 'react';
 
-interface Props {
-  children: ReactNode;
-}
-
-export const Layout = ({ children }: Props) => (
-  <Box px={[4, 8, 12, 14]}>{children}</Box>
+export const Layout = (props: any) => (
+  <Box px={[4, 8, 12, 14]} {...props} minHeight="100vh">
+    {props.children}
+  </Box>
 );
