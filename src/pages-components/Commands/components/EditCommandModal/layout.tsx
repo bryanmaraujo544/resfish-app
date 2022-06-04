@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import {
   FormControl,
   Input,
@@ -7,7 +8,9 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Modal } from 'components/Modal';
+import { ReactNode } from 'react';
 import { SubmitHandler } from 'react-hook-form';
+
 interface EditCommandInputs {
   table: string;
   waiter: string;
@@ -30,59 +33,53 @@ export const EditCommandModalLayout = ({
   rhfHandleSubmit,
   rhfRegister,
   rhfErrors,
-}: Props) => {
-  return (
-    <Modal
-      isOpen={isModalOpen}
-      onClose={handleCloseModal}
-      title="Editar comanda"
+}: Props) => (
+  <Modal isOpen={isModalOpen} onClose={handleCloseModal} title="Editar comanda">
+    <FormControl
+      as="form"
+      display="flex"
+      flexDirection="column"
+      gap={4}
+      onSubmit={rhfHandleSubmit(handleEditCommand)}
     >
-      <FormControl
-        as="form"
-        display="flex"
-        flexDirection="column"
-        gap={4}
-        onSubmit={rhfHandleSubmit(handleEditCommand)}
-      >
-        <InputGroup>
-          <Text>Mesa: </Text>
-          <Input
-            placeholder="João"
-            {...rhfRegister('table', { required: true })}
-          />
-          <ErrorText
-            hasError={rhfErrors.table}
-            errorMsg="Esse campo é necessário"
-          />
-        </InputGroup>
-        <InputGroup>
-          <Text>Garçom: </Text>
-          <Input
-            placeholder="Fulano..."
-            {...rhfRegister('waiter', { required: true })}
-          />
-          <ErrorText
-            hasError={rhfErrors.waiter}
-            errorMsg="Esse campo é necessário"
-          />
-        </InputGroup>
-        <InputGroup>
-          <Text>Tipo de Pesca</Text>
-          <Select {...rhfRegister('fishingType')} cursor="pointer">
-            <option>Nenhum</option>
-            <option>Pesca Esportiva</option>
-            <option>Pesque-Pague</option>
-          </Select>
-        </InputGroup>
-        <Button type="submit">Adicionar</Button>
-      </FormControl>
-    </Modal>
-  );
-};
+      <InputGroup>
+        <Text>Mesa: </Text>
+        <Input
+          placeholder="João"
+          {...rhfRegister('table', { required: true })}
+        />
+        <ErrorText
+          hasError={rhfErrors.table}
+          errorMsg="Esse campo é necessário"
+        />
+      </InputGroup>
+      <InputGroup>
+        <Text>Garçom: </Text>
+        <Input
+          placeholder="Fulano..."
+          {...rhfRegister('waiter', { required: true })}
+        />
+        <ErrorText
+          hasError={rhfErrors.waiter}
+          errorMsg="Esse campo é necessário"
+        />
+      </InputGroup>
+      <InputGroup>
+        <Text>Tipo de Pesca</Text>
+        <Select {...rhfRegister('fishingType')} cursor="pointer">
+          <option defaultChecked>Nenhum</option>
+          <option>Pesca Esportiva</option>
+          <option>Pesque-Pague</option>
+        </Select>
+      </InputGroup>
+      <Button type="submit">Atualizar</Button>
+    </FormControl>
+  </Modal>
+);
 
-const InputGroup = (props: any) => (
+const InputGroup = ({ children }: { children: ReactNode }) => (
   <Flex display="flex" flexDirection="column" gap={1}>
-    {props.children}
+    {children}
   </Flex>
 );
 

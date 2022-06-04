@@ -2,7 +2,7 @@ import { serverApi } from 'services/serverApi';
 import { Command } from '../types/Command';
 
 interface UpdateCommand extends Command {
-  _id: string;
+  _id: string | undefined;
 }
 
 class CommandsService {

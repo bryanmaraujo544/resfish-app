@@ -1,4 +1,4 @@
-import { Toast, useToast } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 import { CommandsContext } from 'pages-components/Commands';
 import CommandsService from 'pages-components/Commands/services/CommandsService';
 import { Dispatch, SetStateAction, useContext, useEffect } from 'react';
@@ -41,8 +41,8 @@ export const EditCommandModal = ({
     // Setting the value of input of form with command's values
     setValue('table', command?.table || '');
     setValue('waiter', command?.waiter || '');
-    setValue('fishingType', command?.fishingType || '');
-  }, [command]);
+    setValue('fishingType', command?.fishingType || 'Nenhum');
+  }, [command, setValue]);
 
   function handleCloseModal() {
     setIsModalOpen(false);
@@ -53,6 +53,23 @@ export const EditCommandModal = ({
     waiter,
     fishingType,
   }) => {
+    if (
+      table === command.table &&
+      waiter === command.waiter &&
+      fishingType === command.fishingType
+    ) {
+      handleCloseModal();
+
+      toast({
+        status: 'info',
+        title: 'Nada alterado',
+        duration: 3000,
+        isClosable: true,
+      });
+
+      return;
+    }
+
     try {
       const { message, command: newCommand } =
         await CommandsService.updateCommand({
