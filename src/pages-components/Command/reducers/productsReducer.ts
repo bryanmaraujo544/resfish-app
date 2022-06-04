@@ -29,7 +29,7 @@ export const productsReducer = (state: any, action: any) => {
     case 'delete': {
       console.log('DELETE DISPATCH WAS CALLED', action);
       const newState = state.value.filter(
-        (product: any) => product.id !== action.payload.id
+        (product: any) => product._id !== action.payload.product._id
       );
       return { value: newState };
     }

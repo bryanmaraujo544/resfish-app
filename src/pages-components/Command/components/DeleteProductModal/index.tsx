@@ -18,7 +18,10 @@ export const DeleteProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   function handleDeleteProduct() {
     console.log('delete');
     // DELETE THE PRODUCT BASED ON ID
-    productsDispatch({ type: 'delete', payload: { id: productIdToDelete } });
+    productsDispatch({
+      type: 'delete',
+      payload: { product: { _id: productIdToDelete } },
+    });
     handleCloseModal();
   }
 

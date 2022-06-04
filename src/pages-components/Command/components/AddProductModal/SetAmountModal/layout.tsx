@@ -48,7 +48,9 @@ export const SetAmountModalLayout = ({
             <NumberDecrementStepper />
           </NumberInputStepper>
         </NumberInput>
-        <Button w="100%">Adicionar Produto</Button>
+        <Button w="100%" type="submit">
+          Adicionar Produto
+        </Button>
       </Stack>
     </Modal>
   );

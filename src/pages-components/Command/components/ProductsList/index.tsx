@@ -92,6 +92,8 @@ export const ProductsList = () => {
     return filtered;
   }, [orderByDir, filteredBySearch, orderBy]);
 
+  console.log({ filteredBySort });
+
   return (
     <ProductsListLayout
       products={filteredBySort}

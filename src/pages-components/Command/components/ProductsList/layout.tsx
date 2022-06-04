@@ -89,13 +89,13 @@ export const ProductsListLayout = ({
       </Thead>
       <Tbody>
         {products?.length > 0 &&
-          products?.map(({ id, name, amount, unitPrice }: any) => (
+          products?.map(({ _id, name, amount, unitPrice }: any) => (
             <Tr key={`product-list${name}`} h={20}>
               <Td>{name}</Td>
               <Td>
                 <Flex gap={4}>
                   <Icon
-                    onClick={() => handleDecrementProductAmount({ id })}
+                    onClick={() => handleDecrementProductAmount({ id: _id })}
                     as={BsDash}
                     fontSize={[20, 22, 24]}
                     rounded={2}
@@ -107,7 +107,7 @@ export const ProductsListLayout = ({
                   />
                   <Text>{amount}</Text>
                   <Icon
-                    onClick={() => handleIncrementProductAmount({ id })}
+                    onClick={() => handleIncrementProductAmount({ id: _id })}
                     as={BsPlus}
                     fontSize={[20, 22, 24]}
                     rounded={2}
@@ -134,7 +134,7 @@ export const ProductsListLayout = ({
                 <Button
                   bg="red.50"
                   p={0}
-                  onClick={() => handleOpenDeleteModal({ productId: id })}
+                  onClick={() => handleOpenDeleteModal({ productId: _id })}
                 >
                   <Icon as={BsFillTrashFill} color="red.600" />
                 </Button>
@@ -147,7 +147,7 @@ export const ProductsListLayout = ({
               <Flex align="center" gap={4} mt={4} color="blue.700">
                 <Icon as={BiSad} fontSize={32} />
                 <Text fontSize={20} fontWeight={600}>
-                  Nenhum Produto com essa categoria
+                  Nenhum produto encontrado
                 </Text>
               </Flex>
             </Td>
