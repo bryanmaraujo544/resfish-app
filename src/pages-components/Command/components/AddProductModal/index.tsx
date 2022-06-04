@@ -6,6 +6,7 @@ import {
   useState,
   useMemo,
   useEffect,
+  useCallback,
 } from 'react';
 import { useToast } from '@chakra-ui/react';
 
@@ -132,6 +133,8 @@ export const AddProductModal = ({
 
       location.reload();
 
+      cleanModalValues();
+
       // TODO: Broadcast to necessary entities the update of command
 
       toast.closeAll();
@@ -151,6 +154,13 @@ export const AddProductModal = ({
       });
     }
   }
+
+  const cleanModalValues = useCallback(() => {
+    setSelectedProducts([]);
+    setAmount(1);
+    setFilter('');
+    setSearchContent('');
+  }, []);
 
   function handleChangeFilter(selectedFilter: string) {
     setFilter((prevFilter) => {

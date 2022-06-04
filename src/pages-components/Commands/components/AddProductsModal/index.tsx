@@ -9,6 +9,7 @@ import {
   useMemo,
   useEffect,
   useContext,
+  useCallback,
 } from 'react';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
@@ -79,6 +80,7 @@ export const AddProductsModal = ({
       setIsSetAmountModalOpen(false);
       return;
     }
+
     setSelectedProducts((prev: any) => [
       ...prev,
       { ...productToSetAmount, amount },
@@ -126,6 +128,8 @@ export const AddProductsModal = ({
 
       // TODO: Broadcast to necessary entities the update of command
 
+      cleanModalValues();
+
       toast.closeAll();
       toast({
         status: 'success',
@@ -143,6 +147,13 @@ export const AddProductsModal = ({
       });
     }
   }
+
+  const cleanModalValues = useCallback(() => {
+    setSelectedProducts([]);
+    setAmount(1);
+    setFilter('');
+    setSearchContent('');
+  }, []);
 
   function handleChangeFilter(selectedFilter: string) {
     setFilter((prevFilter) => {
