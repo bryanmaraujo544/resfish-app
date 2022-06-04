@@ -41,21 +41,25 @@ const filterOptions = [
 
 const productsColumns = ['Nome', 'Quantidade', 'Preço Unid.'];
 
-type Props = {
+interface ProductNoAmount {
+  _id?: string;
+  name: string;
+  unitPrice: number;
+}
+
+interface Props {
   isModalOpen: boolean;
   handleCloseModal: () => void;
   products: any[];
   selectedProducts: any[];
-  handleOpenAmountModal: any;
-  // eslint-disable-next-line no-unused-vars
+  handleOpenAmountModal: ({ product }: { product: ProductNoAmount }) => void;
   handleRemoveSelectedProduct: ({ id }: { id: string }) => void;
   handleAddProductsInCommand: () => void;
   filter: string;
   searchContent: string;
   setSearchContent: Dispatch<SetStateAction<string>>;
-  // eslint-disable-next-line no-unused-vars
   handleChangeFilter: (selectedFilter: string) => void;
-};
+}
 
 export const AddProductModalLayout = ({
   isModalOpen,
@@ -175,8 +179,8 @@ export const AddProductModalLayout = ({
           </Thead>
           <Tbody>
             {products?.length > 0 &&
-              products?.map(({ id, name, unitPrice, amount }) => (
-                <Tr key={`add-product-modal-product-${id}`}>
+              products?.map(({ _id, name, unitPrice, amount }) => (
+                <Tr key={`add-product-modal-product-${_id}`}>
                   <Td>{name}</Td>
                   <Td>{amount}</Td>
                   <Td>{unitPrice}</Td>
@@ -187,7 +191,7 @@ export const AddProductModalLayout = ({
                       onClick={
                         () =>
                           handleOpenAmountModal({
-                            product: { name, unitPrice },
+                            product: { _id, name, unitPrice },
                           })
                         // handleAddProduct({ id, name, unitPrice, amount })
                       }

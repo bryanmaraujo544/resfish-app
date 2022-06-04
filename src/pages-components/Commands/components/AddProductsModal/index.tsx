@@ -13,11 +13,17 @@ import {
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
 
-type Props = {
+interface Props {
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
   commandId: string;
-};
+}
+
+interface ProductNoAmount {
+  _id?: string;
+  name: string;
+  unitPrice: number;
+}
 
 export const AddProductsModal = ({
   isModalOpen,
@@ -28,7 +34,9 @@ export const AddProductsModal = ({
   const [selectedProducts, setSelectedProducts] = useState([] as any);
 
   const [isSetAmountModalOpen, setIsSetAmountModalOpen] = useState(false);
-  const [productToSetAmount, setProductToSetAmount] = useState({} as any);
+  const [productToSetAmount, setProductToSetAmount] = useState<ProductNoAmount>(
+    {} as ProductNoAmount
+  );
   const [amount, setAmount] = useState(1);
 
   const [filter, setFilter] = useState('');
@@ -49,7 +57,7 @@ export const AddProductsModal = ({
   }
 
   // This function receives the product infos of the product clicked and opens the modal to select the amount of this
-  function handleOpenAmountModal({ product }: { product: any }) {
+  function handleOpenAmountModal({ product }: { product: ProductNoAmount }) {
     setProductToSetAmount(product);
     setIsSetAmountModalOpen(true);
   }
@@ -62,6 +70,7 @@ export const AddProductsModal = ({
     const hasBeenSelected = selectedProducts.some(
       (selectedProduct: any) => selectedProduct.name === productToSetAmount.name
     );
+
     if (hasBeenSelected) {
       toast({
         title: 'Produto já foi selecionado',
