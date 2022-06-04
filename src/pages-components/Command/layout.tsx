@@ -8,16 +8,13 @@ type Props = {
   command: any;
 };
 
-export const CommandLayout = ({ command }: Props) => {
-  console.log('command', command);
-  return (
-    <Layout>
-      <Header />
-      <Heading color="blue.800" mb={5} fontSize={[18, 24, 28]}>
-        Comanda: {command?.table}
-      </Heading>
-      <NavHeader />
-      <ProductsList />
-    </Layout>
-  );
-};
+export const CommandLayout = ({ command }: Props) => (
+  <Layout>
+    <Header />
+    <Heading color="blue.800" mb={5} fontSize={[18, 24, 28]}>
+      Comanda: {command?.table}
+    </Heading>
+    <NavHeader />
+    <ProductsList />
+  </Layout>
+);

@@ -6,15 +6,6 @@ import { CommandsLayout } from './layout';
 import { commandsReducer } from './reducers/commandsReducer';
 import CommandsService from './services/CommandsService';
 
-const mockCommands = [
-  {
-    _id: 'kjfd3343kdkkklldxdJ',
-    table: 'João Gomes',
-    waiter: 'Diego',
-    total: 458.9,
-  },
-];
-
 export const CommandsContext = createContext({} as ContextProps);
 
 export const Commands = () => {
@@ -38,8 +29,6 @@ export const Commands = () => {
       });
     })();
   }, []);
-
-  console.log({ allCommands });
 
   function handleOpenAddCommandModal() {
     setIsAddCommandModalOpen(true);

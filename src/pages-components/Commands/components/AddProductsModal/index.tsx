@@ -1,6 +1,15 @@
 import { useToast } from '@chakra-ui/react';
+import { CommandsContext } from 'pages-components/Commands';
+import CommandsService from 'pages-components/Commands/services/CommandsService';
 import ProductsService from 'pages-components/Commands/services/ProductsService';
-import { Dispatch, SetStateAction, useState, useMemo, useEffect } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useState,
+  useMemo,
+  useEffect,
+  useContext,
+} from 'react';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
 
@@ -15,7 +24,6 @@ export const AddProductsModal = ({
   setIsModalOpen,
   commandId,
 }: Props) => {
-  console.log('Command Id: ', commandId);
   const [allProducts, setAllProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([] as any);
 
@@ -26,6 +34,7 @@ export const AddProductsModal = ({
   const [filter, setFilter] = useState('');
   const [searchContent, setSearchContent] = useState('');
 
+  const { allCommandsDispatch } = useContext(CommandsContext);
   const toast = useToast();
 
   useEffect(() => {
@@ -73,24 +82,56 @@ export const AddProductsModal = ({
     );
   }
 
-  function handleAddProductsInCommand() {
-    // const hasSomeSelectedProductInCommand = commandProducts.value.find(
-    //   (product) =>
-    //     selectedProducts.some(
-    //       (selectedProduct: any) => selectedProduct.name === product.name
-    //     )
-    // );
+  async function handleAddProductsInCommand() {
+    try {
+      // Grab command infos to get the products array and push all of selectedProducts in it.
+      const { command } = await CommandsService.getOneCommand({ commandId });
+      const hasSomeSelectedProductInCommand = command.products.find(
+        (product: any) =>
+          selectedProducts.some(
+            (selectedProduct: any) => selectedProduct.name === product.name
+          )
+      );
 
-    // if (hasSomeSelectedProductInCommand) {
-    //   toast({
-    //     title: `O produto: ${hasSomeSelectedProductInCommand.name} já está na comanda`,
-    //     status: 'error',
-    //   });
-    //   return;
-    // }
+      if (hasSomeSelectedProductInCommand) {
+        toast({
+          title: `O produto: ${hasSomeSelectedProductInCommand.name} já está na comanda`,
+          status: 'error',
+        });
+        return;
+      }
 
-    // ADD THIS PRODUCTS IN COMMAND IN MONGODB DATABASE
-    handleCloseModal();
+      const newProducts = [...command.products, ...selectedProducts];
+
+      // ADD THIS PRODUCTS IN COMMAND IN MONGODB DATABASE
+      const { command: updatedCommand } = await CommandsService.updateCommand({
+        _id: commandId,
+        products: newProducts,
+      });
+
+      allCommandsDispatch({
+        type: 'UPDATE-ONE-COMMAND',
+        payload: { command: updatedCommand },
+      });
+
+      // TODO: Broadcast to necessary entities the update of command
+
+      toast.closeAll();
+      toast({
+        status: 'success',
+        title: 'Produtos adicionados',
+        duration: 2000,
+        isClosable: true,
+      });
+      handleCloseModal();
+    } catch (error: any) {
+      toast({
+        status: 'error',
+        title: error?.response?.data?.message,
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   }
 
   function handleChangeFilter(selectedFilter: string) {

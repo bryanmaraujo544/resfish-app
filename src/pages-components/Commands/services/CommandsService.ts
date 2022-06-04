@@ -1,6 +1,10 @@
 import { serverApi } from 'services/serverApi';
 import { Command } from '../types/Command';
 
+interface UpdateCommand extends Command {
+  _id: string;
+}
+
 class CommandsService {
   async getAllCommands() {
     const { data } = await serverApi.get('/commands');
@@ -25,7 +29,7 @@ class CommandsService {
     products,
     total,
     isActive,
-  }: Command) {
+  }: UpdateCommand) {
     const { data } = await serverApi.put(`/commands/${_id}`, {
       waiter,
       table,
@@ -34,6 +38,11 @@ class CommandsService {
       total,
       isActive,
     });
+    return data;
+  }
+
+  async getOneCommand({ commandId }: { commandId: string }) {
+    const { data } = await serverApi.get(`/commands/${commandId}`);
     return data;
   }
 }

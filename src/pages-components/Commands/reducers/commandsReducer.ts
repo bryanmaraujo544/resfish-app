@@ -13,11 +13,6 @@ interface CommandsState {
   value: Command[] | [];
 }
 
-type Reducer = (
-  state: CommandsState,
-  action: Action
-) => { value: CommandsState };
-
 export const commandsReducer = (state: CommandsState, action: Action) => {
   switch (action.type) {
     case 'ADD-ALL-COMMANDS': {

@@ -187,7 +187,7 @@ export const AddProductModalLayout = ({
                       onClick={
                         () =>
                           handleOpenAmountModal({
-                            product: { id, name, unitPrice },
+                            product: { name, unitPrice },
                           })
                         // handleAddProduct({ id, name, unitPrice, amount })
                       }
