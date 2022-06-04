@@ -1,8 +1,8 @@
+import { useToast } from '@chakra-ui/react';
+import CommandService from 'pages-components/Command/services/CommandService';
 import { useContext, useMemo, useCallback } from 'react';
 import { CommandContext } from '../../index';
 import { ProductsListLayout } from './layout';
-
-type Id = { id: string };
 
 export const ProductsList = () => {
   const {
@@ -14,34 +14,91 @@ export const ProductsList = () => {
     orderByDir,
     setOrderByDir,
     searchContent,
+    command,
+    setCommand,
   } = useContext(CommandContext);
 
-  function handleIncrementProductAmount({ id }: Id) {
-    // Logic to diminish the amount of this product on the stock
-    // Or can diminish the amount of the product only after the paymentd
-    productsDispatch({
-      type: 'increment-amount',
-      payload: {
-        id,
-      },
-    });
-  }
+  const toast = useToast();
 
-  function handleDecrementProductAmount({ id }: Id) {
-    const amountOfProduct = products.value.find(
-      (product: any) => product._id === id
-    ).amount;
+  async function handleIncrementProductAmount({ id }: { id: string }) {
+    try {
+      // Logic to diminish the amount of this product on the stock
+      // Or can diminish the amount of the product only after the paymentd
 
-    if (amountOfProduct === 1) {
-      // Ask if the user wants to delete the product
-    }
+      // Check if the value of product amount is available
+      const oldProducts = command?.products;
+      const newProducts = oldProducts?.map((product) => {
+        if (product._id === id) {
+          const newAmount = product.amount + 1;
+          const newProduct = { ...product, amount: newAmount };
+          return newProduct;
+        }
+        return product;
+      });
 
-    if (amountOfProduct > 0) {
+      const { command: updatedCommand } = await CommandService.updateCommand({
+        _id: command?._id,
+        products: newProducts,
+      });
+
+      setCommand(updatedCommand);
+
       productsDispatch({
-        type: 'decrement-amount',
+        type: 'increment-amount',
         payload: {
           id,
         },
+      });
+    } catch (error: any) {
+      toast({
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+        title: error?.response?.data?.message,
+      });
+    }
+  }
+
+  async function handleDecrementProductAmount({ id }: { id: string }) {
+    try {
+      const amountOfProduct = products.value.find(
+        (product: any) => product._id === id
+      ).amount;
+
+      if (amountOfProduct === 1) {
+        // Ask if the user wants to delete the product
+      }
+
+      if (amountOfProduct > 0) {
+        const oldProducts = command?.products;
+        const newProducts = oldProducts?.map((product) => {
+          if (product._id === id) {
+            const newAmount = product.amount - 1;
+            const newProduct = { ...product, amount: newAmount };
+            return newProduct;
+          }
+          return product;
+        });
+
+        const { command: updatedCommand } = await CommandService.updateCommand({
+          _id: command?._id,
+          products: newProducts,
+        });
+        setCommand(updatedCommand);
+
+        productsDispatch({
+          type: 'decrement-amount',
+          payload: {
+            id,
+          },
+        });
+      }
+    } catch (error: any) {
+      toast({
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+        title: error?.response?.data?.message,
       });
     }
   }
@@ -91,8 +148,6 @@ export const ProductsList = () => {
 
     return filtered;
   }, [orderByDir, filteredBySearch, orderBy]);
-
-  console.log({ filteredBySort });
 
   return (
     <ProductsListLayout

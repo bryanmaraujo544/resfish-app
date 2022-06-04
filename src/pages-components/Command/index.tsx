@@ -36,6 +36,7 @@ type ContextProps = {
   searchContent: string;
   setSearchContent: Dispatch<SetStateAction<string>>;
   command: CommandType;
+  setCommand: Dispatch<SetStateAction<CommandType>>;
 };
 
 export const CommandContext = createContext({} as ContextProps);
@@ -110,6 +111,7 @@ export const Command = ({ commandId }: Props) => {
     <CommandContext.Provider
       value={{
         command,
+        setCommand,
         productsDispatch,
         products,
         isDeleteProductModalOpen,

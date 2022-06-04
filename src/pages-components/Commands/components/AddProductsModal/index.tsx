@@ -115,7 +115,6 @@ export const AddProductsModal = ({
 
       const newProducts = [...command.products, ...selectedProducts];
 
-      // ADD THIS PRODUCTS IN COMMAND IN MONGODB DATABASE
       const { command: updatedCommand } = await CommandsService.updateCommand({
         _id: commandId,
         products: newProducts,
