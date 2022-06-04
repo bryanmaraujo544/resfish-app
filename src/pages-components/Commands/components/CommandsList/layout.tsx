@@ -21,7 +21,7 @@ import { FiEdit2 } from 'react-icons/fi';
 import { FaArrowUp } from 'react-icons/fa';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
-import { Command } from 'pages-components/Commands/types/Command';
+import { Command } from 'types/Command';
 
 const listColumns = [
   {

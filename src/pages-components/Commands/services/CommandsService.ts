@@ -1,5 +1,5 @@
 import { serverApi } from 'services/serverApi';
-import { Command } from '../types/Command';
+import { Command } from 'types/Command';
 
 interface UpdateCommand extends Command {
   _id: string | undefined;

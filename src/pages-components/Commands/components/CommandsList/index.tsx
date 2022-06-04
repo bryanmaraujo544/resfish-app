@@ -2,10 +2,10 @@ import { useCallback, useContext, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { CommandsContext } from 'pages-components/Commands';
+import { Command } from 'types/Command';
 import { AddProductsModal } from '../AddProductsModal';
 import { CommandsListLayout } from './layout';
 import { EditCommandModal } from '../EditCommandModal';
-import { Command } from 'pages-components/Commands/types/Command';
 import { DeleteCommandModal } from '../DeleteCommandModal';
 
 export const CommandsList = () => {

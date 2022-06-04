@@ -64,6 +64,8 @@ export const Command = ({ commandId }: Props) => {
   const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
     useState(false);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const toast = useToast();
 
   useEffect(() => {
@@ -80,6 +82,7 @@ export const Command = ({ commandId }: Props) => {
           payload: commandFound?.products,
         });
 
+        setIsLoading(false);
         toast.closeAll();
       } catch (error: any) {
         toast({
@@ -90,7 +93,7 @@ export const Command = ({ commandId }: Props) => {
         });
       }
     })();
-  }, [commandId]);
+  }, [commandId, toast]);
 
   const handleOpenDeleteModal = useCallback(
     ({ productId }: { productId: string }) => {
@@ -121,7 +124,7 @@ export const Command = ({ commandId }: Props) => {
         setSearchContent,
       }}
     >
-      <CommandLayout command={command} />
+      <CommandLayout command={command} isLoading={isLoading} />
       <DeleteProductModal
         isModalOpen={isDeleteProductModalOpen}
         setIsModalOpen={setIsDeleteProductModalOpen}

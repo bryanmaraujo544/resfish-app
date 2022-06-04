@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { Command } from './Command';
+import { Command } from 'types/Command';
 
 interface AllCommandsAction {
   type:
