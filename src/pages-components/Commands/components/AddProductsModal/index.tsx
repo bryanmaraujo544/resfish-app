@@ -1,37 +1,8 @@
 import { useToast } from '@chakra-ui/react';
-import { Dispatch, SetStateAction, useState, useMemo } from 'react';
+import ProductsService from 'pages-components/Commands/services/ProductsService';
+import { Dispatch, SetStateAction, useState, useMemo, useEffect } from 'react';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
-
-const mockProducts = [
-  {
-    image:
-      'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aHVtYW58ZW58MHx8MHx8&w=1000&q=80',
-    name: 'Pesque-Pague',
-    category: 'Pesca',
-    amount: null,
-    unitPrice: 0,
-    id: Math.random().toFixed(4),
-  },
-  {
-    image:
-      'https://user-images.githubusercontent.com/62571814/168487287-6b0c1c98-d2d6-4827-87dd-998048561057.png',
-    name: 'Pesca Esportiva',
-    category: 'Pesca',
-    amount: null,
-    unitPrice: 25.9,
-    id: Math.random().toFixed(4),
-  },
-  {
-    image:
-      'https://user-images.githubusercontent.com/62571814/168487287-6b0c1c98-d2d6-4827-87dd-998048561057.png',
-    name: 'Coca-Cola',
-    category: 'Bebidas',
-    amount: 56,
-    unitPrice: 7.9,
-    id: Math.random().toFixed(4),
-  },
-];
 
 type Props = {
   isModalOpen: boolean;
@@ -45,6 +16,7 @@ export const AddProductsModal = ({
   commandId,
 }: Props) => {
   console.log('Command Id: ', commandId);
+  const [allProducts, setAllProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([] as any);
 
   const [isSetAmountModalOpen, setIsSetAmountModalOpen] = useState(false);
@@ -55,6 +27,13 @@ export const AddProductsModal = ({
   const [searchContent, setSearchContent] = useState('');
 
   const toast = useToast();
+
+  useEffect(() => {
+    (async () => {
+      const products = await ProductsService.getAllProducts();
+      setAllProducts(products);
+    })();
+  }, []);
 
   function handleCloseModal() {
     setIsModalOpen(false);
@@ -125,11 +104,11 @@ export const AddProductsModal = ({
 
   const filteredByFilter = useMemo(() => {
     if (filter === '') {
-      return mockProducts;
+      return allProducts;
     }
-    const filtered = mockProducts.filter(({ category }) => category === filter);
+    const filtered = allProducts?.filter(({ category }) => category === filter);
     return filtered;
-  }, [filter]);
+  }, [filter, allProducts]);
 
   const filteredBySearch = useMemo(() => {
     const filtered = filteredByFilter.filter((product: any) => {
