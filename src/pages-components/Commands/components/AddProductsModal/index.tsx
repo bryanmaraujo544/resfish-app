@@ -1,6 +1,5 @@
 import { useToast } from '@chakra-ui/react';
-import { CommandContext } from 'pages-components/Command';
-import { Dispatch, SetStateAction, useContext, useState, useMemo } from 'react';
+import { Dispatch, SetStateAction, useState, useMemo } from 'react';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
 
@@ -45,6 +44,7 @@ export const AddProductsModal = ({
   setIsModalOpen,
   commandId,
 }: Props) => {
+  console.log('Command Id: ', commandId);
   const [selectedProducts, setSelectedProducts] = useState([] as any);
 
   const [isSetAmountModalOpen, setIsSetAmountModalOpen] = useState(false);
