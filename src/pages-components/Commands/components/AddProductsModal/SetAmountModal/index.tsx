@@ -8,7 +8,7 @@ type Props = {
   setIsSetAmountModalOpen: Dispatch<SetStateAction<boolean>>;
   amount: number;
   setAmount: Dispatch<SetStateAction<number>>;
-  handleAddProduct: () => void;
+  handleAddProduct: (e: any) => void;
 };
 
 export const SetAmountModal = ({

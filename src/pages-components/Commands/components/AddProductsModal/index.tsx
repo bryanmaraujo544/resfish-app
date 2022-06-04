@@ -56,7 +56,8 @@ export const AddProductsModal = ({
 
   // This function add in selected products list. Takes the object with infos based on the click of the user,
   // and add the amount propertie containing the amount selected by the user in modal
-  function handleAddProduct() {
+  function handleAddProduct(e: any) {
+    e.preventDefault();
     // TODO: check if there are enough amount of product selected in stock
     const hasBeenSelected = selectedProducts.some(
       (selectedProduct: any) => selectedProduct.name === productToSetAmount.name

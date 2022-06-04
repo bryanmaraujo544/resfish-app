@@ -15,7 +15,7 @@ type Props = {
   handleCloseAmountModal: () => void;
   amount: number;
   setAmount: Dispatch<SetStateAction<number>>;
-  handleAddProduct: () => void;
+  handleAddProduct: (e: any) => void;
 };
 
 export const SetAmountModalLayout = ({
@@ -34,7 +34,7 @@ export const SetAmountModalLayout = ({
       title="Quantidade do produto"
       initialFocusRef={inputRef}
     >
-      <Stack spacing={4}>
+      <Stack spacing={4} as="form" onSubmit={(e) => handleAddProduct(e)}>
         <NumberInput
           value={amount}
           min={1}
@@ -48,7 +48,7 @@ export const SetAmountModalLayout = ({
             <NumberDecrementStepper />
           </NumberInputStepper>
         </NumberInput>
-        <Button w="100%" onClick={() => handleAddProduct()}>
+        <Button w="100%" type="submit">
           Adicionar Produto
         </Button>
       </Stack>
