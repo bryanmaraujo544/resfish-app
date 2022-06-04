@@ -1,45 +1,35 @@
+/* eslint-disable no-restricted-globals */
+import {
+  Dispatch,
+  SetStateAction,
+  // useContext,
+  useState,
+  useMemo,
+  useEffect,
+} from 'react';
 import { useToast } from '@chakra-ui/react';
-import { CommandContext } from 'pages-components/Command';
-import { Dispatch, SetStateAction, useContext, useState, useMemo } from 'react';
+
+import CommandService from 'pages-components/Command/services/CommandService';
+import ProductsService from 'pages-components/Command/services/ProductsService';
+// import { CommandContext } from 'pages-components/Command';
+import { Command } from 'types/Command';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
-
-const mockProducts = [
-  {
-    image:
-      'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aHVtYW58ZW58MHx8MHx8&w=1000&q=80',
-    name: 'Pesque-Pague',
-    category: 'Pesca',
-    amount: null,
-    unitPrice: 0,
-    id: Math.random().toFixed(4),
-  },
-  {
-    image:
-      'https://user-images.githubusercontent.com/62571814/168487287-6b0c1c98-d2d6-4827-87dd-998048561057.png',
-    name: 'Pesca Esportiva',
-    category: 'Pesca',
-    amount: null,
-    unitPrice: 25.9,
-    id: Math.random().toFixed(4),
-  },
-  {
-    image:
-      'https://user-images.githubusercontent.com/62571814/168487287-6b0c1c98-d2d6-4827-87dd-998048561057.png',
-    name: 'Coca-Cola',
-    category: 'Bebidas',
-    amount: 56,
-    unitPrice: 7.9,
-    id: Math.random().toFixed(4),
-  },
-];
 
 type Props = {
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  commandId: string | undefined;
+  setCommand: Dispatch<SetStateAction<Command>>;
 };
 
-export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
+export const AddProductModal = ({
+  isModalOpen,
+  setIsModalOpen,
+  commandId,
+  setCommand,
+}: Props) => {
+  const [allProducts, setAllProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([] as any);
 
   const [isSetAmountModalOpen, setIsSetAmountModalOpen] = useState(false);
@@ -49,9 +39,17 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   const [filter, setFilter] = useState('');
   const [searchContent, setSearchContent] = useState('');
 
-  const { productsDispatch, products: commandProducts } =
-    useContext(CommandContext);
+  // const { productsDispatch, products: commandProducts } =
+  //   useContext(CommandContext);
+
   const toast = useToast();
+
+  useEffect(() => {
+    (async () => {
+      const products = await ProductsService.getAllProducts();
+      setAllProducts(products);
+    })();
+  }, []);
 
   function handleCloseModal() {
     setIsModalOpen(false);
@@ -65,7 +63,9 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
 
   // This function add in selected products list. Takes the object with infos based on the click of the user,
   // and add the amount propertie containing the amount selected by the user in modal
-  function handleAddProduct() {
+  function handleAddProduct(e: any) {
+    e.preventDefault();
+
     // TODO: check if there are enough amount of product selected in stock
     const hasBeenSelected = selectedProducts.some(
       (selectedProduct: any) => selectedProduct.name === productToSetAmount.name
@@ -91,25 +91,60 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     );
   }
 
-  function handleAddProductsInCommand() {
-    const hasSomeSelectedProductInCommand = commandProducts.value.find(
-      (product) =>
-        selectedProducts.some(
-          (selectedProduct: any) => selectedProduct.name === product.name
-        )
-    );
+  async function handleAddProductsInCommand() {
+    try {
+      // Grab command infos to get the products array and push all of selectedProducts in it.
+      const { command } = await CommandService.getOneCommand({ commandId });
+      const hasSomeSelectedProductInCommand = command.products.find(
+        (product: any) =>
+          selectedProducts.some(
+            (selectedProduct: any) => selectedProduct.name === product.name
+          )
+      );
 
-    if (hasSomeSelectedProductInCommand) {
-      toast({
-        title: `O produto: ${hasSomeSelectedProductInCommand.name} já está na comanda`,
-        status: 'error',
+      if (hasSomeSelectedProductInCommand) {
+        toast({
+          title: `O produto: ${hasSomeSelectedProductInCommand.name} já está na comanda`,
+          status: 'error',
+        });
+        return;
+      }
+
+      const newProducts = [...command.products, ...selectedProducts];
+
+      // ADD THIS PRODUCTS IN COMMAND IN MONGODB DATABASE
+      const { command: updatedCommand } = await CommandService.updateCommand({
+        _id: commandId,
+        products: newProducts,
       });
-      return;
+
+      setCommand(updatedCommand);
+      console.log({ updatedCommand });
+
+      location.reload();
+      // allCommandsDispatch({
+      //   type: 'UPDATE-ONE-COMMAND',
+      //   payload: { command: updatedCommand },
+      // });
+
+      // TODO: Broadcast to necessary entities the update of command
+
+      toast.closeAll();
+      toast({
+        status: 'success',
+        title: 'Produtos adicionados',
+        duration: 2000,
+        isClosable: true,
+      });
+      handleCloseModal();
+    } catch (error: any) {
+      toast({
+        status: 'error',
+        title: error?.response?.data?.message,
+        duration: 3000,
+        isClosable: true,
+      });
     }
-    selectedProducts.forEach((product: any) => {
-      productsDispatch({ type: 'add', payload: product });
-    });
-    handleCloseModal();
   }
 
   function handleChangeFilter(selectedFilter: string) {
@@ -123,11 +158,11 @@ export const AddProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
 
   const filteredByFilter = useMemo(() => {
     if (filter === '') {
-      return mockProducts;
+      return allProducts;
     }
-    const filtered = mockProducts.filter(({ category }) => category === filter);
+    const filtered = allProducts.filter(({ category }) => category === filter);
     return filtered;
-  }, [filter]);
+  }, [filter, allProducts]);
 
   const filteredBySearch = useMemo(() => {
     const filtered = filteredByFilter.filter((product: any) => {

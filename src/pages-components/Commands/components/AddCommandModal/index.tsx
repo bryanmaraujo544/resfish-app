@@ -2,9 +2,9 @@ import { Dispatch, SetStateAction, useContext } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import CommandsService from 'pages-components/Commands/services/CommandsService';
-import { AddCommandModalLayout } from './layout';
 import { useToast } from '@chakra-ui/react';
 import { CommandsContext } from 'pages-components/Commands';
+import { AddCommandModalLayout } from './layout';
 
 type Props = {
   isModalOpen: boolean;

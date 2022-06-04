@@ -10,6 +10,7 @@ import {
 } from 'react';
 
 import { useToast } from '@chakra-ui/react';
+import { Command as CommandType } from 'types/Command';
 import { productsReducer } from './reducers/productsReducer';
 import { AddProductModal } from './components/AddProductModal';
 import { DeleteProductModal } from './components/DeleteProductModal';
@@ -34,6 +35,7 @@ type ContextProps = {
   setOrderByDir: Dispatch<SetStateAction<'asc' | 'desc'>>;
   searchContent: string;
   setSearchContent: Dispatch<SetStateAction<string>>;
+  command: CommandType;
 };
 
 export const CommandContext = createContext({} as ContextProps);
@@ -47,7 +49,8 @@ const initialState = {
 };
 
 export const Command = ({ commandId }: Props) => {
-  const [command, setCommand] = useState({});
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [command, setCommand] = useState<CommandType>({} as CommandType);
   const [products, productsDispatch] = useReducer(
     productsReducer,
     initialState
@@ -106,6 +109,7 @@ export const Command = ({ commandId }: Props) => {
   return (
     <CommandContext.Provider
       value={{
+        command,
         productsDispatch,
         products,
         isDeleteProductModalOpen,
@@ -132,6 +136,8 @@ export const Command = ({ commandId }: Props) => {
       <AddProductModal
         isModalOpen={isAddProductModalOpen}
         setIsModalOpen={setIsAddProductModalOpen}
+        commandId={command?._id}
+        setCommand={setCommand}
       />
     </CommandContext.Provider>
   );
