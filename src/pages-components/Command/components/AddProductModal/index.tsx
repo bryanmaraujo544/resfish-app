@@ -119,13 +119,8 @@ export const AddProductModal = ({
       });
 
       setCommand(updatedCommand);
-      console.log({ updatedCommand });
 
       location.reload();
-      // allCommandsDispatch({
-      //   type: 'UPDATE-ONE-COMMAND',
-      //   payload: { command: updatedCommand },
-      // });
 
       // TODO: Broadcast to necessary entities the update of command
 
