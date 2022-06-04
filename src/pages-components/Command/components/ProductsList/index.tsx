@@ -29,7 +29,7 @@ export const ProductsList = () => {
 
   function handleDecrementProductAmount({ id }: Id) {
     const amountOfProduct = products.value.find(
-      (product: any) => product.id === id
+      (product: any) => product._id === id
     ).amount;
 
     if (amountOfProduct === 1) {

@@ -7,7 +7,7 @@ export const productsReducer = (state: any, action: any) => {
       return { value: [...state.value, action.payload] };
     case 'increment-amount': {
       const newState = state.value.map((product: any) => {
-        if (product.id === action.payload.id) {
+        if (product._id === action.payload.id) {
           return { ...product, amount: product.amount + 1 };
         }
         return product;
@@ -16,7 +16,7 @@ export const productsReducer = (state: any, action: any) => {
     }
     case 'decrement-amount': {
       const newState = state.value.map((product: any) => {
-        if (product.id === action.payload.id) {
+        if (product._id === action.payload.id) {
           return {
             ...product,
             amount: product.amount > 0 ? product.amount - 1 : product.amount,
@@ -27,7 +27,6 @@ export const productsReducer = (state: any, action: any) => {
       return { value: [...newState] };
     }
     case 'delete': {
-      console.log('DELETE DISPATCH WAS CALLED', action);
       const newState = state.value.filter(
         (product: any) => product._id !== action.payload.product._id
       );

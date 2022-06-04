@@ -1,8 +1,4 @@
-interface Product {
-  name: string;
-  amount: number;
-  unitPrice: number;
-}
+import { Product } from './Product';
 
 export interface Command {
   _id?: string;
