@@ -1,7 +1,9 @@
-import { Heading, Spinner } from '@chakra-ui/react';
+/* eslint-disable react/destructuring-assignment */
+import { Heading, Spinner, Flex } from '@chakra-ui/react';
 import { Header } from 'components/Header';
 import { Layout } from 'components/Layout';
 import { Command } from 'types/Command';
+import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { NavHeader } from './components/NavHeader';
 import { ProductsList } from './components/ProductsList';
 
@@ -23,12 +25,38 @@ export const CommandLayout = ({ command, isLoading }: Props) => (
       />
     ) : (
       <>
-        <Heading color="blue.800" mb={5} fontSize={[18, 24, 28]}>
-          Comanda: {command?.table}
-        </Heading>
+        <Flex justify="space-between" mb={4}>
+          <BgBox>
+            <Heading fontSize={[16, 20, 22]}>Comanda: {command?.table}</Heading>
+          </BgBox>
+          <BgBox>
+            <Heading fontSize={[16, 20, 22]}>
+              Total: R${' '}
+              {formatDecimalNum({
+                num: command?.total?.toString() || '0',
+                to: 'comma',
+              })}
+            </Heading>
+          </BgBox>
+        </Flex>
         <NavHeader />
         <ProductsList />
       </>
     )}
   </Layout>
+);
+
+const BgBox = (props: any) => (
+  <Flex
+    align="center"
+    boxShadow="sm"
+    bg="blue.50"
+    color="blue.700"
+    px={4}
+    py={2}
+    rounded={4}
+    {...props}
+  >
+    {props.children}
+  </Flex>
 );
