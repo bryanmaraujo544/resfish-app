@@ -10,11 +10,16 @@ import { ProductsList } from './components/ProductsList';
 interface Props {
   command: Command;
   isLoading: boolean;
+  handleGoToCommands?: () => void;
 }
 
-export const CommandLayout = ({ command, isLoading }: Props) => (
+export const CommandLayout = ({
+  command,
+  isLoading,
+  handleGoToCommands,
+}: Props) => (
   <Layout>
-    <Header />
+    <Header hasBackPageBtn handleBackPage={handleGoToCommands} />
     {isLoading ? (
       <Spinner
         size="xl"

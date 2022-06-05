@@ -6,9 +6,11 @@ import { HeaderLayout } from './layout';
 
 type Props = {
   children?: ReactNode;
+  hasBackPageBtn?: boolean;
+  handleBackPage?: () => void;
 };
 
-export const Header = ({ children }: Props) => {
+export const Header = ({ children, hasBackPageBtn, handleBackPage }: Props) => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const router = useRouter();
 
@@ -31,6 +33,8 @@ export const Header = ({ children }: Props) => {
       handleCloseSideMenu={handleCloseSideMenu}
       children={children}
       handleOpenSideMenu={handleOpenSideMenu}
+      hasBackPageBtn={hasBackPageBtn}
+      handleBackPage={handleBackPage}
     />
   );
 };
