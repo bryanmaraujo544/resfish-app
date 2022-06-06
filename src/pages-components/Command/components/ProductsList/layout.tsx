@@ -90,6 +90,8 @@ export const ProductsListLayout = ({
     setFishIdToEditAmount('');
   });
 
+  console.log('PRODUCTS FROM PRODUCTS LIST LAYOUT', products);
+
   return (
     <TableContainer mt={16}>
       <Table>
@@ -126,7 +128,7 @@ export const ProductsListLayout = ({
                   <Td>{name}</Td>
                   <Td>
                     <Flex gap={4}>
-                      {!isFishingCategory && (
+                      {!isFishingCategory(category) && (
                         <Icon
                           onClick={() =>
                             handleDecrementProductAmount({ id: _id })
@@ -169,14 +171,14 @@ export const ProductsListLayout = ({
                           }}
                         >
                           {isFishingCategory(category)
-                            ? formatAmount({
+                            ? `${formatAmount({
                                 num: amount.toString(),
                                 to: 'comma',
-                              })
+                              })} Kg`
                             : amount}
                         </Text>
                       )}
-                      {!isFishingCategory && (
+                      {!isFishingCategory(category) && (
                         <Icon
                           onClick={() =>
                             handleIncrementProductAmount({ id: _id })
