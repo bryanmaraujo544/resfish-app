@@ -41,7 +41,9 @@ export const ModalLayout = ({
     <ModalContent py={2} mx={2}>
       <ModalHeader>{title}</ModalHeader>
       <ModalCloseButton />
-      <ModalBody>{children}</ModalBody>
+      <ModalBody display="flex" flexDir="column" overflowY="hidden">
+        {children}
+      </ModalBody>
     </ModalContent>
   </Modal>
 );

@@ -83,7 +83,7 @@ export const AddProductModalLayout = ({
     title="Adicionar Produto"
     size="6xl"
   >
-    <Stack spacing={[4, 6]}>
+    <Stack spacing={[4, 6]} overflowY="scroll">
       {/* Header */}
       <Grid gridTemplateColumns={['1fr', '1fr 3fr']} gap={[2, 4]}>
         <Menu>
@@ -170,7 +170,7 @@ export const AddProductModalLayout = ({
       </Grid>
 
       {/* List of products to add in command */}
-      <TableContainer>
+      <TableContainer overflowY="scroll">
         <Table w="100%" mt={[2, 4]}>
           <Thead>
             <Tr>
@@ -189,8 +189,8 @@ export const AddProductModalLayout = ({
                   <Td>{unitPrice}</Td>
                   <Td isNumeric>
                     <Button
-                      colorScheme="blue"
-                      bg="blue.400"
+                      bg="blue.50"
+                      color="blue.700"
                       onClick={() =>
                         handleOpenAmountModal({
                           product: { _id, name, unitPrice },
