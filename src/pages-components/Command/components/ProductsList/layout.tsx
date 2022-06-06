@@ -90,8 +90,6 @@ export const ProductsListLayout = ({
     setFishIdToEditAmount('');
   });
 
-  console.log('PRODUCTS FROM PRODUCTS LIST LAYOUT', products);
-
   return (
     <TableContainer mt={16}>
       <Table>

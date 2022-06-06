@@ -41,8 +41,6 @@ export const AddProductModal = ({
   const [allProducts, setAllProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([] as any);
 
-  console.log('Selected Products', selectedProducts);
-
   const [isSetAmountModalOpen, setIsSetAmountModalOpen] = useState(false);
   const [productToSetAmount, setProductToSetAmount] = useState<ProductNoAmount>(
     {} as ProductNoAmount

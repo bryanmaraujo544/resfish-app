@@ -42,8 +42,6 @@ export const AddProductsModal = ({
   );
   const [amount, setAmount] = useState('1');
 
-  console.log({ amount });
-
   const [filter, setFilter] = useState('');
   const [searchContent, setSearchContent] = useState('');
 
