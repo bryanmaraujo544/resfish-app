@@ -1,8 +1,10 @@
 import { serverApi } from 'services/serverApi';
 import { Command } from 'types/Command';
+import { Product } from 'types/Product';
 
 interface UpdateCommand extends Command {
   _id: string | undefined;
+  products: Product[] | undefined;
 }
 
 class CommandService {

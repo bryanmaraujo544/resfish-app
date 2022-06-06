@@ -1,3 +1,5 @@
+import { Product } from 'types/Product';
+
 export const productsReducer = (state: any, action: any) => {
   switch (action.type) {
     case 'add-products': {
@@ -20,6 +22,18 @@ export const productsReducer = (state: any, action: any) => {
           return {
             ...product,
             amount: product.amount > 0 ? product.amount - 1 : product.amount,
+          };
+        }
+        return product;
+      });
+      return { value: [...newState] };
+    }
+    case 'update-fish-amount': {
+      const newState = state.value.map((product: Product) => {
+        if (product._id === action.payload.product.id) {
+          return {
+            ...product,
+            amount: action.payload.product.amount,
           };
         }
         return product;

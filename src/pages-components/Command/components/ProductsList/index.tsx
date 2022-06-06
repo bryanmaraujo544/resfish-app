@@ -1,10 +1,15 @@
+import { useContext, useState, useMemo, useCallback } from 'react';
 import { useToast } from '@chakra-ui/react';
+
 import CommandService from 'pages-components/Command/services/CommandService';
-import { useContext, useMemo, useCallback } from 'react';
+import { formatAmount } from 'utils/formatAmount';
 import { CommandContext } from '../../index';
 import { ProductsListLayout } from './layout';
 
 export const ProductsList = () => {
+  const [fishIdToEditAmount, setFishIdToEditAmount] = useState('');
+  const [newFishAmount, setNewFishAmount] = useState('');
+
   const {
     products,
     productsDispatch,
@@ -103,6 +108,71 @@ export const ProductsList = () => {
     }
   }
 
+  // This function enables the edition of the amount of some fish
+  function handleActiveEditFishAmount({
+    productId,
+    amount,
+  }: {
+    productId: string;
+    amount: string;
+  }) {
+    setNewFishAmount(
+      formatAmount({ num: amount.toString(), to: 'comma' }).toString()
+    );
+    setFishIdToEditAmount(productId);
+  }
+
+  // Function that updates the amount of fish product in fact
+  async function handleUpdateFishAmount(
+    e: any,
+    { productId }: { productId: string }
+  ) {
+    e.preventDefault();
+    setFishIdToEditAmount('');
+    const newFishAmountFormatted = formatAmount({
+      num: newFishAmount,
+      to: 'point',
+    });
+
+    if (Number.isNaN(newFishAmountFormatted)) {
+      toast({
+        status: 'error',
+        title: 'Quantidade inválida',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    const oldProducts = command?.products;
+    const newProducts = oldProducts?.map((product) => {
+      if (product._id === productId) {
+        const newProduct = {
+          ...product,
+          amount: newFishAmountFormatted as number,
+        };
+        return newProduct;
+      }
+      return product;
+    });
+
+    const { command: updatedCommand } = await CommandService.updateCommand({
+      _id: command?._id,
+      products: newProducts,
+    });
+    setCommand(updatedCommand);
+
+    productsDispatch({
+      type: 'update-fish-amount',
+      payload: {
+        product: {
+          id: productId,
+          amount: newFishAmountFormatted,
+        },
+      },
+    });
+  }
+
   const handleToggleOrderByDir = useCallback(() => {
     setOrderByDir((prev: string) => (prev === 'asc' ? 'desc' : 'asc'));
   }, [setOrderByDir]);
@@ -158,6 +228,12 @@ export const ProductsList = () => {
       orderBy={orderBy}
       orderByDir={orderByDir}
       handleToggleOrderByDir={handleToggleOrderByDir}
+      fishIdToEditAmount={fishIdToEditAmount}
+      handleActiveEditFishAmount={handleActiveEditFishAmount}
+      handleUpdateFishAmount={handleUpdateFishAmount}
+      newFishAmount={newFishAmount}
+      setNewFishAmount={setNewFishAmount}
+      setFishIdToEditAmount={setFishIdToEditAmount}
     />
   );
 };
