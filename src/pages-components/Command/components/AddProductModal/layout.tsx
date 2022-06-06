@@ -27,7 +27,8 @@ import { BiSad, BiSearchAlt } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
 
 import { Modal } from 'components/Modal';
-import { Product } from 'types/Product';
+import { formatDecimalNum } from 'utils/formatDecimalNum';
+import { formatAmount } from 'utils/formatAmount';
 
 const filterOptions = [
   'Pesca',
@@ -46,12 +47,13 @@ interface ProductNoAmount {
   _id?: string;
   name: string;
   unitPrice: number;
+  category: string;
 }
 
 interface Props {
   isModalOpen: boolean;
   handleCloseModal: () => void;
-  products: Product[];
+  products: any[];
   selectedProducts: any[];
   handleOpenAmountModal: ({ product }: { product: ProductNoAmount }) => void;
   // eslint-disable-next-line no-unused-vars
@@ -149,7 +151,7 @@ export const AddProductModalLayout = ({
                 {name}
               </Text>
               <Text fontSize={14} fontWeight={600}>
-                Qntd: {amount}
+                Qntd: {formatAmount({ num: amount, to: 'comma' })}
               </Text>
             </Flex>
             <Icon
@@ -182,18 +184,24 @@ export const AddProductModalLayout = ({
           </Thead>
           <Tbody>
             {products?.length > 0 &&
-              products?.map(({ _id, name, unitPrice, amount }) => (
+              products?.map(({ _id, name, unitPrice, amount, category }) => (
                 <Tr key={`add-product-modal-product-${_id}`}>
                   <Td>{name}</Td>
                   <Td>{amount}</Td>
-                  <Td>{unitPrice}</Td>
+                  <Td>
+                    R${' '}
+                    {formatDecimalNum({
+                      num: unitPrice.toString(),
+                      to: 'comma',
+                    })}
+                  </Td>
                   <Td isNumeric>
                     <Button
                       bg="blue.50"
                       color="blue.700"
                       onClick={() =>
                         handleOpenAmountModal({
-                          product: { _id, name, unitPrice },
+                          product: { _id, name, unitPrice, category },
                         })
                       }
                     >
