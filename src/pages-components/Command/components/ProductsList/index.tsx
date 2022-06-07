@@ -8,8 +8,7 @@ import { ProductsListLayout } from './layout';
 
 export const ProductsList = () => {
   const [fishIdToEditAmount, setFishIdToEditAmount] = useState('');
-  const [newFishAmount, setNewFishAmount] = useState('');
-
+  const [newProductAmount, setNewProductAmount] = useState('');
   const {
     products,
     productsDispatch,
@@ -25,89 +24,6 @@ export const ProductsList = () => {
 
   const toast = useToast();
 
-  async function handleIncrementProductAmount({ id }: { id: string }) {
-    try {
-      // Logic to diminish the amount of this product on the stock
-      // Or can diminish the amount of the product only after the paymentd
-
-      // Check if the value of product amount is available
-      const oldProducts = command?.products;
-      const newProducts = oldProducts?.map((product) => {
-        if (product._id === id) {
-          const newAmount = product.amount + 1;
-          const newProduct = { ...product, amount: newAmount };
-          return newProduct;
-        }
-        return product;
-      });
-
-      const { command: updatedCommand } = await CommandService.updateCommand({
-        _id: command?._id,
-        products: newProducts,
-      });
-
-      setCommand(updatedCommand);
-
-      productsDispatch({
-        type: 'increment-amount',
-        payload: {
-          id,
-        },
-      });
-    } catch (error: any) {
-      toast({
-        status: 'error',
-        duration: 2000,
-        isClosable: true,
-        title: error?.response?.data?.message,
-      });
-    }
-  }
-
-  async function handleDecrementProductAmount({ id }: { id: string }) {
-    try {
-      const amountOfProduct = products.value.find(
-        (product: any) => product._id === id
-      ).amount;
-
-      if (amountOfProduct === 1) {
-        // Ask if the user wants to delete the product
-      }
-
-      if (amountOfProduct > 0) {
-        const oldProducts = command?.products;
-        const newProducts = oldProducts?.map((product) => {
-          if (product._id === id) {
-            const newAmount = product.amount - 1;
-            const newProduct = { ...product, amount: newAmount };
-            return newProduct;
-          }
-          return product;
-        });
-
-        const { command: updatedCommand } = await CommandService.updateCommand({
-          _id: command?._id,
-          products: newProducts,
-        });
-        setCommand(updatedCommand);
-
-        productsDispatch({
-          type: 'decrement-amount',
-          payload: {
-            id,
-          },
-        });
-      }
-    } catch (error: any) {
-      toast({
-        status: 'error',
-        duration: 2000,
-        isClosable: true,
-        title: error?.response?.data?.message,
-      });
-    }
-  }
-
   // This function enables the edition of the amount of some fish
   function handleActiveEditFishAmount({
     productId,
@@ -116,7 +32,7 @@ export const ProductsList = () => {
     productId: string;
     amount: string;
   }) {
-    setNewFishAmount(
+    setNewProductAmount(
       formatAmount({ num: amount.toString(), to: 'comma' }).toString()
     );
     setFishIdToEditAmount(productId);
@@ -125,16 +41,19 @@ export const ProductsList = () => {
   // Function that updates the amount of fish product in fact
   async function handleUpdateFishAmount(
     e: any,
-    { productId }: { productId: string }
+    { productId, isFish }: { productId: string; isFish: boolean }
   ) {
     e.preventDefault();
     setFishIdToEditAmount('');
-    const newFishAmountFormatted = formatAmount({
-      num: newFishAmount,
-      to: 'point',
-    });
 
-    if (Number.isNaN(newFishAmountFormatted)) {
+    const newAmount = isFish
+      ? formatAmount({
+          num: newProductAmount,
+          to: 'point',
+        })
+      : newProductAmount;
+
+    if (Number.isNaN(newAmount)) {
       toast({
         status: 'error',
         title: 'Quantidade inválida',
@@ -149,7 +68,7 @@ export const ProductsList = () => {
       if (product._id === productId) {
         const newProduct = {
           ...product,
-          amount: newFishAmountFormatted as number,
+          amount: newAmount as number,
         };
         return newProduct;
       }
@@ -163,11 +82,11 @@ export const ProductsList = () => {
     setCommand(updatedCommand);
 
     productsDispatch({
-      type: 'update-fish-amount',
+      type: 'update-product-amount',
       payload: {
         product: {
           id: productId,
-          amount: newFishAmountFormatted,
+          amount: newAmount,
         },
       },
     });
@@ -222,8 +141,8 @@ export const ProductsList = () => {
   return (
     <ProductsListLayout
       products={filteredBySort}
-      handleIncrementProductAmount={handleIncrementProductAmount}
-      handleDecrementProductAmount={handleDecrementProductAmount}
+      // handleIncrementProductAmount={handleIncrementProductAmount}
+      // handleDecrementProductAmount={handleDecrementProductAmount}
       handleOpenDeleteModal={handleOpenDeleteModal}
       orderBy={orderBy}
       orderByDir={orderByDir}
@@ -231,8 +150,8 @@ export const ProductsList = () => {
       fishIdToEditAmount={fishIdToEditAmount}
       handleActiveEditFishAmount={handleActiveEditFishAmount}
       handleUpdateFishAmount={handleUpdateFishAmount}
-      newFishAmount={newFishAmount}
-      setNewFishAmount={setNewFishAmount}
+      newProductAmount={newProductAmount}
+      setNewProductAmount={setNewProductAmount}
       setFishIdToEditAmount={setFishIdToEditAmount}
     />
   );

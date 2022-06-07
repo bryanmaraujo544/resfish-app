@@ -14,8 +14,9 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { BsPlus, BsDash, BsFillTrashFill } from 'react-icons/bs';
+import { BsFillTrashFill } from 'react-icons/bs';
 import { BiSad } from 'react-icons/bi';
+import { FiEdit2 } from 'react-icons/fi';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { FaArrowUp } from 'react-icons/fa';
@@ -50,28 +51,20 @@ interface ActiveEditFish {
 
 interface Props {
   products: any[];
-  // eslint-disable-next-line no-unused-vars
-  handleIncrementProductAmount: ({ id }: { id: string }) => void;
-  // eslint-disable-next-line no-unused-vars
-  handleDecrementProductAmount: ({ id }: { id: string }) => void;
-  // eslint-disable-next-line no-unused-vars
   handleOpenDeleteModal: ({ productId }: { productId: string }) => void;
   handleToggleOrderByDir: () => void;
-
   orderBy: string;
   orderByDir: 'asc' | 'desc';
   fishIdToEditAmount: string;
   handleActiveEditFishAmount: ({ productId, amount }: ActiveEditFish) => void;
   handleUpdateFishAmount: any;
-  newFishAmount: string;
-  setNewFishAmount: Dispatch<SetStateAction<string>>;
+  newProductAmount: string;
+  setNewProductAmount: Dispatch<SetStateAction<string>>;
   setFishIdToEditAmount: Dispatch<SetStateAction<string>>;
 }
 
 export const ProductsListLayout = ({
   products,
-  handleIncrementProductAmount,
-  handleDecrementProductAmount,
   handleOpenDeleteModal,
   orderBy,
   orderByDir,
@@ -79,8 +72,8 @@ export const ProductsListLayout = ({
   handleActiveEditFishAmount,
   fishIdToEditAmount,
   handleUpdateFishAmount,
-  newFishAmount,
-  setNewFishAmount,
+  newProductAmount,
+  setNewProductAmount,
   setFishIdToEditAmount,
 }: Props) => {
   const isFishingCategory = (category?: string) =>
@@ -125,71 +118,60 @@ export const ProductsListLayout = ({
                 <Tr key={`product-list${name}`} h={20}>
                   <Td>{name}</Td>
                   <Td>
-                    <Flex gap={4}>
-                      {!isFishingCategory(category) && (
-                        <Icon
-                          onClick={() =>
-                            handleDecrementProductAmount({ id: _id })
-                          }
-                          as={BsDash}
-                          fontSize={[20, 22, 24]}
-                          rounded={2}
-                          bg="gray.50"
-                          boxShadow="sm"
-                          cursor="pointer"
-                          _hover={{ bg: 'blue.100' }}
-                          _active={{ bg: 'blue.50' }}
-                        />
-                      )}
+                    <Flex gap={4} align="center">
                       {/* Form to edit tha amount of fish products */}
                       {fishIdToEditAmount === _id ? (
                         <FormControl
                           as="form"
                           onSubmit={(e) =>
-                            handleUpdateFishAmount(e, { productId: _id })
+                            handleUpdateFishAmount(e, {
+                              productId: _id,
+                              isFish: isFishingCategory(category),
+                            })
                           }
                           w="auto"
                         >
                           <Input
-                            value={newFishAmount}
-                            onChange={(e) => setNewFishAmount(e.target.value)}
+                            value={newProductAmount}
+                            onChange={(e) =>
+                              setNewProductAmount(e.target.value)
+                            }
                             ref={editAmountInputRef}
                             autoFocus
                           />
                         </FormControl>
                       ) : (
-                        <Text
-                          onClick={() => {
-                            if (isFishingCategory(category)) {
+                        <>
+                          <Text
+                            onClick={() => {
                               handleActiveEditFishAmount({
                                 productId: _id,
                                 amount: amount.toString(),
                               });
-                            }
-                          }}
-                        >
-                          {isFishingCategory(category)
-                            ? `${formatAmount({
-                                num: amount.toString(),
-                                to: 'comma',
-                              })} Kg`
-                            : amount}
-                        </Text>
-                      )}
-                      {!isFishingCategory(category) && (
-                        <Icon
-                          onClick={() =>
-                            handleIncrementProductAmount({ id: _id })
-                          }
-                          as={BsPlus}
-                          fontSize={[20, 22, 24]}
-                          rounded={2}
-                          bg="gray.50"
-                          boxShadow="sm"
-                          cursor="pointer"
-                          _hover={{ bg: 'blue.100' }}
-                          _active={{ bg: 'blue.50' }}
-                        />
+                            }}
+                          >
+                            {isFishingCategory(category)
+                              ? `${formatAmount({
+                                  num: amount.toString(),
+                                  to: 'comma',
+                                })} Kg`
+                              : amount}
+                          </Text>
+                          <Icon
+                            onClick={() => {
+                              handleActiveEditFishAmount({
+                                productId: _id,
+                                amount: amount.toString(),
+                              });
+                            }}
+                            as={FiEdit2}
+                            fontSize={14}
+                            cursor="pointer"
+                            _hover={{
+                              color: 'blue.500',
+                            }}
+                          />
+                        </>
                       )}
                     </Flex>
                   </Td>

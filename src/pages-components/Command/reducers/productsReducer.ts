@@ -28,7 +28,7 @@ export const productsReducer = (state: any, action: any) => {
       });
       return { value: [...newState] };
     }
-    case 'update-fish-amount': {
+    case 'update-product-amount': {
       const newState = state.value.map((product: Product) => {
         if (product._id === action.payload.product.id) {
           return {
