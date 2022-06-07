@@ -19,6 +19,7 @@ export const Commands = () => {
   const [searchContent, setSearchContent] = useState('');
 
   const [isAddCommandModalOpen, setIsAddCommandModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -27,6 +28,7 @@ export const Commands = () => {
         type: 'ADD-ALL-COMMANDS',
         payload: { commands },
       });
+      setIsLoading(false);
     })();
   }, []);
 
@@ -59,7 +61,10 @@ export const Commands = () => {
 
   return (
     <CommandsContext.Provider value={contextValues}>
-      <CommandsLayout handleOpenAddCommandModal={handleOpenAddCommandModal} />
+      <CommandsLayout
+        handleOpenAddCommandModal={handleOpenAddCommandModal}
+        isLoading={isLoading}
+      />
       <AddCommandModal
         isModalOpen={isAddCommandModalOpen}
         setIsModalOpen={setIsAddCommandModalOpen}

@@ -1,4 +1,4 @@
-import { Heading, Icon } from '@chakra-ui/react';
+import { Heading, Icon, Spinner } from '@chakra-ui/react';
 import { MdPlaylistAdd } from 'react-icons/md';
 
 import { Button } from 'components/Button';
@@ -9,9 +9,13 @@ import { CommandsList } from './components/CommandsList';
 
 type Props = {
   handleOpenAddCommandModal: () => void;
+  isLoading: boolean;
 };
 
-export const CommandsLayout = ({ handleOpenAddCommandModal }: Props) => (
+export const CommandsLayout = ({
+  handleOpenAddCommandModal,
+  isLoading,
+}: Props) => (
   <Layout>
     <Header>
       <Button isCallAction onClick={() => handleOpenAddCommandModal()}>
@@ -23,6 +27,16 @@ export const CommandsLayout = ({ handleOpenAddCommandModal }: Props) => (
       Comandas
     </Heading>
     <NavHeader />
-    <CommandsList />
+    {isLoading ? (
+      <Spinner
+        size="xl"
+        position="absolute"
+        left="50%"
+        top="50%"
+        transform="translate(-50%, -50%)"
+      />
+    ) : (
+      <CommandsList />
+    )}
   </Layout>
 );

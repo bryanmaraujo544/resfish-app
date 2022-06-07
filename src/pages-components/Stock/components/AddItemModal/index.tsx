@@ -30,6 +30,8 @@ export const AddItemModal = ({
   const [amount, setAmount] = useState(1);
   const [unitPrice, setUnitPrice] = useState('R$ ');
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { productsDispatch } = useContext(StockContext);
   const toast = useToast();
 
@@ -41,6 +43,7 @@ export const AddItemModal = ({
     e.preventDefault();
 
     try {
+      setIsSubmitting(true);
       // taking out the "R$" of the string and getting only the number;
       const unitPriceNum = unitPrice.split(' ')[1];
       const formattedUnitPriceStr = formatDecimalNum({
@@ -50,18 +53,13 @@ export const AddItemModal = ({
 
       const formattedUnitPrice = Number(formattedUnitPriceStr);
 
-      if (
-        !name ||
-        !category ||
-        amount === null ||
-        amount === undefined ||
-        !formattedUnitPrice
-      ) {
+      if (!name || !category || amount === null || amount === undefined) {
         toast({
           status: 'error',
           title: 'Preencha os campos necessários',
           isClosable: true,
         });
+        setIsSubmitting(false);
         return;
       }
 
@@ -73,6 +71,7 @@ export const AddItemModal = ({
           duration: 5000,
           isClosable: true,
         });
+        setIsSubmitting(false);
         return;
       }
 
@@ -84,6 +83,7 @@ export const AddItemModal = ({
           title: 'A URL da imagem está inválida',
           isClosable: true,
         });
+        setIsSubmitting(false);
         return;
       }
 
@@ -109,8 +109,10 @@ export const AddItemModal = ({
       });
 
       cleanFields();
+      setIsSubmitting(false);
       handleCloseModal();
     } catch (error: any) {
+      setIsSubmitting(false);
       toast({
         status: 'error',
         title: error?.response.data.message,
@@ -145,6 +147,7 @@ export const AddItemModal = ({
       setImage={setImage}
       amount={amount}
       setAmount={setAmount}
+      isSubmitting={isSubmitting}
     />
   );
 };
