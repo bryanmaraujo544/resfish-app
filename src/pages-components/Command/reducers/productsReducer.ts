@@ -40,6 +40,19 @@ export const productsReducer = (state: any, action: any) => {
       });
       return { value: [...newState] };
     }
+    case 'update-product-total-payed': {
+      const newState = state.value.map((product: Product) => {
+        console.log(action.payload.product);
+        if (product._id === action.payload.product.id) {
+          return {
+            ...product,
+            totalPayed: product.totalPayed + action.payload.product.totalPayed,
+          };
+        }
+        return product;
+      });
+      return { value: newState };
+    }
     case 'delete': {
       const newState = state.value.filter(
         (product: any) => product._id !== action.payload.product._id

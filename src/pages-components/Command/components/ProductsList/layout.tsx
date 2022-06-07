@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { Dispatch, SetStateAction } from 'react';
 import {
   Flex,
   Icon,
-  Button,
   Table,
   TableContainer,
   Thead,
@@ -12,18 +13,23 @@ import {
   Text,
   FormControl,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { BsFillTrashFill } from 'react-icons/bs';
-import { BiSad } from 'react-icons/bi';
 import { FiEdit2 } from 'react-icons/fi';
+import { FaArrowUp } from 'react-icons/fa';
+import { CgOptions } from 'react-icons/cg';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
-import { FaArrowUp } from 'react-icons/fa';
 import { Product } from 'types/Product';
 import { formatAmount } from 'utils/formatAmount';
-import { Dispatch, SetStateAction } from 'react';
 import { useClickOutsideToClose } from 'hooks/useClickOutsideToClose';
+import { IoCashOutline } from 'react-icons/io5';
+import { BiSad } from 'react-icons/bi';
 
 const columns = [
   {
@@ -41,6 +47,10 @@ const columns = [
   {
     text: 'Total',
     prop: 'total',
+  },
+  {
+    text: 'Pago',
+    prop: 'totalPayed',
   },
 ];
 
@@ -61,6 +71,7 @@ interface Props {
   newProductAmount: string;
   setNewProductAmount: Dispatch<SetStateAction<string>>;
   setFishIdToEditAmount: Dispatch<SetStateAction<string>>;
+  handleOpenPayProductModal: (product: Product) => void;
 }
 
 export const ProductsListLayout = ({
@@ -75,6 +86,7 @@ export const ProductsListLayout = ({
   newProductAmount,
   setNewProductAmount,
   setFishIdToEditAmount,
+  handleOpenPayProductModal,
 }: Props) => {
   const isFishingCategory = (category?: string) =>
     category?.toLowerCase() === 'peixes';
@@ -114,7 +126,14 @@ export const ProductsListLayout = ({
         <Tbody>
           {products?.length > 0 &&
             products?.map(
-              ({ _id, name, amount, unitPrice, category }: Product) => (
+              ({
+                _id,
+                name,
+                amount,
+                unitPrice,
+                category,
+                totalPayed,
+              }: Product) => (
                 <Tr key={`product-list${name}`} h={20}>
                   <Td>{name}</Td>
                   <Td>
@@ -189,14 +208,60 @@ export const ProductsListLayout = ({
                       to: 'comma',
                     })}
                   </Td>
+                  <Td>
+                    R${' '}
+                    {formatDecimalNum({
+                      num: totalPayed?.toString() as string,
+                      to: 'comma',
+                    })}
+                  </Td>
+
                   <Td isNumeric>
-                    <Button
-                      bg="red.50"
-                      p={0}
-                      onClick={() => handleOpenDeleteModal({ productId: _id })}
-                    >
-                      <Icon as={BsFillTrashFill} color="red.600" />
-                    </Button>
+                    <Menu>
+                      <MenuButton
+                        p={1}
+                        rounded={4}
+                        _hover={{
+                          bg: 'blue.50',
+                        }}
+                      >
+                        <Icon
+                          as={CgOptions}
+                          fontSize={[16, 22]}
+                          color="blue.800"
+                        />
+                      </MenuButton>
+                      <MenuList>
+                        <MenuItem
+                          icon={<IoCashOutline fontSize={14} />}
+                          onClick={() =>
+                            handleOpenPayProductModal({
+                              _id,
+                              name,
+                              amount,
+                              unitPrice,
+                              category,
+                              totalPayed,
+                            })
+                          }
+                          display="flex"
+                          alignItems="center"
+                        >
+                          <Text>Pagar</Text>
+                        </MenuItem>
+                        <MenuItem
+                          icon={<BsFillTrashFill fontSize={14} />}
+                          onClick={() =>
+                            handleOpenDeleteModal({ productId: _id })
+                          }
+                          color="red.500"
+                          display="flex"
+                          alignItems="center"
+                        >
+                          <Text>Deletar</Text>
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
                   </Td>
                 </Tr>
               )

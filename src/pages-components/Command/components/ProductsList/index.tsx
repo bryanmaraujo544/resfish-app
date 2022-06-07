@@ -3,12 +3,18 @@ import { useToast } from '@chakra-ui/react';
 
 import CommandService from 'pages-components/Command/services/CommandService';
 import { formatAmount } from 'utils/formatAmount';
+import { Product } from 'types/Product';
 import { CommandContext } from '../../index';
 import { ProductsListLayout } from './layout';
+import { PayProductModal } from './PayProductModal';
 
 export const ProductsList = () => {
   const [fishIdToEditAmount, setFishIdToEditAmount] = useState('');
   const [newProductAmount, setNewProductAmount] = useState('');
+
+  const [productToPay, setProductToPay] = useState<Product>({} as Product);
+  const [isPayProductModalOpen, setIsPayProductModalOpen] = useState(false);
+
   const {
     products,
     productsDispatch,
@@ -101,6 +107,13 @@ export const ProductsList = () => {
     }
   }
 
+  function handleOpenPayProductModal(product: Product) {
+    setIsPayProductModalOpen(true);
+    setProductToPay(product);
+  }
+
+  // Command Filters Logic
+
   const handleToggleOrderByDir = useCallback(() => {
     setOrderByDir((prev: string) => (prev === 'asc' ? 'desc' : 'asc'));
   }, [setOrderByDir]);
@@ -148,20 +161,28 @@ export const ProductsList = () => {
   }, [orderByDir, filteredBySearch, orderBy]);
 
   return (
-    <ProductsListLayout
-      products={filteredBySort}
-      // handleIncrementProductAmount={handleIncrementProductAmount}
-      // handleDecrementProductAmount={handleDecrementProductAmount}
-      handleOpenDeleteModal={handleOpenDeleteModal}
-      orderBy={orderBy}
-      orderByDir={orderByDir}
-      handleToggleOrderByDir={handleToggleOrderByDir}
-      fishIdToEditAmount={fishIdToEditAmount}
-      handleActiveEditFishAmount={handleActiveEditFishAmount}
-      handleUpdateFishAmount={handleUpdateFishAmount}
-      newProductAmount={newProductAmount}
-      setNewProductAmount={setNewProductAmount}
-      setFishIdToEditAmount={setFishIdToEditAmount}
-    />
+    <>
+      <ProductsListLayout
+        products={filteredBySort}
+        // handleIncrementProductAmount={handleIncrementProductAmount}
+        // handleDecrementProductAmount={handleDecrementProductAmount}
+        handleOpenDeleteModal={handleOpenDeleteModal}
+        orderBy={orderBy}
+        orderByDir={orderByDir}
+        handleToggleOrderByDir={handleToggleOrderByDir}
+        fishIdToEditAmount={fishIdToEditAmount}
+        handleActiveEditFishAmount={handleActiveEditFishAmount}
+        handleUpdateFishAmount={handleUpdateFishAmount}
+        newProductAmount={newProductAmount}
+        setNewProductAmount={setNewProductAmount}
+        setFishIdToEditAmount={setFishIdToEditAmount}
+        handleOpenPayProductModal={handleOpenPayProductModal}
+      />
+      <PayProductModal
+        isModalOpen={isPayProductModalOpen}
+        setIsModalOpen={setIsPayProductModalOpen}
+        productToPay={productToPay}
+      />
+    </>
   );
 };
