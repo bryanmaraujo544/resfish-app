@@ -11,6 +11,7 @@ import {
   useContext,
   useCallback,
 } from 'react';
+import { formatAmount } from 'utils/formatAmount';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
 
@@ -24,6 +25,7 @@ interface ProductNoAmount {
   _id?: string;
   name: string;
   unitPrice: number;
+  category: string;
 }
 
 export const AddProductsModal = ({
@@ -38,7 +40,7 @@ export const AddProductsModal = ({
   const [productToSetAmount, setProductToSetAmount] = useState<ProductNoAmount>(
     {} as ProductNoAmount
   );
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState('1');
 
   const [filter, setFilter] = useState('');
   const [searchContent, setSearchContent] = useState('');
@@ -81,9 +83,20 @@ export const AddProductsModal = ({
       return;
     }
 
+    const formattedAmount = Number(formatAmount({ num: amount, to: 'point' }));
+    if (Number.isNaN(formattedAmount)) {
+      toast({
+        status: 'error',
+        title: 'Número inválido',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     setSelectedProducts((prev: any) => [
       ...prev,
-      { ...productToSetAmount, amount },
+      { ...productToSetAmount, amount: formattedAmount.toString() },
     ]);
     setIsSetAmountModalOpen(false);
   }
@@ -149,7 +162,7 @@ export const AddProductsModal = ({
 
   const cleanModalValues = useCallback(() => {
     setSelectedProducts([]);
-    setAmount(1);
+    setAmount('1');
     setFilter('');
     setSearchContent('');
   }, []);
@@ -204,6 +217,9 @@ export const AddProductsModal = ({
         amount={amount}
         setAmount={setAmount}
         handleAddProduct={handleAddProduct}
+        isFishesCategory={
+          productToSetAmount?.category?.toLowerCase() === 'peixes'
+        }
       />
     </>
   );

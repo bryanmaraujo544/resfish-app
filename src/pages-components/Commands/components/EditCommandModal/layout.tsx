@@ -69,7 +69,7 @@ export const EditCommandModalLayout = ({
         <Select {...rhfRegister('fishingType')} cursor="pointer">
           <option defaultChecked>Nenhum</option>
           <option>Pesca Esportiva</option>
-          <option>Pesque-Pague</option>
+          <option>Pesque Pague</option>
         </Select>
       </InputGroup>
       <Button type="submit">Atualizar</Button>

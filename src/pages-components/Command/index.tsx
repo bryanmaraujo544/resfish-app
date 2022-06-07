@@ -11,6 +11,7 @@ import {
 
 import { useToast } from '@chakra-ui/react';
 import { Command as CommandType } from 'types/Command';
+import { useRouter } from 'next/router';
 import { productsReducer } from './reducers/productsReducer';
 import { AddProductModal } from './components/AddProductModal';
 import { DeleteProductModal } from './components/DeleteProductModal';
@@ -70,6 +71,7 @@ export const Command = ({ commandId }: Props) => {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const router = useRouter();
   const toast = useToast();
 
   useEffect(() => {
@@ -107,6 +109,10 @@ export const Command = ({ commandId }: Props) => {
     []
   );
 
+  const handleGoToCommands = useCallback(() => {
+    router.push('/commands');
+  }, [router]);
+
   return (
     <CommandContext.Provider
       value={{
@@ -130,7 +136,11 @@ export const Command = ({ commandId }: Props) => {
         setSearchContent,
       }}
     >
-      <CommandLayout command={command} isLoading={isLoading} />
+      <CommandLayout
+        command={command}
+        isLoading={isLoading}
+        handleGoToCommands={handleGoToCommands}
+      />
       <DeleteProductModal
         isModalOpen={isDeleteProductModalOpen}
         setIsModalOpen={setIsDeleteProductModalOpen}

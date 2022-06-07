@@ -26,7 +26,10 @@ import {
 import { BiSad, BiSearchAlt } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
 
+import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { Modal } from 'components/Modal';
+import { MdPlaylistAdd } from 'react-icons/md';
+import { formatAmount } from 'utils/formatAmount';
 
 const filterOptions = [
   'Pesca',
@@ -45,6 +48,7 @@ interface ProductNoAmount {
   _id?: string;
   name: string;
   unitPrice: number;
+  category: string;
 }
 
 interface Props {
@@ -79,8 +83,9 @@ export const AddProductModalLayout = ({
     onClose={() => handleCloseModal()}
     title="Adicionar Produto"
     size="6xl"
+    modalBodyOverflow="hidden"
   >
-    <Stack spacing={[4, 6]}>
+    <Stack spacing={[4, 6]} overflowY="scroll">
       {/* Header */}
       <Grid gridTemplateColumns={['1fr', '1fr 3fr']} gap={[2, 4]}>
         <Menu>
@@ -146,7 +151,7 @@ export const AddProductModalLayout = ({
                 {name}
               </Text>
               <Text fontSize={14} fontWeight={600}>
-                Qntd: {amount}
+                Qntd: {formatAmount({ num: amount, to: 'comma' })}
               </Text>
             </Flex>
             <Icon
@@ -167,7 +172,7 @@ export const AddProductModalLayout = ({
       </Grid>
 
       {/* List of products to add in command */}
-      <TableContainer>
+      <TableContainer overflowY="scroll" flex="1">
         <Table w="100%" mt={[2, 4]}>
           <Thead>
             <Tr>
@@ -179,19 +184,26 @@ export const AddProductModalLayout = ({
           </Thead>
           <Tbody>
             {products?.length > 0 &&
-              products?.map(({ _id, name, unitPrice, amount }) => (
+              products?.map(({ _id, name, unitPrice, amount, category }) => (
                 <Tr key={`add-product-modal-product-${_id}`}>
                   <Td>{name}</Td>
                   <Td>{amount}</Td>
-                  <Td>{unitPrice}</Td>
+                  <Td>
+                    R${' '}
+                    {formatDecimalNum({
+                      num: unitPrice.toString(),
+                      to: 'comma',
+                    })}
+                  </Td>
                   <Td isNumeric>
                     <Button
-                      colorScheme="blue"
-                      bg="blue.400"
+                      bg="blue.50"
+                      color="blue.700"
+                      fontSize={15}
                       onClick={
                         () =>
                           handleOpenAmountModal({
-                            product: { _id, name, unitPrice },
+                            product: { _id, name, unitPrice, category },
                           })
                         // handleAddProduct({ id, name, unitPrice, amount })
                       }
@@ -218,7 +230,14 @@ export const AddProductModalLayout = ({
       </TableContainer>
       <Grid gridTemplateColumns={['1fr', '1fr 1fr']} gap={4}>
         <Button onClick={() => handleCloseModal()}>Cancelar</Button>
-        <Button onClick={() => handleAddProductsInCommand()} colorScheme="blue">
+        <Button
+          onClick={() => handleAddProductsInCommand()}
+          colorScheme="blue"
+          display="flex"
+          alignItems="center"
+          gap={2}
+        >
+          <Icon as={MdPlaylistAdd} fontSize={[20, 24]} />
           Adicionar Produtos
         </Button>
       </Grid>

@@ -6,9 +6,10 @@ import { SetAmountModalLayout } from './layout';
 type Props = {
   isSetAmountModalOpen: boolean;
   setIsSetAmountModalOpen: Dispatch<SetStateAction<boolean>>;
-  amount: number;
-  setAmount: Dispatch<SetStateAction<number>>;
+  amount: string;
+  setAmount: Dispatch<SetStateAction<string>>;
   handleAddProduct: (e: any) => void;
+  isFishesCategory: boolean;
 };
 
 export const SetAmountModal = ({
@@ -17,6 +18,7 @@ export const SetAmountModal = ({
   amount,
   setAmount,
   handleAddProduct,
+  isFishesCategory,
 }: Props) => {
   function handleCloseAmountModal() {
     setIsSetAmountModalOpen(false);
@@ -29,6 +31,7 @@ export const SetAmountModal = ({
       amount={amount}
       setAmount={setAmount}
       handleAddProduct={handleAddProduct}
+      isFishesCategory={isFishesCategory}
     />
   );
 };

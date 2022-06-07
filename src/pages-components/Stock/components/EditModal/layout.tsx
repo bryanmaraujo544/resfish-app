@@ -57,12 +57,11 @@ export const EditModalLayout = ({
         value={itemInfos.unitPrice || ''}
         onChange={(e) => handleChangeUnitPrice(e)}
       />
-      <NumberInput>
-        <NumberInputField
-          placeholder="Quantidade"
-          value={itemInfos.amount || ''}
-          onChange={(e) => itemInfos.setAmount(Number(e.target.value))}
-        />
+      <NumberInput
+        value={itemInfos.amount || ''}
+        onChange={(e) => itemInfos.setAmount(Number(e))}
+      >
+        <NumberInputField placeholder="Quantidade" />
 
         <NumberInputStepper>
           <NumberIncrementStepper />

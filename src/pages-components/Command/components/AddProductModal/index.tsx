@@ -14,6 +14,7 @@ import CommandService from 'pages-components/Command/services/CommandService';
 import ProductsService from 'pages-components/Command/services/ProductsService';
 // import { CommandContext } from 'pages-components/Command';
 import { Command } from 'types/Command';
+import { formatAmount } from 'utils/formatAmount';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
 
@@ -28,6 +29,7 @@ interface ProductNoAmount {
   _id?: string;
   name: string;
   unitPrice: number;
+  category: string;
 }
 
 export const AddProductModal = ({
@@ -39,13 +41,11 @@ export const AddProductModal = ({
   const [allProducts, setAllProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([] as any);
 
-  console.log('Selected Products', selectedProducts);
-
   const [isSetAmountModalOpen, setIsSetAmountModalOpen] = useState(false);
   const [productToSetAmount, setProductToSetAmount] = useState<ProductNoAmount>(
     {} as ProductNoAmount
   );
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState('1');
 
   const [filter, setFilter] = useState('');
   const [searchContent, setSearchContent] = useState('');
@@ -89,9 +89,21 @@ export const AddProductModal = ({
       setIsSetAmountModalOpen(false);
       return;
     }
+
+    const formattedAmount = Number(formatAmount({ num: amount, to: 'point' }));
+    if (Number.isNaN(formattedAmount)) {
+      toast({
+        status: 'error',
+        title: 'Número inválido',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     setSelectedProducts((prev: any) => [
       ...prev,
-      { ...productToSetAmount, amount },
+      { ...productToSetAmount, amount: formattedAmount.toString() },
     ]);
     setIsSetAmountModalOpen(false);
   }
@@ -157,7 +169,7 @@ export const AddProductModal = ({
 
   const cleanModalValues = useCallback(() => {
     setSelectedProducts([]);
-    setAmount(1);
+    setAmount('1');
     setFilter('');
     setSearchContent('');
   }, []);
@@ -212,6 +224,9 @@ export const AddProductModal = ({
         amount={amount}
         setAmount={setAmount}
         handleAddProduct={handleAddProduct}
+        isFishesCategory={
+          productToSetAmount?.category?.toLowerCase() === 'peixes'
+        }
       />
     </>
   );

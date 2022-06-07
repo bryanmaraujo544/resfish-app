@@ -9,6 +9,7 @@ interface Props {
   size?: string;
   children: ReactNode;
   initialFocusRef?: any;
+  modalBodyOverflow?: any;
 }
 
 export const Modal = ({
@@ -18,6 +19,7 @@ export const Modal = ({
   children,
   size,
   initialFocusRef,
+  modalBodyOverflow,
 }: Props) => (
   <ModalLayout
     title={title}
@@ -26,5 +28,6 @@ export const Modal = ({
     children={children}
     size={size}
     initialFocusRef={initialFocusRef}
+    modalBodyOverflow={modalBodyOverflow}
   />
 );

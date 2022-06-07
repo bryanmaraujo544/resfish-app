@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import {
   Flex,
-  Box,
   Text,
   Icon,
   Button,
@@ -18,6 +18,7 @@ import { BiIdCard } from 'react-icons/bi';
 import { MdInventory2 } from 'react-icons/md';
 import { GiCook } from 'react-icons/gi';
 import { CgMenu } from 'react-icons/cg';
+import { FaArrowUp } from 'react-icons/fa';
 
 const headerButtons = [
   {
@@ -42,6 +43,8 @@ interface Props {
   isSideMenuOpen: boolean;
   handleCloseSideMenu: any;
   handleOpenSideMenu: any;
+  hasBackPageBtn?: boolean;
+  handleBackPage?: any;
   children: ReactNode;
 }
 
@@ -50,6 +53,8 @@ export const HeaderLayout = ({
   isSideMenuOpen,
   handleCloseSideMenu,
   handleOpenSideMenu,
+  hasBackPageBtn,
+  handleBackPage,
   children,
 }: Props) => {
   const { pathname } = useRouter();
@@ -66,11 +71,30 @@ export const HeaderLayout = ({
         mb={[1, 2]}
         w="100%"
       >
-        <Box>
+        <Flex gap={2} align="center">
+          {hasBackPageBtn && (
+            <Button
+              onClick={handleBackPage}
+              transform="rotate(-90deg)"
+              color="red.900"
+              bg="red.50"
+              _hover={{
+                bg: 'red.100',
+                color: 'red.900',
+              }}
+              _active={{
+                bg: 'red.50',
+                color: 'red.800',
+              }}
+              boxShadow="base"
+            >
+              <Icon as={FaArrowUp} />
+            </Button>
+          )}
           <Text fontWeight={700} color="red.500" fontSize="2xl">
             Pesqueiro Arruda's
           </Text>
-        </Box>
+        </Flex>
         <Flex
           gap={4}
           w={['100%', null, 'auto']}
@@ -83,6 +107,7 @@ export const HeaderLayout = ({
             onClick={handleOpenSideMenu}
             h="100%"
             bg="red.50"
+            color="red.900"
             _hover={{
               bg: 'red.100',
               color: 'red.900',

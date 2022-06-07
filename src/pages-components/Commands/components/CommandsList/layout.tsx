@@ -12,6 +12,7 @@ import {
   Thead,
   Tr,
   Flex,
+  Text,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { AiOutlineDelete } from 'react-icons/ai';
@@ -122,8 +123,10 @@ export const CommandsListLayout = ({
                   <MenuItem
                     icon={<BiAddToQueue />}
                     onClick={() => handleOpenAddProductsModal(_id)}
+                    display="flex"
+                    alignItems="center"
                   >
-                    Adicionar Produtos
+                    <Text>Adicionar Produtos</Text>
                   </MenuItem>
                   <MenuItem
                     icon={<FiEdit2 />}
@@ -135,15 +138,19 @@ export const CommandsListLayout = ({
                         waiter,
                       })
                     }
+                    display="flex"
+                    alignItems="center"
                   >
-                    Editar
+                    <Text>Editar</Text>
                   </MenuItem>
                   <MenuItem
                     icon={<AiOutlineDelete />}
                     color="red.500"
                     onClick={() => handleOpenDeleteCommandModal(_id)}
+                    display="flex"
+                    alignItems="center"
                   >
-                    Deletar
+                    <Text>Deletar</Text>
                   </MenuItem>
                 </MenuList>
               </Menu>

@@ -17,6 +17,10 @@ export const formatDecimalNum = ({ num, to }: Props) => {
   const numWithComma = num.replace(/\./g, ',');
   const numberAfterComma = numWithComma.split(',')[1];
 
+  if (!numberAfterComma) {
+    return `${numWithComma},00`;
+  }
+
   if (numberAfterComma?.length < 2) {
     return `${numWithComma}0`;
   }

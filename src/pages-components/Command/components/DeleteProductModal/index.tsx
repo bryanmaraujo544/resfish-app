@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const DeleteProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
-  const { productIdToDelete, productsDispatch, command } =
+  const { productIdToDelete, productsDispatch, command, setCommand } =
     useContext(CommandContext);
 
   const toast = useToast();
@@ -26,10 +26,12 @@ export const DeleteProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         (product) => product._id !== productIdToDelete
       );
 
-      await CommandService.updateCommand({
+      const { command: updatedCommand } = await CommandService.updateCommand({
         _id: command._id,
         products: newProducts,
       });
+
+      setCommand(updatedCommand);
 
       productsDispatch({
         type: 'delete',

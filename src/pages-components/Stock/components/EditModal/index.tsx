@@ -1,12 +1,12 @@
 import { SetStateAction, Dispatch, useContext } from 'react';
 import { useToast } from '@chakra-ui/react';
 
-import StockService from '../../services/index';
 import { formatPrice } from 'utils/formatPrice';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
+import { StockContext } from 'pages-components/Stock';
+import StockService from '../../services/index';
 import { EditModalLayout } from './layout';
 import type { Item } from '../../types/Item';
-import { StockContext } from 'pages-components/Stock';
 
 interface Props {
   itemInfos: Item;
@@ -19,6 +19,7 @@ export const EditModal = ({
   setIsEditModalOpen,
   itemInfos,
 }: Props) => {
+  console.log({ itemInfos });
   const { productsDispatch } = useContext(StockContext);
   const toast = useToast();
 
