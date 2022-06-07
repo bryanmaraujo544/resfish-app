@@ -83,6 +83,7 @@ export const AddProductModalLayout = ({
     onClose={() => handleCloseModal()}
     title="Adicionar Produto"
     size="6xl"
+    modalBodyOverflow="hidden"
   >
     <Stack spacing={[4, 6]} overflowY="scroll">
       {/* Header */}

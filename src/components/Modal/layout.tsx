@@ -15,6 +15,7 @@ interface Props {
   children: ReactNode;
   initialFocusRef: any;
   size?: string;
+  modalBodyOverflow?: any;
 }
 
 export const ModalLayout = ({
@@ -24,6 +25,7 @@ export const ModalLayout = ({
   size,
   initialFocusRef,
   children,
+  modalBodyOverflow,
 }: Props) => (
   <Modal
     isOpen={isOpen}
@@ -41,7 +43,11 @@ export const ModalLayout = ({
     <ModalContent py={2} mx={2}>
       <ModalHeader>{title}</ModalHeader>
       <ModalCloseButton />
-      <ModalBody display="flex" flexDir="column" overflowY="hidden">
+      <ModalBody
+        display="flex"
+        flexDir="column"
+        overflowY={modalBodyOverflow || 'scroll'}
+      >
         {children}
       </ModalBody>
     </ModalContent>
