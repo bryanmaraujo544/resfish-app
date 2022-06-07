@@ -43,53 +43,62 @@ export const ProductsList = () => {
     e: any,
     { productId, isFish }: { productId: string; isFish: boolean }
   ) {
-    e.preventDefault();
-    setFishIdToEditAmount('');
+    try {
+      e.preventDefault();
+      setFishIdToEditAmount('');
 
-    const newAmount = isFish
-      ? formatAmount({
-          num: newProductAmount,
-          to: 'point',
-        })
-      : newProductAmount;
+      const newAmount = isFish
+        ? formatAmount({
+            num: newProductAmount,
+            to: 'point',
+          })
+        : newProductAmount;
 
-    if (Number.isNaN(newAmount)) {
+      if (Number.isNaN(newAmount)) {
+        toast({
+          status: 'error',
+          title: 'Quantidade inválida',
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      const oldProducts = command?.products;
+      const newProducts = oldProducts?.map((product) => {
+        if (product._id === productId) {
+          const newProduct = {
+            ...product,
+            amount: newAmount as number,
+          };
+          return newProduct;
+        }
+        return product;
+      });
+
+      const { command: updatedCommand } = await CommandService.updateCommand({
+        _id: command?._id,
+        products: newProducts,
+      });
+
+      setCommand(updatedCommand);
+
+      productsDispatch({
+        type: 'update-product-amount',
+        payload: {
+          product: {
+            id: productId,
+            amount: newAmount,
+          },
+        },
+      });
+    } catch (error: any) {
       toast({
         status: 'error',
-        title: 'Quantidade inválida',
+        title: error?.response?.data?.message,
         duration: 3000,
-        isClosable: true,
       });
-      return;
     }
-
-    const oldProducts = command?.products;
-    const newProducts = oldProducts?.map((product) => {
-      if (product._id === productId) {
-        const newProduct = {
-          ...product,
-          amount: newAmount as number,
-        };
-        return newProduct;
-      }
-      return product;
-    });
-
-    const { command: updatedCommand } = await CommandService.updateCommand({
-      _id: command?._id,
-      products: newProducts,
-    });
-    setCommand(updatedCommand);
-
-    productsDispatch({
-      type: 'update-product-amount',
-      payload: {
-        product: {
-          id: productId,
-          amount: newAmount,
-        },
-      },
-    });
   }
 
   const handleToggleOrderByDir = useCallback(() => {
