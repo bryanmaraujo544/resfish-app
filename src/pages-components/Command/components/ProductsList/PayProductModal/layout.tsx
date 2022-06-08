@@ -21,7 +21,7 @@ import { formatDecimalNum } from 'utils/formatDecimalNum';
 interface Props {
   isModalOpen: boolean;
   handleCloseModal: () => void;
-  handlePayProduct: () => void;
+  handlePayProduct: (e: any) => void;
   productInfos: Product;
   paymentValue: string;
   setPaymentValue: Dispatch<SetStateAction<string>>;
@@ -42,68 +42,81 @@ export const PayProductModalLayout = ({
   setAmountToPay,
   typeOfPayment,
   setTypeOfPayment,
-}: Props) => (
-  <Modal
-    isOpen={isModalOpen}
-    onClose={() => handleCloseModal()}
-    title="Pagar produto"
-    size="2xl"
-  >
-    <Stack gap={4}>
-      <Stack>
-        <Flex gap={2}>
-          <Text fontSize={[18, 20]} fontWeight={600} flex="1">
-            {productInfos?.name}
-          </Text>
-          <Select
-            w="auto"
-            cursor="pointer"
-            onChange={(e) =>
-              setTypeOfPayment(e.target.value as 'unit' | 'free')
-            }
-          >
-            <option value="unit">Pagar por unidade</option>
-            <option value="free">Pagar por valor livre</option>
-          </Select>
-        </Flex>
+}: Props) => {
+  console.log('oioioioioi');
 
-        {typeOfPayment === 'unit' ? (
-          <>
-            <Text>Quantidade a Pagar</Text>
-            <NumberInput
-              defaultValue={0}
-              min={0}
-              max={productInfos?.amount}
-              value={amountToPay}
-              onChange={(numStr) => setAmountToPay(Number(numStr))}
+  const totalToBePayed = formatDecimalNum({
+    num: (
+      productInfos.amount * productInfos.unitPrice -
+      (productInfos?.totalPayed as number)
+    ).toString(),
+    to: 'comma',
+  });
+
+  return (
+    <Modal
+      isOpen={isModalOpen}
+      onClose={() => handleCloseModal()}
+      title="Pagar produto"
+      size="2xl"
+    >
+      <Stack gap={4} as="form" onSubmit={(e) => handlePayProduct(e)}>
+        <Stack>
+          <Flex gap={2}>
+            <Text fontSize={[18, 20]} fontWeight={600} flex="1">
+              {productInfos?.name}
+            </Text>
+            <Select
+              w="auto"
+              cursor="pointer"
+              onChange={(e) =>
+                setTypeOfPayment(e.target.value as 'unit' | 'free')
+              }
             >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-          </>
-        ) : (
-          <>
-            <Text>Valor a pagar</Text>
-            <Input
-              placeholder="Valor a pagar"
-              type="text"
-              max={productInfos?.unitPrice * productInfos?.amount || 0}
-              // value=
-              onChange={(e) => setPaymentValue(e.target.value)}
-            />
-          </>
+              <option value="unit">Pagar por unidade</option>
+              <option value="free">Pagar por valor livre</option>
+            </Select>
+          </Flex>
+
+          {typeOfPayment === 'unit' ? (
+            <>
+              <Text>Quantidade a Pagar</Text>
+              <NumberInput
+                defaultValue={0}
+                min={0}
+                max={productInfos?.amount}
+                value={amountToPay}
+                onChange={(numStr) => setAmountToPay(Number(numStr))}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </>
+          ) : (
+            <>
+              <Text>Valor a pagar</Text>
+              <Input
+                placeholder="Valor a pagar"
+                type="text"
+                max={productInfos?.unitPrice * productInfos?.amount || 0}
+                // value=
+                onChange={(e) => setPaymentValue(e.target.value)}
+              />
+            </>
+          )}
+        </Stack>
+        {typeOfPayment === 'unit' && (
+          <Text>
+            Pagar: R${' '}
+            {formatDecimalNum({ num: paymentValue.toString(), to: 'comma' })}
+          </Text>
         )}
+        <Text>Total a ser pago: {totalToBePayed}</Text>
+        <Button type="submit">Pay</Button>
       </Stack>
-      {typeOfPayment === 'unit' && (
-        <Text>
-          Total a Pagar: R${' '}
-          {formatDecimalNum({ num: paymentValue.toString(), to: 'comma' })}
-        </Text>
-      )}
-      <Button onClick={() => handlePayProduct()}>Pay</Button>
-    </Stack>
-  </Modal>
-);
+    </Modal>
+  );
+};

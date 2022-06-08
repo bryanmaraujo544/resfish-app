@@ -45,10 +45,15 @@ export const PayProductModal = ({
   function handleCloseModal() {
     setIsModalOpen(false);
     setPaymentValue('0');
+    setAmountToPay(0);
+    setTypeOfPayment('unit');
   }
 
-  async function handlePayProduct() {
+  async function handlePayProduct(e: any) {
+    e.preventDefault();
     try {
+      console.log('payed');
+
       // Converting one number with comma to valid number with point 32,90 ==> 32.90
       const paymentValueFormatted = Number(
         formatDecimalNum({
@@ -56,6 +61,16 @@ export const PayProductModal = ({
           to: 'point',
         })
       );
+
+      if (paymentValueFormatted === 0) {
+        toast({
+          status: 'warning',
+          title: 'Valor de pagamento igual a 0',
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
 
       if (Number.isNaN(paymentValueFormatted)) {
         toast.closeAll();
@@ -75,8 +90,6 @@ export const PayProductModal = ({
             Number.EPSILON) *
             100
         ) / 100;
-
-      console.log({ restValueToBePayed, paymentValueFormatted });
 
       if (paymentValueFormatted > restValueToBePayed) {
         toast.closeAll();
@@ -115,6 +128,8 @@ export const PayProductModal = ({
           product: { id: productToPay._id, totalPayed: paymentValueFormatted },
         },
       });
+
+      handleCloseModal();
 
       toast.closeAll();
       toast({
