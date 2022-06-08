@@ -91,7 +91,7 @@ export const CommandsList = () => {
 
   const filteredBySearch = useMemo(() => {
     const filtered = filteredBySort.filter((command) => {
-      const commandStr = Object.values(command).join('').toLowerCase();
+      const commandStr = Object?.values(command)?.join('')?.toLowerCase();
       if (commandStr.includes(searchContent.toLowerCase())) {
         return true;
       }

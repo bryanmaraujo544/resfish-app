@@ -103,7 +103,11 @@ export const AddProductModal = ({
 
     setSelectedProducts((prev: any) => [
       ...prev,
-      { ...productToSetAmount, amount: formattedAmount.toString() },
+      {
+        ...productToSetAmount,
+        amount: formattedAmount.toString(),
+        totalPayed: 0,
+      },
     ]);
     setIsSetAmountModalOpen(false);
   }
