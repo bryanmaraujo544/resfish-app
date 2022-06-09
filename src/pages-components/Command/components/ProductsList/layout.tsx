@@ -247,7 +247,7 @@ export const ProductsListLayout = ({
                           display="flex"
                           alignItems="center"
                         >
-                          <Text>Pagar</Text>
+                          <Text>Pagar Produto</Text>
                         </MenuItem>
                         <MenuItem
                           icon={<BsFillTrashFill fontSize={14} />}

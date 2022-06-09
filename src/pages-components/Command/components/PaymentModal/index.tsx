@@ -30,8 +30,6 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   const toast = useToast();
   const totalToBePayed = (command?.total || 0) - (command?.totalPayed || 0);
 
-  console.log({ command });
-
   useEffect(() => {
     const receivedValueFormatted = Number(
       formatDecimalNum({ num: receivedValue, to: 'point' })
@@ -53,9 +51,14 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     }
 
     setIsReceivedValueInvalid({ value: false, message: '' });
-    const updatedExchange = receivedValueFormatted - totalToBePayed;
+    const updatedExchange = (receivedValueFormatted - totalToBePayed).toFixed(
+      2
+    );
     setExchange(
-      formatDecimalNum({ num: updatedExchange.toString(), to: 'comma' })
+      formatDecimalNum({
+        num: updatedExchange.toString(),
+        to: 'comma',
+      })
     );
   }, [receivedValue]);
 
