@@ -8,4 +8,5 @@ export interface Command {
   products?: Product[];
   total?: number;
   isActive?: boolean;
+  totalPayed?: number;
 }
