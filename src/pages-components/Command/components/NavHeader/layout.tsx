@@ -41,7 +41,7 @@ const sortOptions = [
   },
 ];
 
-type Props = {
+interface Props {
   // eslint-disable-next-line no-unused-vars
   handleChangeFilter: (newFilter: string) => void;
   // eslint-disable-next-line no-unused-vars
@@ -51,7 +51,7 @@ type Props = {
   searchContent: string;
   setSearchContent: Dispatch<SetStateAction<string>>;
   handleOpenAddProductModal: () => void;
-};
+}
 
 export const NavHeaderLayout = ({
   handleChangeFilter,
