@@ -42,6 +42,7 @@ export const CommandLayout = ({
   handleOpenPaymentModal,
 }: Props) => {
   const dt = DateTime.fromISO(command.createdAt as string).setLocale('pt-BR');
+  console.log(dt.day, dt.month, dt.year);
   const createdAtFormatted = dt.toLocaleString(DateTime.DATE_FULL);
 
   return (

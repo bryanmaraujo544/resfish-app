@@ -92,8 +92,6 @@ export const ProductsListLayout = ({
 }: Props) => {
   const { command } = useContext(CommandContext);
 
-  console.log({ command });
-
   const commandIsPayed = command?.isActive === false;
 
   const isFishingCategory = (category?: string) =>
