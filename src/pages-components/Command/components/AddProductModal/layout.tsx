@@ -136,9 +136,9 @@ export const AddProductModalLayout = ({
 
       {/* Products selected */}
       <Grid gridTemplateColumns="repeat(3, 1fr)" gap={[2, 4]}>
-        {selectedProducts.map(({ id, name, amount }) => (
+        {selectedProducts.map(({ _id, name, amount }) => (
           <Flex
-            key={`selected-product-${id}`}
+            key={`selected-product-${_id}`}
             // direction="column"
             align="center"
             justify="space-between"
@@ -157,7 +157,7 @@ export const AddProductModalLayout = ({
             </Flex>
             <Icon
               as={IoClose}
-              onClick={() => handleRemoveSelectedProduct({ id })}
+              onClick={() => handleRemoveSelectedProduct({ id: _id })}
               cursor="pointer"
               fontSize={[16, 18]}
               _hover={{

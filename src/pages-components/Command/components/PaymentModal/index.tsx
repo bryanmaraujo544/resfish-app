@@ -105,8 +105,6 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       });
 
       handleCloseModal();
-
-      console.log({ message, paymentInfos });
     } catch (error: any) {
       toast({
         status: 'error',

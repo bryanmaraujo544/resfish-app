@@ -107,7 +107,7 @@ export const AddProductsModal = ({
 
   function handleRemoveSelectedProduct({ id }: { id: string }) {
     setSelectedProducts((prev: any) =>
-      prev.filter((product: any) => product.id !== id)
+      prev.filter((product: any) => product._id !== id)
     );
   }
 
