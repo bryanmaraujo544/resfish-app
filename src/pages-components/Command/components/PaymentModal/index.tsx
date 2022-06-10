@@ -28,7 +28,12 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   const [paymentType, setPaymentType] = useState('Dinheiro');
 
   const toast = useToast();
-  const totalToBePayed = (command?.total || 0) - (command?.totalPayed || 0);
+
+  const totalToBePayed =
+    Math.round(
+      ((command?.total || 0) - (command?.totalPayed || 0) + Number.EPSILON) *
+        100
+    ) / 100;
 
   useEffect(() => {
     const receivedValueFormatted = Number(
@@ -124,6 +129,7 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       receivedValue={receivedValue}
       setReceivedValue={setReceivedValue}
       isReceivedValueInvalid={isReceivedValueInvalid}
+      totalToBePayed={totalToBePayed}
     />
   );
 };

@@ -42,7 +42,6 @@ export const productsReducer = (state: any, action: any) => {
     }
     case 'update-product-total-payed': {
       const newState = state.value.map((product: Product) => {
-        console.log(action.payload.product);
         if (product._id === action.payload.product.id) {
           return {
             ...product,

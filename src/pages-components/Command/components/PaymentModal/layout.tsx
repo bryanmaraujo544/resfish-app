@@ -27,6 +27,7 @@ interface Props {
   receivedValue: string;
   setReceivedValue: Dispatch<SetStateAction<string>>;
   isReceivedValueInvalid: { value: boolean; message: string };
+  totalToBePayed: number;
 }
 
 const paymentOptions = [
@@ -47,172 +48,168 @@ export const PaymentModalLayout = ({
   receivedValue,
   setReceivedValue,
   isReceivedValueInvalid,
-}: Props) => {
-  const totalToBePayed =
-    (command?.total as number) - (command?.totalPayed as number);
-
-  return (
-    <Modal
-      isOpen={isModalOpen}
-      onClose={handleCloseModal}
-      title="Pagamento"
-      size="full"
-    >
-      <Stack gap={[2, 6]} alignItems="space-between">
-        {/* HEADER */}
-        <Grid
-          gridTemplateColumns={[
-            'repeact(2, 1fr)',
-            'repeact(2, 1fr)',
-            'repeat(4, 1fr)',
-          ]}
-          gap={[1, 2, 3, 4]}
+  totalToBePayed,
+}: Props) => (
+  <Modal
+    isOpen={isModalOpen}
+    onClose={handleCloseModal}
+    title="Pagamento"
+    size="full"
+  >
+    <Stack gap={[2, 6]} alignItems="space-between">
+      {/* HEADER */}
+      <Grid
+        gridTemplateColumns={[
+          'repeact(2, 1fr)',
+          'repeact(2, 1fr)',
+          'repeat(4, 1fr)',
+        ]}
+        gap={[1, 2, 3, 4]}
+      >
+        <BgBox flex="1">
+          <Text fontSize={[14, 18, 20]}>
+            Mesa:{' '}
+            <Text display="inline-block" fontWeight="700">
+              {command.table}
+            </Text>
+          </Text>
+        </BgBox>
+        <BgBox
+          flex="1"
+          justifyContent="center"
+          border="2px solid"
+          borderColor="blue.300"
         >
-          <BgBox flex="1">
-            <Text fontSize={[14, 18, 20]}>
-              Mesa:{' '}
-              <Text display="inline-block" fontWeight="700">
-                {command.table}
-              </Text>
+          <Text fontSize={[14, 18, 20]}>
+            Total:{' '}
+            <Text display="inline-block" fontWeight="700">
+              R${' '}
+              {formatDecimalNum({
+                num: command?.total?.toString() || '',
+                to: 'comma',
+              })}
             </Text>
-          </BgBox>
-          <BgBox
-            flex="1"
-            justifyContent="center"
-            border="2px solid"
-            borderColor="blue.300"
-          >
-            <Text fontSize={[14, 18, 20]}>
-              Total:{' '}
-              <Text display="inline-block" fontWeight="700">
-                R${' '}
-                {formatDecimalNum({
-                  num: command?.total?.toString() || '',
-                  to: 'comma',
-                })}
-              </Text>
+          </Text>
+        </BgBox>
+        <BgBox flex="1" justifyContent="center">
+          <Text fontSize={[14, 18, 20]}>
+            Pago:{' '}
+            <Text display="inline-block" fontWeight="700">
+              R${' '}
+              {formatDecimalNum({
+                num: command?.totalPayed?.toString() || '',
+                to: 'comma',
+              })}
             </Text>
-          </BgBox>
-          <BgBox flex="1" justifyContent="center">
-            <Text fontSize={[14, 18, 20]}>
-              Pago:{' '}
-              <Text display="inline-block" fontWeight="700">
-                R${' '}
-                {formatDecimalNum({
-                  num: command?.totalPayed?.toString() || '',
-                  to: 'comma',
-                })}
-              </Text>
+          </Text>
+        </BgBox>
+        <BgBox flex="1" border="2px solid" borderColor="red.300">
+          <Text fontSize={[14, 18, 20]}>
+            A pagar:{' '}
+            <Text display="inline-block" fontWeight="700">
+              R${' '}
+              {formatDecimalNum({
+                num: totalToBePayed.toString(),
+                to: 'comma',
+              })}
             </Text>
-          </BgBox>
-          <BgBox flex="1" border="2px solid" borderColor="red.300">
-            <Text fontSize={[14, 18, 20]}>
-              A pagar:{' '}
-              <Text display="inline-block" fontWeight="700">
-                R${' '}
-                {formatDecimalNum({
-                  num: totalToBePayed.toString(),
-                  to: 'comma',
-                })}
-              </Text>
-            </Text>
-          </BgBox>
-        </Grid>
-        <Divider />
-        {/* Payment Form */}
-        <FormControl
-          onSubmit={(e) => handleMakePayment(e)}
-          as="form"
-          display="flex"
-          flexDir="column"
-          gap={[4, 8]}
-        >
-          <Grid gridTemplateColumns="1fr 1fr" gap={[2, 4, 8]}>
-            <GridItem gridColumn={['1 / 3', '1 / 3', '1 / 2']}>
-              <InputGroup
-                hasError={isReceivedValueInvalid.value}
-                errorMsg={isReceivedValueInvalid.message}
+          </Text>
+        </BgBox>
+      </Grid>
+      <Divider />
+      {/* Payment Form */}
+      <FormControl
+        onSubmit={(e) => handleMakePayment(e)}
+        as="form"
+        display="flex"
+        flexDir="column"
+        gap={[4, 8]}
+      >
+        <Grid gridTemplateColumns="1fr 1fr" gap={[2, 4, 8]}>
+          <GridItem gridColumn={['1 / 3', '1 / 3', '1 / 2']}>
+            <InputGroup
+              hasError={isReceivedValueInvalid.value}
+              errorMsg={isReceivedValueInvalid.message}
+            >
+              <TitleText>Valor Recebido</TitleText>
+              <Input
+                placeholder="Ex: R$ 23,90"
+                value={receivedValue}
+                onChange={(e) => setReceivedValue(e.target.value)}
+              />
+            </InputGroup>
+          </GridItem>
+          <GridItem gridColumn={['1 / 3', '1 / 3', '2 / 3']}>
+            <InputGroup>
+              <TitleText
+                fontWeight="600"
+                fontSize={[16, 18, 22]}
+                color="blue.800"
               >
-                <TitleText>Valor Recebido</TitleText>
-                <Input
-                  placeholder="Ex: R$ 23,90"
-                  value={receivedValue}
-                  onChange={(e) => setReceivedValue(e.target.value)}
-                />
-              </InputGroup>
-            </GridItem>
-            <GridItem gridColumn={['1 / 3', '1 / 3', '2 / 3']}>
-              <InputGroup>
-                <TitleText
-                  fontWeight="600"
-                  fontSize={[16, 18, 22]}
-                  color="blue.800"
-                >
-                  Método de Pagamento
-                </TitleText>
-                <Select
-                  value={paymentType}
-                  onChange={(e) => setPaymentType(e.target.value)}
-                >
-                  {paymentOptions.map((payment) => (
-                    <option key={`payment-option-${payment}`}>{payment}</option>
-                  ))}
-                </Select>
-              </InputGroup>
-            </GridItem>
-          </Grid>
-          {paymentType === 'Dinheiro' && exchange && (
-            <BgBox>
-              <TitleText fontSize={[18, 22, 26]}>
-                Troco:{' '}
-                <Text fontWeight="700" display="inline-block" color="red.400">
-                  R${' '}
-                  {formatDecimalNum({
-                    num: exchange,
-                    to: 'comma',
-                  })}
-                </Text>
+                Método de Pagamento
               </TitleText>
-            </BgBox>
-          )}
-          <Divider />
-          {/* ACTION BUTTONS */}
-          <Grid gridTemplateColumns="1fr 1fr" gap={[1, 2, 4]}>
-            <GridItem gridColumn={['1 / 3', '1 / 3', '1 / 2']}>
-              <Button
-                onClick={() => handleCloseModal()}
-                w="100%"
-                fontSize={[16, 18, 22]}
-                py={2}
-                h={14}
-                color="blue.900"
+              <Select
+                value={paymentType}
+                onChange={(e) => setPaymentType(e.target.value)}
               >
-                Cancelar
-              </Button>
-            </GridItem>
-            <GridItem gridColumn={['1 / 3', '1 / 3', '2 / 3']}>
-              <Button
-                type="submit"
-                w="100%"
-                bg="green.300"
-                color="white"
-                fontSize={[16, 18, 22]}
-                py={2}
-                h={14}
-                _hover={{
-                  bg: 'green.100',
-                  color: 'green.700',
-                }}
-              >
-                Confirmar Pagamento
-              </Button>
-            </GridItem>
-          </Grid>
-        </FormControl>
-      </Stack>
-    </Modal>
-  );
-};
+                {paymentOptions.map((payment) => (
+                  <option key={`payment-option-${payment}`}>{payment}</option>
+                ))}
+              </Select>
+            </InputGroup>
+          </GridItem>
+        </Grid>
+        {paymentType === 'Dinheiro' && exchange && (
+          <BgBox>
+            <TitleText fontSize={[18, 22, 26]}>
+              Troco:{' '}
+              <Text fontWeight="700" display="inline-block" color="red.400">
+                R${' '}
+                {formatDecimalNum({
+                  num: exchange,
+                  to: 'comma',
+                })}
+              </Text>
+            </TitleText>
+          </BgBox>
+        )}
+        <Divider />
+        {/* ACTION BUTTONS */}
+        <Grid gridTemplateColumns="1fr 1fr" gap={[1, 2, 4]}>
+          <GridItem gridColumn={['1 / 3', '1 / 3', '1 / 2']}>
+            <Button
+              onClick={() => handleCloseModal()}
+              w="100%"
+              fontSize={[16, 18, 22]}
+              py={2}
+              h={14}
+              color="blue.900"
+            >
+              Cancelar
+            </Button>
+          </GridItem>
+          <GridItem gridColumn={['1 / 3', '1 / 3', '2 / 3']}>
+            <Button
+              type="submit"
+              w="100%"
+              bg="green.300"
+              color="white"
+              fontSize={[16, 18, 22]}
+              py={2}
+              h={14}
+              _hover={{
+                bg: 'green.100',
+                color: 'green.700',
+              }}
+            >
+              Confirmar Pagamento
+            </Button>
+          </GridItem>
+        </Grid>
+      </FormControl>
+    </Stack>
+  </Modal>
+);
 
 const BgBox = (props: any) => (
   <Flex
