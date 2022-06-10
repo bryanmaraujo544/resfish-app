@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useContext } from 'react';
 import {
   Flex,
   Icon,
@@ -19,17 +19,19 @@ import {
   MenuList,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+
 import { BsFillTrashFill } from 'react-icons/bs';
 import { FiEdit2 } from 'react-icons/fi';
 import { FaArrowUp } from 'react-icons/fa';
 import { CgOptions } from 'react-icons/cg';
+import { IoCashOutline } from 'react-icons/io5';
+import { BiSad } from 'react-icons/bi';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { Product } from 'types/Product';
 import { formatAmount } from 'utils/formatAmount';
 import { useClickOutsideToClose } from 'hooks/useClickOutsideToClose';
-import { IoCashOutline } from 'react-icons/io5';
-import { BiSad } from 'react-icons/bi';
+import { CommandContext } from 'pages-components/Command';
 
 const columns = [
   {
@@ -88,6 +90,12 @@ export const ProductsListLayout = ({
   setFishIdToEditAmount,
   handleOpenPayProductModal,
 }: Props) => {
+  const { command } = useContext(CommandContext);
+
+  console.log({ command });
+
+  const commandIsPayed = command?.isActive === false;
+
   const isFishingCategory = (category?: string) =>
     category?.toLowerCase() === 'peixes';
 
@@ -163,10 +171,12 @@ export const ProductsListLayout = ({
                         <>
                           <Text
                             onClick={() => {
-                              handleActiveEditFishAmount({
-                                productId: _id,
-                                amount: amount.toString(),
-                              });
+                              if (!commandIsPayed) {
+                                handleActiveEditFishAmount({
+                                  productId: _id,
+                                  amount: amount.toString(),
+                                });
+                              }
                             }}
                           >
                             {isFishingCategory(category)
@@ -176,20 +186,24 @@ export const ProductsListLayout = ({
                                 })} Kg`
                               : amount}
                           </Text>
-                          <Icon
-                            onClick={() => {
-                              handleActiveEditFishAmount({
-                                productId: _id,
-                                amount: amount.toString(),
-                              });
-                            }}
-                            as={FiEdit2}
-                            fontSize={14}
-                            cursor="pointer"
-                            _hover={{
-                              color: 'blue.500',
-                            }}
-                          />
+                          {!commandIsPayed && (
+                            <Icon
+                              onClick={() => {
+                                if (!commandIsPayed) {
+                                  handleActiveEditFishAmount({
+                                    productId: _id,
+                                    amount: amount.toString(),
+                                  });
+                                }
+                              }}
+                              as={FiEdit2}
+                              fontSize={14}
+                              cursor="pointer"
+                              _hover={{
+                                color: 'blue.500',
+                              }}
+                            />
+                          )}
                         </>
                       )}
                     </Flex>
@@ -217,51 +231,53 @@ export const ProductsListLayout = ({
                   </Td>
 
                   <Td isNumeric>
-                    <Menu>
-                      <MenuButton
-                        p={1}
-                        rounded={4}
-                        _hover={{
-                          bg: 'blue.50',
-                        }}
-                      >
-                        <Icon
-                          as={CgOptions}
-                          fontSize={[16, 22]}
-                          color="blue.800"
-                        />
-                      </MenuButton>
-                      <MenuList>
-                        <MenuItem
-                          icon={<IoCashOutline fontSize={14} />}
-                          onClick={() =>
-                            handleOpenPayProductModal({
-                              _id,
-                              name,
-                              amount,
-                              unitPrice,
-                              category,
-                              totalPayed,
-                            })
-                          }
-                          display="flex"
-                          alignItems="center"
+                    {!commandIsPayed && (
+                      <Menu>
+                        <MenuButton
+                          p={1}
+                          rounded={4}
+                          _hover={{
+                            bg: 'blue.50',
+                          }}
                         >
-                          <Text>Pagar Produto</Text>
-                        </MenuItem>
-                        <MenuItem
-                          icon={<BsFillTrashFill fontSize={14} />}
-                          onClick={() =>
-                            handleOpenDeleteModal({ productId: _id })
-                          }
-                          color="red.500"
-                          display="flex"
-                          alignItems="center"
-                        >
-                          <Text>Deletar</Text>
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
+                          <Icon
+                            as={CgOptions}
+                            fontSize={[16, 22]}
+                            color="blue.800"
+                          />
+                        </MenuButton>
+                        <MenuList>
+                          <MenuItem
+                            icon={<IoCashOutline fontSize={14} />}
+                            onClick={() =>
+                              handleOpenPayProductModal({
+                                _id,
+                                name,
+                                amount,
+                                unitPrice,
+                                category,
+                                totalPayed,
+                              })
+                            }
+                            display="flex"
+                            alignItems="center"
+                          >
+                            <Text>Pagar Produto</Text>
+                          </MenuItem>
+                          <MenuItem
+                            icon={<BsFillTrashFill fontSize={14} />}
+                            onClick={() =>
+                              handleOpenDeleteModal({ productId: _id })
+                            }
+                            color="red.500"
+                            display="flex"
+                            alignItems="center"
+                          >
+                            <Text>Deletar</Text>
+                          </MenuItem>
+                        </MenuList>
+                      </Menu>
+                    )}
                   </Td>
                 </Tr>
               )

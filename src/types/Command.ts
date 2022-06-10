@@ -9,4 +9,5 @@ export interface Command {
   total?: number;
   isActive?: boolean;
   totalPayed?: number;
+  createdAt?: string;
 }
