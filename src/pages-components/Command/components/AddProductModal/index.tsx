@@ -74,42 +74,69 @@ export const AddProductModal = ({
 
   // This function add in selected products list. Takes the object with infos based on the click of the user,
   // and add the amount propertie containing the amount selected by the user in modal
-  function handleAddProduct(e: any) {
-    e.preventDefault();
+  async function handleAddProduct(e: any) {
+    try {
+      e.preventDefault();
 
-    // TODO: check if there are enough amount of product selected in stock
-    const hasBeenSelected = selectedProducts.some(
-      (selectedProduct: any) => selectedProduct.name === productToSetAmount.name
-    );
-    if (hasBeenSelected) {
-      toast({
-        title: 'Produto já foi selecionado',
-        status: 'warning',
+      // TODO: check if there are enough amount of product selected in stock
+      const hasBeenSelected = selectedProducts.some(
+        (selectedProduct: any) =>
+          selectedProduct.name === productToSetAmount.name
+      );
+      if (hasBeenSelected) {
+        toast({
+          title: 'Produto já foi selecionado',
+          status: 'warning',
+        });
+        setIsSetAmountModalOpen(false);
+        return;
+      }
+
+      const formattedAmount = Number(
+        formatAmount({ num: amount, to: 'point' })
+      );
+      if (Number.isNaN(formattedAmount)) {
+        toast({
+          status: 'error',
+          title: 'Número inválido',
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      const { isInStock } = await ProductsService.verifyAmount({
+        productId: productToSetAmount?._id as string,
+        amount: formattedAmount,
       });
-      setIsSetAmountModalOpen(false);
-      return;
-    }
 
-    const formattedAmount = Number(formatAmount({ num: amount, to: 'point' }));
-    if (Number.isNaN(formattedAmount)) {
+      if (!isInStock) {
+        toast({
+          status: 'error',
+          title: 'Quantidade acima do estoque disponível',
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      setSelectedProducts((prev: any) => [
+        ...prev,
+        {
+          ...productToSetAmount,
+          amount: formattedAmount.toString(),
+          totalPayed: 0,
+        },
+      ]);
+      setIsSetAmountModalOpen(false);
+    } catch (error: any) {
       toast({
         status: 'error',
-        title: 'Número inválido',
+        title: error?.response?.data?.message,
         duration: 3000,
         isClosable: true,
       });
-      return;
     }
-
-    setSelectedProducts((prev: any) => [
-      ...prev,
-      {
-        ...productToSetAmount,
-        amount: formattedAmount.toString(),
-        totalPayed: 0,
-      },
-    ]);
-    setIsSetAmountModalOpen(false);
   }
 
   function handleRemoveSelectedProduct({ id }: { id: string }) {
@@ -148,7 +175,6 @@ export const AddProductModal = ({
       setCommand(updatedCommand);
 
       location.reload();
-
       cleanModalValues();
 
       // TODO: Broadcast to necessary entities the update of command
