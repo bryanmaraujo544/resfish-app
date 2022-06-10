@@ -17,8 +17,12 @@ export const Commands = () => {
   const [orderBy, setOrderBy] = useState('');
   const [orderByDir, setOrderByDir] = useState('asc' as 'asc' | 'desc');
   const [searchContent, setSearchContent] = useState('');
+  const [commandStatusFilter, setCommandStatusFilter] = useState<
+    'Ativas' | 'Pagas'
+  >('Ativas');
 
   const [isAddCommandModalOpen, setIsAddCommandModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -27,6 +31,7 @@ export const Commands = () => {
         type: 'ADD-ALL-COMMANDS',
         payload: { commands },
       });
+      setIsLoading(false);
     })();
   }, []);
 
@@ -44,6 +49,8 @@ export const Commands = () => {
       setOrderByDir,
       searchContent,
       setSearchContent,
+      commandStatusFilter,
+      setCommandStatusFilter,
       allCommands: allCommands.value,
       allCommandsDispatch,
     }),
@@ -54,12 +61,19 @@ export const Commands = () => {
       searchContent,
       allCommands,
       allCommandsDispatch,
+      commandStatusFilter,
+      setCommandStatusFilter,
     ]
   );
 
   return (
     <CommandsContext.Provider value={contextValues}>
-      <CommandsLayout handleOpenAddCommandModal={handleOpenAddCommandModal} />
+      <CommandsLayout
+        handleOpenAddCommandModal={handleOpenAddCommandModal}
+        isLoading={isLoading}
+        commandStatusFilter={commandStatusFilter}
+        setCommandStatusFilter={setCommandStatusFilter}
+      />
       <AddCommandModal
         isModalOpen={isAddCommandModalOpen}
         setIsModalOpen={setIsAddCommandModalOpen}

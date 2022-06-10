@@ -17,6 +17,7 @@ import { AddProductModal } from './components/AddProductModal';
 import { DeleteProductModal } from './components/DeleteProductModal';
 import { CommandLayout } from './layout';
 import CommandService from './services/CommandService';
+import { PaymentModal } from './components/PaymentModal';
 
 type ContextProps = {
   products: { value: any[] };
@@ -53,10 +54,7 @@ const initialState = {
 export const Command = ({ commandId }: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [command, setCommand] = useState<CommandType>({} as CommandType);
-  const [products, productsDispatch] = useReducer(
-    productsReducer,
-    initialState
-  );
+  const [isLoading, setIsLoading] = useState(true);
 
   const [productIdToDelete, setProductIdToDelete] = useState('');
 
@@ -69,7 +67,12 @@ export const Command = ({ commandId }: Props) => {
   const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
     useState(false);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+
+  const [products, productsDispatch] = useReducer(
+    productsReducer,
+    initialState
+  );
 
   const router = useRouter();
   const toast = useToast();
@@ -109,6 +112,10 @@ export const Command = ({ commandId }: Props) => {
     []
   );
 
+  const handleOpenPaymentModal = useCallback(() => {
+    setIsPaymentModalOpen(true);
+  }, []);
+
   const handleGoToCommands = useCallback(() => {
     router.push('/commands');
   }, [router]);
@@ -140,6 +147,7 @@ export const Command = ({ commandId }: Props) => {
         command={command}
         isLoading={isLoading}
         handleGoToCommands={handleGoToCommands}
+        handleOpenPaymentModal={handleOpenPaymentModal}
       />
       <DeleteProductModal
         isModalOpen={isDeleteProductModalOpen}
@@ -150,6 +158,10 @@ export const Command = ({ commandId }: Props) => {
         setIsModalOpen={setIsAddProductModalOpen}
         commandId={command?._id}
         setCommand={setCommand}
+      />
+      <PaymentModal
+        isModalOpen={isPaymentModalOpen}
+        setIsModalOpen={setIsPaymentModalOpen}
       />
     </CommandContext.Provider>
   );

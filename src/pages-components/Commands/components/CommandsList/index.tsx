@@ -27,6 +27,7 @@ export const CommandsList = () => {
     orderByDir,
     setOrderByDir,
     allCommands,
+    commandStatusFilter,
   } = useContext(CommandsContext);
 
   const handleToggleOrderByDir = useCallback(() => {
@@ -57,14 +58,26 @@ export const CommandsList = () => {
 
   const filteredByFilter = useMemo(() => {
     if (!filter) {
-      return allCommands;
+      return allCommands.filter((command) => {
+        if (commandStatusFilter === 'Ativas') {
+          return command.isActive;
+        }
+
+        return !command.isActive;
+      });
     }
 
-    const filtered = allCommands.filter(
-      (command) => command.fishingType === filter
-    );
+    // MAKE THE ACTIVES AND PAYED COMMANDS
+
+    const filtered = allCommands.filter((command) => {
+      if (commandStatusFilter === 'Ativas') {
+        return command.fishingType === filter && command.isActive;
+      }
+
+      return command.fishingType === filter && !command.isActive;
+    });
     return filtered;
-  }, [filter, allCommands]);
+  }, [filter, allCommands, commandStatusFilter]);
 
   const filteredBySort = useMemo(() => {
     const filtered = filteredByFilter.sort((a: any, b: any) => {
@@ -91,7 +104,7 @@ export const CommandsList = () => {
 
   const filteredBySearch = useMemo(() => {
     const filtered = filteredBySort.filter((command) => {
-      const commandStr = Object.values(command).join('').toLowerCase();
+      const commandStr = Object?.values(command)?.join('')?.toLowerCase();
       if (commandStr.includes(searchContent.toLowerCase())) {
         return true;
       }

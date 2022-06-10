@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { Dispatch, SetStateAction, useContext } from 'react';
 import {
   Flex,
   Icon,
-  Button,
   Table,
   TableContainer,
   Thead,
@@ -12,17 +13,25 @@ import {
   Text,
   FormControl,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { BsPlus, BsDash, BsFillTrashFill } from 'react-icons/bs';
+
+import { BsFillTrashFill } from 'react-icons/bs';
+import { FiEdit2 } from 'react-icons/fi';
+import { FaArrowUp } from 'react-icons/fa';
+import { CgOptions } from 'react-icons/cg';
+import { IoCashOutline } from 'react-icons/io5';
 import { BiSad } from 'react-icons/bi';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
-import { FaArrowUp } from 'react-icons/fa';
 import { Product } from 'types/Product';
 import { formatAmount } from 'utils/formatAmount';
-import { Dispatch, SetStateAction } from 'react';
 import { useClickOutsideToClose } from 'hooks/useClickOutsideToClose';
+import { CommandContext } from 'pages-components/Command';
 
 const columns = [
   {
@@ -41,6 +50,10 @@ const columns = [
     text: 'Total',
     prop: 'total',
   },
+  {
+    text: 'Pago',
+    prop: 'totalPayed',
+  },
 ];
 
 interface ActiveEditFish {
@@ -50,28 +63,21 @@ interface ActiveEditFish {
 
 interface Props {
   products: any[];
-  // eslint-disable-next-line no-unused-vars
-  handleIncrementProductAmount: ({ id }: { id: string }) => void;
-  // eslint-disable-next-line no-unused-vars
-  handleDecrementProductAmount: ({ id }: { id: string }) => void;
-  // eslint-disable-next-line no-unused-vars
   handleOpenDeleteModal: ({ productId }: { productId: string }) => void;
   handleToggleOrderByDir: () => void;
-
   orderBy: string;
   orderByDir: 'asc' | 'desc';
   fishIdToEditAmount: string;
   handleActiveEditFishAmount: ({ productId, amount }: ActiveEditFish) => void;
   handleUpdateFishAmount: any;
-  newFishAmount: string;
-  setNewFishAmount: Dispatch<SetStateAction<string>>;
+  newProductAmount: string;
+  setNewProductAmount: Dispatch<SetStateAction<string>>;
   setFishIdToEditAmount: Dispatch<SetStateAction<string>>;
+  handleOpenPayProductModal: (product: Product) => void;
 }
 
 export const ProductsListLayout = ({
   products,
-  handleIncrementProductAmount,
-  handleDecrementProductAmount,
   handleOpenDeleteModal,
   orderBy,
   orderByDir,
@@ -79,10 +85,15 @@ export const ProductsListLayout = ({
   handleActiveEditFishAmount,
   fishIdToEditAmount,
   handleUpdateFishAmount,
-  newFishAmount,
-  setNewFishAmount,
+  newProductAmount,
+  setNewProductAmount,
   setFishIdToEditAmount,
+  handleOpenPayProductModal,
 }: Props) => {
+  const { command } = useContext(CommandContext);
+
+  const commandIsPayed = command?.isActive === false;
+
   const isFishingCategory = (category?: string) =>
     category?.toLowerCase() === 'peixes';
 
@@ -95,7 +106,7 @@ export const ProductsListLayout = ({
       <Table>
         <Thead>
           <Tr>
-            {columns.map(({ text, prop }) => (
+            {columns.slice(0, commandIsPayed ? 4 : 5).map(({ text, prop }) => (
               <Th key={`products-list-header${prop}`}>
                 <Flex align="center" gap={2}>
                   {text}
@@ -121,75 +132,77 @@ export const ProductsListLayout = ({
         <Tbody>
           {products?.length > 0 &&
             products?.map(
-              ({ _id, name, amount, unitPrice, category }: Product) => (
+              ({
+                _id,
+                name,
+                amount,
+                unitPrice,
+                category,
+                totalPayed,
+              }: Product) => (
                 <Tr key={`product-list${name}`} h={20}>
                   <Td>{name}</Td>
                   <Td>
-                    <Flex gap={4}>
-                      {!isFishingCategory(category) && (
-                        <Icon
-                          onClick={() =>
-                            handleDecrementProductAmount({ id: _id })
-                          }
-                          as={BsDash}
-                          fontSize={[20, 22, 24]}
-                          rounded={2}
-                          bg="gray.50"
-                          boxShadow="sm"
-                          cursor="pointer"
-                          _hover={{ bg: 'blue.100' }}
-                          _active={{ bg: 'blue.50' }}
-                        />
-                      )}
+                    <Flex gap={4} align="center">
                       {/* Form to edit tha amount of fish products */}
                       {fishIdToEditAmount === _id ? (
                         <FormControl
                           as="form"
                           onSubmit={(e) =>
-                            handleUpdateFishAmount(e, { productId: _id })
+                            handleUpdateFishAmount(e, {
+                              productId: _id,
+                              isFish: isFishingCategory(category),
+                            })
                           }
                           w="auto"
                         >
                           <Input
-                            value={newFishAmount}
-                            onChange={(e) => setNewFishAmount(e.target.value)}
+                            value={newProductAmount}
+                            onChange={(e) =>
+                              setNewProductAmount(e.target.value)
+                            }
                             ref={editAmountInputRef}
                             autoFocus
                           />
                         </FormControl>
                       ) : (
-                        <Text
-                          onClick={() => {
-                            if (isFishingCategory(category)) {
-                              handleActiveEditFishAmount({
-                                productId: _id,
-                                amount: amount.toString(),
-                              });
-                            }
-                          }}
-                        >
-                          {isFishingCategory(category)
-                            ? `${formatAmount({
-                                num: amount.toString(),
-                                to: 'comma',
-                              })} Kg`
-                            : amount}
-                        </Text>
-                      )}
-                      {!isFishingCategory(category) && (
-                        <Icon
-                          onClick={() =>
-                            handleIncrementProductAmount({ id: _id })
-                          }
-                          as={BsPlus}
-                          fontSize={[20, 22, 24]}
-                          rounded={2}
-                          bg="gray.50"
-                          boxShadow="sm"
-                          cursor="pointer"
-                          _hover={{ bg: 'blue.100' }}
-                          _active={{ bg: 'blue.50' }}
-                        />
+                        <>
+                          <Text
+                            onClick={() => {
+                              if (!commandIsPayed) {
+                                handleActiveEditFishAmount({
+                                  productId: _id,
+                                  amount: amount.toString(),
+                                });
+                              }
+                            }}
+                          >
+                            {isFishingCategory(category)
+                              ? `${formatAmount({
+                                  num: amount.toString(),
+                                  to: 'comma',
+                                })} Kg`
+                              : amount}
+                          </Text>
+                          {!commandIsPayed && (
+                            <Icon
+                              onClick={() => {
+                                if (!commandIsPayed) {
+                                  handleActiveEditFishAmount({
+                                    productId: _id,
+                                    amount: amount.toString(),
+                                  });
+                                }
+                              }}
+                              as={FiEdit2}
+                              fontSize={14}
+                              cursor="pointer"
+                              _hover={{
+                                color: 'blue.500',
+                              }}
+                            />
+                          )}
+                        </>
                       )}
                     </Flex>
                   </Td>
@@ -207,14 +220,64 @@ export const ProductsListLayout = ({
                       to: 'comma',
                     })}
                   </Td>
+                  {!commandIsPayed && (
+                    <Td>
+                      R${' '}
+                      {formatDecimalNum({
+                        num: totalPayed?.toString() as string,
+                        to: 'comma',
+                      })}
+                    </Td>
+                  )}
+
                   <Td isNumeric>
-                    <Button
-                      bg="red.50"
-                      p={0}
-                      onClick={() => handleOpenDeleteModal({ productId: _id })}
-                    >
-                      <Icon as={BsFillTrashFill} color="red.600" />
-                    </Button>
+                    {!commandIsPayed && (
+                      <Menu>
+                        <MenuButton
+                          p={1}
+                          rounded={4}
+                          _hover={{
+                            bg: 'blue.50',
+                          }}
+                        >
+                          <Icon
+                            as={CgOptions}
+                            fontSize={[16, 22]}
+                            color="blue.800"
+                          />
+                        </MenuButton>
+                        <MenuList>
+                          <MenuItem
+                            icon={<IoCashOutline fontSize={14} />}
+                            onClick={() =>
+                              handleOpenPayProductModal({
+                                _id,
+                                name,
+                                amount,
+                                unitPrice,
+                                category,
+                                totalPayed,
+                              })
+                            }
+                            display="flex"
+                            alignItems="center"
+                          >
+                            <Text>Pagar Produto</Text>
+                          </MenuItem>
+                          <MenuItem
+                            icon={<BsFillTrashFill fontSize={14} />}
+                            onClick={() =>
+                              handleOpenDeleteModal({ productId: _id })
+                            }
+                            color="red.500"
+                            display="flex"
+                            alignItems="center"
+                          >
+                            <Text>Deletar</Text>
+                          </MenuItem>
+                        </MenuList>
+                      </Menu>
+                    )}
                   </Td>
                 </Tr>
               )

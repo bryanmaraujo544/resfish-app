@@ -19,7 +19,6 @@ export const EditModal = ({
   setIsEditModalOpen,
   itemInfos,
 }: Props) => {
-  console.log({ itemInfos });
   const { productsDispatch } = useContext(StockContext);
   const toast = useToast();
 

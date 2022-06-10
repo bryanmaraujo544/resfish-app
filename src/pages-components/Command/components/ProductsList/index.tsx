@@ -3,12 +3,17 @@ import { useToast } from '@chakra-ui/react';
 
 import CommandService from 'pages-components/Command/services/CommandService';
 import { formatAmount } from 'utils/formatAmount';
+import { Product } from 'types/Product';
 import { CommandContext } from '../../index';
 import { ProductsListLayout } from './layout';
+import { PayProductModal } from './PayProductModal';
 
 export const ProductsList = () => {
   const [fishIdToEditAmount, setFishIdToEditAmount] = useState('');
-  const [newFishAmount, setNewFishAmount] = useState('');
+  const [newProductAmount, setNewProductAmount] = useState('');
+
+  const [productToPay, setProductToPay] = useState<Product>({} as Product);
+  const [isPayProductModalOpen, setIsPayProductModalOpen] = useState(false);
 
   const {
     products,
@@ -25,17 +30,53 @@ export const ProductsList = () => {
 
   const toast = useToast();
 
-  async function handleIncrementProductAmount({ id }: { id: string }) {
-    try {
-      // Logic to diminish the amount of this product on the stock
-      // Or can diminish the amount of the product only after the paymentd
+  // This function enables the edition of the amount of some fish
+  function handleActiveEditFishAmount({
+    productId,
+    amount,
+  }: {
+    productId: string;
+    amount: string;
+  }) {
+    setNewProductAmount(
+      formatAmount({ num: amount.toString(), to: 'comma' }).toString()
+    );
+    setFishIdToEditAmount(productId);
+  }
 
-      // Check if the value of product amount is available
+  // Function that updates the amount of fish product in fact
+  async function handleUpdateFishAmount(
+    e: any,
+    { productId, isFish }: { productId: string; isFish: boolean }
+  ) {
+    try {
+      e.preventDefault();
+      setFishIdToEditAmount('');
+
+      const newAmount = isFish
+        ? formatAmount({
+            num: newProductAmount,
+            to: 'point',
+          })
+        : newProductAmount;
+
+      if (Number.isNaN(newAmount)) {
+        toast({
+          status: 'error',
+          title: 'Quantidade inválida',
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+
       const oldProducts = command?.products;
       const newProducts = oldProducts?.map((product) => {
-        if (product._id === id) {
-          const newAmount = product.amount + 1;
-          const newProduct = { ...product, amount: newAmount };
+        if (product._id === productId) {
+          const newProduct = {
+            ...product,
+            amount: newAmount as number,
+          };
           return newProduct;
         }
         return product;
@@ -49,129 +90,29 @@ export const ProductsList = () => {
       setCommand(updatedCommand);
 
       productsDispatch({
-        type: 'increment-amount',
+        type: 'update-product-amount',
         payload: {
-          id,
-        },
-      });
-    } catch (error: any) {
-      toast({
-        status: 'error',
-        duration: 2000,
-        isClosable: true,
-        title: error?.response?.data?.message,
-      });
-    }
-  }
-
-  async function handleDecrementProductAmount({ id }: { id: string }) {
-    try {
-      const amountOfProduct = products.value.find(
-        (product: any) => product._id === id
-      ).amount;
-
-      if (amountOfProduct === 1) {
-        // Ask if the user wants to delete the product
-      }
-
-      if (amountOfProduct > 0) {
-        const oldProducts = command?.products;
-        const newProducts = oldProducts?.map((product) => {
-          if (product._id === id) {
-            const newAmount = product.amount - 1;
-            const newProduct = { ...product, amount: newAmount };
-            return newProduct;
-          }
-          return product;
-        });
-
-        const { command: updatedCommand } = await CommandService.updateCommand({
-          _id: command?._id,
-          products: newProducts,
-        });
-        setCommand(updatedCommand);
-
-        productsDispatch({
-          type: 'decrement-amount',
-          payload: {
-            id,
+          product: {
+            id: productId,
+            amount: newAmount,
           },
-        });
-      }
+        },
+      });
     } catch (error: any) {
       toast({
         status: 'error',
-        duration: 2000,
-        isClosable: true,
         title: error?.response?.data?.message,
-      });
-    }
-  }
-
-  // This function enables the edition of the amount of some fish
-  function handleActiveEditFishAmount({
-    productId,
-    amount,
-  }: {
-    productId: string;
-    amount: string;
-  }) {
-    setNewFishAmount(
-      formatAmount({ num: amount.toString(), to: 'comma' }).toString()
-    );
-    setFishIdToEditAmount(productId);
-  }
-
-  // Function that updates the amount of fish product in fact
-  async function handleUpdateFishAmount(
-    e: any,
-    { productId }: { productId: string }
-  ) {
-    e.preventDefault();
-    setFishIdToEditAmount('');
-    const newFishAmountFormatted = formatAmount({
-      num: newFishAmount,
-      to: 'point',
-    });
-
-    if (Number.isNaN(newFishAmountFormatted)) {
-      toast({
-        status: 'error',
-        title: 'Quantidade inválida',
         duration: 3000,
-        isClosable: true,
       });
-      return;
     }
-
-    const oldProducts = command?.products;
-    const newProducts = oldProducts?.map((product) => {
-      if (product._id === productId) {
-        const newProduct = {
-          ...product,
-          amount: newFishAmountFormatted as number,
-        };
-        return newProduct;
-      }
-      return product;
-    });
-
-    const { command: updatedCommand } = await CommandService.updateCommand({
-      _id: command?._id,
-      products: newProducts,
-    });
-    setCommand(updatedCommand);
-
-    productsDispatch({
-      type: 'update-fish-amount',
-      payload: {
-        product: {
-          id: productId,
-          amount: newFishAmountFormatted,
-        },
-      },
-    });
   }
+
+  function handleOpenPayProductModal(product: Product) {
+    setIsPayProductModalOpen(true);
+    setProductToPay(product);
+  }
+
+  // Command Filters Logic
 
   const handleToggleOrderByDir = useCallback(() => {
     setOrderByDir((prev: string) => (prev === 'asc' ? 'desc' : 'asc'));
@@ -220,20 +161,28 @@ export const ProductsList = () => {
   }, [orderByDir, filteredBySearch, orderBy]);
 
   return (
-    <ProductsListLayout
-      products={filteredBySort}
-      handleIncrementProductAmount={handleIncrementProductAmount}
-      handleDecrementProductAmount={handleDecrementProductAmount}
-      handleOpenDeleteModal={handleOpenDeleteModal}
-      orderBy={orderBy}
-      orderByDir={orderByDir}
-      handleToggleOrderByDir={handleToggleOrderByDir}
-      fishIdToEditAmount={fishIdToEditAmount}
-      handleActiveEditFishAmount={handleActiveEditFishAmount}
-      handleUpdateFishAmount={handleUpdateFishAmount}
-      newFishAmount={newFishAmount}
-      setNewFishAmount={setNewFishAmount}
-      setFishIdToEditAmount={setFishIdToEditAmount}
-    />
+    <>
+      <ProductsListLayout
+        products={filteredBySort}
+        // handleIncrementProductAmount={handleIncrementProductAmount}
+        // handleDecrementProductAmount={handleDecrementProductAmount}
+        handleOpenDeleteModal={handleOpenDeleteModal}
+        orderBy={orderBy}
+        orderByDir={orderByDir}
+        handleToggleOrderByDir={handleToggleOrderByDir}
+        fishIdToEditAmount={fishIdToEditAmount}
+        handleActiveEditFishAmount={handleActiveEditFishAmount}
+        handleUpdateFishAmount={handleUpdateFishAmount}
+        newProductAmount={newProductAmount}
+        setNewProductAmount={setNewProductAmount}
+        setFishIdToEditAmount={setFishIdToEditAmount}
+        handleOpenPayProductModal={handleOpenPayProductModal}
+      />
+      <PayProductModal
+        isModalOpen={isPayProductModalOpen}
+        setIsModalOpen={setIsPayProductModalOpen}
+        productToPay={productToPay}
+      />
+    </>
   );
 };

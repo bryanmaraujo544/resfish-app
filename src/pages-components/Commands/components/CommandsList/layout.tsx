@@ -23,6 +23,7 @@ import { FaArrowUp } from 'react-icons/fa';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { Command } from 'types/Command';
+import { MdVerified } from 'react-icons/md';
 
 const listColumns = [
   {
@@ -92,7 +93,7 @@ export const CommandsListLayout = ({
         </Tr>
       </Thead>
       <Tbody>
-        {items.map(({ _id, table, waiter, total, fishingType }) => (
+        {items.map(({ _id, table, waiter, total, fishingType, isActive }) => (
           <Tr
             key={`list-command-${_id}`}
             h={20}
@@ -109,6 +110,32 @@ export const CommandsListLayout = ({
               R$ {formatDecimalNum({ num: total.toString(), to: 'comma' })}
             </Td>
             <Td isNumeric>
+              {isActive === false && (
+                <Flex
+                  align="center"
+                  bg="green.300"
+                  display="inline-flex"
+                  gap={2}
+                  rounded={4}
+                  py={1}
+                  px={[1, 3]}
+                  mr={[1, 2]}
+                >
+                  <Icon
+                    as={MdVerified}
+                    fontSize={[18, 22, 24]}
+                    m={0}
+                    color="green.50"
+                  />
+                  <Text
+                    fontSize={[14, 16, 18]}
+                    fontWeight="600"
+                    color="green.50"
+                  >
+                    Paga
+                  </Text>
+                </Flex>
+              )}
               <Menu>
                 <MenuButton
                   p={1}
@@ -117,7 +144,12 @@ export const CommandsListLayout = ({
                     bg: 'blue.50',
                   }}
                 >
-                  <Icon as={CgOptions} fontSize={[16, 22]} color="blue.800" />
+                  <Icon
+                    as={CgOptions}
+                    fontSize={[16, 22]}
+                    color="blue.800"
+                    display="block"
+                  />
                 </MenuButton>
                 <MenuList>
                   <MenuItem
@@ -125,6 +157,7 @@ export const CommandsListLayout = ({
                     onClick={() => handleOpenAddProductsModal(_id)}
                     display="flex"
                     alignItems="center"
+                    isDisabled={isActive === false}
                   >
                     <Text>Adicionar Produtos</Text>
                   </MenuItem>
@@ -138,6 +171,7 @@ export const CommandsListLayout = ({
                         waiter,
                       })
                     }
+                    isDisabled={isActive === false}
                     display="flex"
                     alignItems="center"
                   >

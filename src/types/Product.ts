@@ -4,4 +4,5 @@ export interface Product {
   amount: number;
   unitPrice: number;
   category?: string;
+  totalPayed?: number;
 }

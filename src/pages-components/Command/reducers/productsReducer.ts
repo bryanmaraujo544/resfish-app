@@ -28,7 +28,7 @@ export const productsReducer = (state: any, action: any) => {
       });
       return { value: [...newState] };
     }
-    case 'update-fish-amount': {
+    case 'update-product-amount': {
       const newState = state.value.map((product: Product) => {
         if (product._id === action.payload.product.id) {
           return {
@@ -39,6 +39,18 @@ export const productsReducer = (state: any, action: any) => {
         return product;
       });
       return { value: [...newState] };
+    }
+    case 'update-product-total-payed': {
+      const newState = state.value.map((product: Product) => {
+        if (product._id === action.payload.product.id) {
+          return {
+            ...product,
+            totalPayed: product.totalPayed + action.payload.product.totalPayed,
+          };
+        }
+        return product;
+      });
+      return { value: newState };
     }
     case 'delete': {
       const newState = state.value.filter(

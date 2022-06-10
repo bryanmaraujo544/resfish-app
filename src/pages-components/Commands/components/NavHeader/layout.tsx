@@ -128,7 +128,6 @@ export const NavHeaderLayout = ({
             ))}
           </MenuList>
         </Menu>
-
         {/* Sort Menu */}
         <Menu>
           <MenuButton
@@ -182,7 +181,6 @@ export const NavHeaderLayout = ({
             ))}
           </MenuList>
         </Menu>
-
         {/* Search Bar */}
         <Input
           value={searchContent}

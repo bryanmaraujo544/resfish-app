@@ -21,4 +21,6 @@ export type ContextProps = {
   setSearchContent: Dispatch<SetStateAction<string>>;
   allCommands: Command[];
   allCommandsDispatch: Dispatch<AllCommandsAction>;
+  commandStatusFilter: 'Ativas' | 'Pagas';
+  setCommandStatusFilter: Dispatch<SetStateAction<'Ativas' | 'Pagas'>>;
 };

@@ -40,6 +40,7 @@ type Props = {
   setImage: Dispatch<SetStateAction<string>>;
   amount: number;
   setAmount: Dispatch<SetStateAction<number>>;
+  isSubmitting: boolean;
 };
 
 export const AddItemModalLayout = ({
@@ -56,6 +57,7 @@ export const AddItemModalLayout = ({
   setImage,
   amount,
   setAmount,
+  isSubmitting,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -132,6 +134,8 @@ export const AddItemModalLayout = ({
         color="white"
         _hover={{ bg: 'blue.500' }}
         _active={{ bg: 'blue.300' }}
+        isLoading={isSubmitting}
+        loadingText="Adicionando"
       >
         Adicionar
       </Button>
