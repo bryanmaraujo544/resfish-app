@@ -108,7 +108,7 @@ export const ProductsListLayout = ({
       <Table>
         <Thead>
           <Tr>
-            {columns.map(({ text, prop }) => (
+            {columns.slice(0, commandIsPayed ? 4 : 5).map(({ text, prop }) => (
               <Th key={`products-list-header${prop}`}>
                 <Flex align="center" gap={2}>
                   {text}
@@ -222,13 +222,15 @@ export const ProductsListLayout = ({
                       to: 'comma',
                     })}
                   </Td>
-                  <Td>
-                    R${' '}
-                    {formatDecimalNum({
-                      num: totalPayed?.toString() as string,
-                      to: 'comma',
-                    })}
-                  </Td>
+                  {!commandIsPayed && (
+                    <Td>
+                      R${' '}
+                      {formatDecimalNum({
+                        num: totalPayed?.toString() as string,
+                        to: 'comma',
+                      })}
+                    </Td>
+                  )}
 
                   <Td isNumeric>
                     {!commandIsPayed && (
