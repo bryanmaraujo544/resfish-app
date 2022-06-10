@@ -43,13 +43,16 @@ export const PayProductModalLayout = ({
   typeOfPayment,
   setTypeOfPayment,
 }: Props) => {
-  console.log('oioioioioi');
+  const totalOfProduct = productInfos.amount * productInfos.unitPrice;
+
+  const restValueToBePayedNum =
+    Math.round(
+      (totalOfProduct - (productInfos.totalPayed as number) + Number.EPSILON) *
+        100
+    ) / 100;
 
   const totalToBePayed = formatDecimalNum({
-    num: (
-      productInfos.amount * productInfos.unitPrice -
-      (productInfos?.totalPayed as number)
-    ).toString(),
+    num: restValueToBePayedNum.toString(),
     to: 'comma',
   });
 

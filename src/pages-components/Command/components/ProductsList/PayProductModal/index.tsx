@@ -28,15 +28,12 @@ export const PayProductModal = ({
   const [typeOfPayment, setTypeOfPayment] = useState<'unit' | 'free'>('unit');
 
   const toast = useToast();
-  const { productsDispatch, products, command, setCommand } =
-    useContext(CommandContext);
-
-  console.log({ products });
+  const { productsDispatch, command, setCommand } = useContext(CommandContext);
 
   useEffect(() => {
     const paymentTotal = amountToPay * productToPay.unitPrice;
     setPaymentValue(paymentTotal.toString());
-  }, [amountToPay]);
+  }, [amountToPay, productToPay.unitPrice]);
 
   useEffect(() => {
     setPaymentValue('0');
@@ -52,8 +49,6 @@ export const PayProductModal = ({
   async function handlePayProduct(e: any) {
     e.preventDefault();
     try {
-      console.log('payed');
-
       // Converting one number with comma to valid number with point 32,90 ==> 32.90
       const paymentValueFormatted = Number(
         formatDecimalNum({
@@ -119,7 +114,6 @@ export const PayProductModal = ({
         _id: command?._id as string,
         products: newProducts,
       });
-      console.log({ updatedCommand });
       setCommand(updatedCommand);
 
       productsDispatch({
