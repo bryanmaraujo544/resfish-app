@@ -78,7 +78,7 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
 
       if (!receivedValue) {
         toast({
-          status: 'error',
+          status: 'info',
           title: 'Insira o valor recebido do cliente',
         });
         return;

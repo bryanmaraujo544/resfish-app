@@ -31,7 +31,9 @@ export const PayProductModal = ({
   const { productsDispatch, command, setCommand } = useContext(CommandContext);
 
   useEffect(() => {
-    const paymentTotal = amountToPay * productToPay.unitPrice;
+    const paymentTotal = (Math.round(
+      (amountToPay * (productToPay?.unitPrice as number) + Number.EPSILON) * 100
+    ) / 100) as number;
     setPaymentValue(paymentTotal.toString());
   }, [amountToPay, productToPay.unitPrice]);
 
