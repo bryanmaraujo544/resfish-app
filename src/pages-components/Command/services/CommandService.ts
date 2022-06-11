@@ -7,6 +7,10 @@ interface UpdateCommand extends Command {
   products: Product[] | undefined;
 }
 
+interface DeleteCommand {
+  commandId: string;
+}
+
 class CommandService {
   async getOneCommand({
     commandId,
@@ -34,6 +38,11 @@ class CommandService {
       total,
       isActive,
     });
+    return data;
+  }
+
+  async deleteCommand({ commandId }: DeleteCommand) {
+    const { data } = await serverApi.delete(`/commands/${commandId}`);
     return data;
   }
 }

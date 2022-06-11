@@ -120,6 +120,13 @@ export const Command = ({ commandId }: Props) => {
     router.push('/commands');
   }, [router]);
 
+  const handleDeleteCommand = useCallback(() => {
+    (async () => {
+      await CommandService.deleteCommand({ commandId: command?._id as string });
+      handleGoToCommands();
+    })();
+  }, [command, handleGoToCommands]);
+
   return (
     <CommandContext.Provider
       value={{
@@ -148,6 +155,7 @@ export const Command = ({ commandId }: Props) => {
         isLoading={isLoading}
         handleGoToCommands={handleGoToCommands}
         handleOpenPaymentModal={handleOpenPaymentModal}
+        handleDeleteCommand={handleDeleteCommand}
       />
       <DeleteProductModal
         isModalOpen={isDeleteProductModalOpen}
