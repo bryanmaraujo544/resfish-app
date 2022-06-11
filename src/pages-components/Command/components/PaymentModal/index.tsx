@@ -76,7 +76,7 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     try {
       e.preventDefault();
 
-      if (!receivedValue) {
+      if (paymentType === 'Dinheiro' && !receivedValue) {
         toast({
           status: 'info',
           title: 'Insira o valor recebido do cliente',

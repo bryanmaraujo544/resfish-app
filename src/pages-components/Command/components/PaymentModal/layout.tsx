@@ -126,20 +126,28 @@ export const PaymentModalLayout = ({
         gap={[4, 8]}
       >
         <Grid gridTemplateColumns="1fr 1fr" gap={[2, 4, 8]}>
-          <GridItem gridColumn={['1 / 3', '1 / 3', '1 / 2']}>
-            <InputGroup
-              hasError={isReceivedValueInvalid.value}
-              errorMsg={isReceivedValueInvalid.message}
-            >
-              <TitleText>Valor Recebido</TitleText>
-              <Input
-                placeholder="Ex: R$ 23,90"
-                value={receivedValue}
-                onChange={(e) => setReceivedValue(e.target.value)}
-              />
-            </InputGroup>
-          </GridItem>
-          <GridItem gridColumn={['1 / 3', '1 / 3', '2 / 3']}>
+          {paymentType === 'Dinheiro' && (
+            <GridItem gridColumn={['1 / 3', '1 / 3', '1 / 2']}>
+              <InputGroup
+                hasError={isReceivedValueInvalid.value}
+                errorMsg={isReceivedValueInvalid.message}
+              >
+                <TitleText>Valor Recebido</TitleText>
+                <Input
+                  placeholder="Ex: R$ 23,90"
+                  value={receivedValue}
+                  onChange={(e) => setReceivedValue(e.target.value)}
+                />
+              </InputGroup>
+            </GridItem>
+          )}
+          <GridItem
+            gridColumn={[
+              '1 / 3',
+              '1 / 3',
+              paymentType === 'Dinheiro' ? '2 / 3' : '1 / 3',
+            ]}
+          >
             <InputGroup>
               <TitleText
                 fontWeight="600"
