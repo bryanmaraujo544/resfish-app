@@ -22,6 +22,7 @@ export const AddCommandModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<AddCommandInputs>();
 
   const { allCommandsDispatch } = useContext(CommandsContext);
@@ -44,18 +45,25 @@ export const AddCommandModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       });
 
       allCommandsDispatch({ type: 'ADD-ONE-COMMAND', payload: { command } });
+      setValue('table', '');
+      setValue('waiter', '');
 
+      toast.closeAll();
       toast({
         status: 'success',
         title: message,
+        duration: 2000,
+        isClosable: true,
       });
 
       handleCloseModal();
     } catch (error: any) {
+      toast.closeAll();
       toast({
         status: 'error',
         title: error?.response?.data?.message,
         duration: 3000,
+        isClosable: true,
       });
     }
   };

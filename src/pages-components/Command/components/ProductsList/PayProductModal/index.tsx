@@ -25,7 +25,7 @@ export const PayProductModal = ({
 }: Props) => {
   const [paymentValue, setPaymentValue] = useState('0');
   const [amountToPay, setAmountToPay] = useState(0);
-  const [typeOfPayment, setTypeOfPayment] = useState<'unit' | 'free'>('unit');
+  const [typeOfPayment, setTypeOfPayment] = useState<'unit' | 'free'>('free');
 
   const toast = useToast();
   const { productsDispatch, command, setCommand } = useContext(CommandContext);
@@ -59,10 +59,10 @@ export const PayProductModal = ({
         })
       );
 
-      if (paymentValueFormatted === 0) {
+      if (paymentValueFormatted <= 0) {
         toast({
           status: 'warning',
-          title: 'Valor de pagamento igual a 0',
+          title: 'Valor de pagamento menor ou igual a 0',
           duration: 3000,
           isClosable: true,
         });
