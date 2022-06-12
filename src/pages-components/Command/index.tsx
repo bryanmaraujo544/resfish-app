@@ -21,6 +21,7 @@ import CommandService from './services/CommandService';
 import { PaymentModal } from './components/PaymentModal';
 import ProductsService from './services/ProductsService';
 import { stockProductsReducer } from './reducers/stockProductsReducer';
+import { DeleteCommandModal } from './components/DeleteCommandModal';
 
 interface StockProductsAction {
   type: 'ADD-ALL-PRODUCTS' | 'UPDATE-ONE-PRODUCT';
@@ -35,7 +36,6 @@ interface ContextProps {
   productIdToDelete: string;
   setProductIdToDelete: Dispatch<SetStateAction<string>>;
   setIsAddProductModalOpen: Dispatch<SetStateAction<boolean>>;
-  // eslint-disable-next-line no-unused-vars
   handleOpenDeleteModal: ({ productId }: { productId: string }) => void;
   filter: string;
   setFilter: Dispatch<SetStateAction<string>>;
@@ -74,6 +74,8 @@ export const Command = ({ commandId }: Props) => {
   const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
     useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isDeleteCommandModalOpen, setIsDeleteCommandModalOpen] =
+    useState(false);
 
   const [stockProducts, stockProductsDispatch] = useReducer(
     stockProductsReducer,
@@ -139,11 +141,8 @@ export const Command = ({ commandId }: Props) => {
   }, [router]);
 
   const handleDeleteCommand = useCallback(() => {
-    (async () => {
-      await CommandService.deleteCommand({ commandId: command?._id as string });
-      handleGoToCommands();
-    })();
-  }, [command, handleGoToCommands]);
+    setIsDeleteCommandModalOpen(true);
+  }, []);
 
   return (
     <CommandContext.Provider
@@ -179,6 +178,11 @@ export const Command = ({ commandId }: Props) => {
       <DeleteProductModal
         isModalOpen={isDeleteProductModalOpen}
         setIsModalOpen={setIsDeleteProductModalOpen}
+      />
+      <DeleteCommandModal
+        isModalOpen={isDeleteCommandModalOpen}
+        setIsModalOpen={setIsDeleteCommandModalOpen}
+        command={command}
       />
       <AddProductModal
         isModalOpen={isAddProductModalOpen}

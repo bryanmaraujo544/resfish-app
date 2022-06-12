@@ -11,7 +11,6 @@ import { useToast } from '@chakra-ui/react';
 
 import CommandService from 'pages-components/Command/services/CommandService';
 import ProductsService from 'pages-components/Command/services/ProductsService';
-// import { CommandContext } from 'pages-components/Command';
 import { Command } from 'types/Command';
 import { formatAmount } from 'utils/formatAmount';
 import { Product } from 'types/Product';
@@ -78,7 +77,6 @@ export const AddProductModal = ({
     try {
       e.preventDefault();
 
-      // TODO: check if there are enough amount of product selected in stock
       const hasBeenSelected = selectedProducts.some(
         (selectedProduct: any) =>
           selectedProduct.name === productToSetAmount.name

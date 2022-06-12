@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Command } from 'types/Command';
+import { Product } from 'types/Product';
 
 interface AllCommandsAction {
   type:
@@ -7,6 +8,11 @@ interface AllCommandsAction {
     | 'ADD-ONE-COMMAND'
     | 'REMOVE-ONE-COMMAND'
     | 'UPDATE-ONE-COMMAND';
+  payload: any;
+}
+
+interface StockProductsAction {
+  type: 'ADD-ALL-PRODUCTS' | 'UPDATE-ONE-PRODUCT';
   payload: any;
 }
 
@@ -23,4 +29,6 @@ export type ContextProps = {
   allCommandsDispatch: Dispatch<AllCommandsAction>;
   commandStatusFilter: 'Ativas' | 'Pagas';
   setCommandStatusFilter: Dispatch<SetStateAction<'Ativas' | 'Pagas'>>;
+  stockProducts: Product[];
+  stockProductsDispatch: Dispatch<StockProductsAction>;
 };

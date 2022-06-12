@@ -1,10 +1,12 @@
 import { createContext, useMemo, useState, useReducer, useEffect } from 'react';
 
+import { Product } from 'types/Product';
 import { ContextProps } from './types/ContextProps';
 import { AddCommandModal } from './components/AddCommandModal';
 import { CommandsLayout } from './layout';
 import { commandsReducer } from './reducers/commandsReducer';
 import CommandsService from './services/CommandsService';
+import { stockProductsReducer } from './reducers/stockProductsReducer';
 
 export const CommandsContext = createContext({} as ContextProps);
 
@@ -12,6 +14,10 @@ export const Commands = () => {
   const [allCommands, allCommandsDispatch] = useReducer(commandsReducer, {
     value: [],
   });
+  const [stockProducts, stockProductsDispatch] = useReducer(
+    stockProductsReducer,
+    { value: [] as Product[] }
+  );
 
   const [filter, setFilter] = useState('');
   const [orderBy, setOrderBy] = useState('');
@@ -53,6 +59,8 @@ export const Commands = () => {
       setCommandStatusFilter,
       allCommands: allCommands.value,
       allCommandsDispatch,
+      stockProducts: stockProducts.value,
+      stockProductsDispatch,
     }),
     [
       filter,
@@ -63,6 +71,8 @@ export const Commands = () => {
       allCommandsDispatch,
       commandStatusFilter,
       setCommandStatusFilter,
+      stockProducts,
+      stockProductsDispatch,
     ]
   );
 

@@ -11,7 +11,6 @@ import {
   useContext,
   useCallback,
 } from 'react';
-import { Product } from 'types/Product';
 import { formatAmount } from 'utils/formatAmount';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
@@ -34,7 +33,7 @@ export const AddProductsModal = ({
   setIsModalOpen,
   commandId,
 }: Props) => {
-  const [allProducts, setAllProducts] = useState([]);
+  // const [allProducts, setAllProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([] as any);
 
   const [isSetAmountModalOpen, setIsSetAmountModalOpen] = useState(false);
@@ -42,19 +41,23 @@ export const AddProductsModal = ({
     {} as ProductNoAmount
   );
   const [amount, setAmount] = useState('1');
-
   const [filter, setFilter] = useState('');
   const [searchContent, setSearchContent] = useState('');
 
-  const { allCommandsDispatch } = useContext(CommandsContext);
+  const {
+    allCommandsDispatch,
+    stockProducts: allProducts,
+    stockProductsDispatch,
+  } = useContext(CommandsContext);
   const toast = useToast();
 
   useEffect(() => {
     (async () => {
       const products = await ProductsService.getAllProducts();
-      setAllProducts(products);
+      stockProductsDispatch({ type: 'ADD-ALL-PRODUCTS', payload: products });
+      // setAllProducts(products);
     })();
-  }, []);
+  }, [stockProductsDispatch]);
 
   function handleCloseModal() {
     setIsModalOpen(false);
@@ -181,15 +184,10 @@ export const AddProductsModal = ({
                 amount: Number(selectedProduct.amount),
               });
 
-            // Updating the amount of product in allCommands list state
-            setAllProducts((prevAllProducts: any) =>
-              prevAllProducts.map((product: Product) => {
-                if (product._id === stockUpdatedProduct._id) {
-                  return stockUpdatedProduct;
-                }
-                return product;
-              })
-            );
+            stockProductsDispatch({
+              type: 'UPDATE-ONE-PRODUCT',
+              payload: { product: stockUpdatedProduct },
+            });
           })();
         }
       );

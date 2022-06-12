@@ -2,8 +2,10 @@ import { Dispatch, SetStateAction, useCallback, useContext } from 'react';
 import { useToast } from '@chakra-ui/react';
 
 import CommandsService from 'pages-components/Commands/services/CommandsService';
-import { DeleteCommandModalLayout } from './layout';
+import ProductsService from 'pages-components/Commands/services/ProductsService';
 import { CommandsContext } from 'pages-components/Commands';
+import { Product } from 'types/Product';
+import { DeleteCommandModalLayout } from './layout';
 
 interface Props {
   isModalOpen: boolean;
@@ -16,7 +18,8 @@ export const DeleteCommandModal = ({
   setIsModalOpen,
   commandId,
 }: Props) => {
-  const { allCommandsDispatch } = useContext(CommandsContext);
+  const { allCommandsDispatch, stockProductsDispatch } =
+    useContext(CommandsContext);
   const toast = useToast();
 
   function handleCloseModal() {
@@ -29,8 +32,26 @@ export const DeleteCommandModal = ({
     }
 
     try {
-      const { message } = await CommandsService.deleteCommand(commandId);
+      const { command } = await CommandsService.getOneCommand({ commandId });
+      const commandProducts = command.products;
+      commandProducts.forEach((product: Product) => {
+        (async () => {
+          const { product: updatedProduct } =
+            await ProductsService.increaseAmount({
+              productId: product._id,
+              amount: product.amount,
+            });
 
+          if (updatedProduct) {
+            stockProductsDispatch({
+              type: 'UPDATE-ONE-PRODUCT',
+              payload: { product: updatedProduct },
+            });
+          }
+        })();
+      });
+
+      const { message } = await CommandsService.deleteCommand(commandId);
       allCommandsDispatch({
         type: 'REMOVE-ONE-COMMAND',
         payload: { commandId },
@@ -49,7 +70,8 @@ export const DeleteCommandModal = ({
         title: error?.response?.data?.message,
       });
     }
-  }, [commandId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commandId, allCommandsDispatch]);
 
   return (
     <DeleteCommandModalLayout
