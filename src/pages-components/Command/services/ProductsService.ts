@@ -6,6 +6,7 @@ interface VerifyAmount {
 }
 
 type IncreaseAmount = VerifyAmount;
+type DecreaseAmount = IncreaseAmount;
 
 class ProductsService {
   async getAllProducts() {
@@ -29,7 +30,7 @@ class ProductsService {
     return data;
   }
 
-  async diminishAmount({ productId, amount }: IncreaseAmount) {
+  async diminishAmount({ productId, amount }: DecreaseAmount) {
     const { data } = await serverApi.put(
       '/products-update-amount?operation=diminish',
       { productId, amount }

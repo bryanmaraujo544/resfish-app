@@ -11,6 +11,7 @@ import {
   useContext,
   useCallback,
 } from 'react';
+import { Product } from 'types/Product';
 import { formatAmount } from 'utils/formatAmount';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
@@ -170,7 +171,30 @@ export const AddProductsModal = ({
         payload: { command: updatedCommand },
       });
 
-      // TODO: Broadcast to necessary entities the update of command
+      // Diminish the amount of products selected in stock
+      selectedProducts.forEach(
+        (selectedProduct: { _id: string; amount: string }) => {
+          (async () => {
+            const { product: stockUpdatedProduct } =
+              await ProductsService.diminishAmount({
+                productId: selectedProduct._id,
+                amount: Number(selectedProduct.amount),
+              });
+
+            // Updating the amount of product in allCommands list state
+            setAllProducts((prevAllProducts: any) =>
+              prevAllProducts.map((product: Product) => {
+                if (product._id === stockUpdatedProduct._id) {
+                  return stockUpdatedProduct;
+                }
+                return product;
+              })
+            );
+          })();
+        }
+      );
+
+      // SOCKET.IO Broadcast to necessary entities the update of command
 
       cleanModalValues();
 
