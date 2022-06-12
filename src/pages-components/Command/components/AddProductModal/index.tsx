@@ -2,11 +2,10 @@
 import {
   Dispatch,
   SetStateAction,
-  // useContext,
   useState,
   useMemo,
-  useEffect,
   useCallback,
+  useContext,
 } from 'react';
 import { useToast } from '@chakra-ui/react';
 
@@ -15,14 +14,22 @@ import ProductsService from 'pages-components/Command/services/ProductsService';
 // import { CommandContext } from 'pages-components/Command';
 import { Command } from 'types/Command';
 import { formatAmount } from 'utils/formatAmount';
+import { Product } from 'types/Product';
+import { CommandContext } from 'pages-components/Command';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
 
+interface AllProductsAction {
+  type: 'ADD-ALL-PRODUCTS' | 'UPDATE-ONE-PRODUCT';
+  payload: any;
+}
 interface Props {
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
   commandId: string | undefined;
   setCommand: Dispatch<SetStateAction<Command>>;
+  allProducts: Product[];
+  allProductsDispatch: Dispatch<AllProductsAction>;
 }
 
 interface ProductNoAmount {
@@ -37,8 +44,9 @@ export const AddProductModal = ({
   setIsModalOpen,
   commandId,
   setCommand,
+  allProducts,
+  allProductsDispatch,
 }: Props) => {
-  const [allProducts, setAllProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([] as any);
 
   const [isSetAmountModalOpen, setIsSetAmountModalOpen] = useState(false);
@@ -50,17 +58,9 @@ export const AddProductModal = ({
   const [filter, setFilter] = useState('');
   const [searchContent, setSearchContent] = useState('');
 
-  // const { productsDispatch, products: commandProducts } =
-  //   useContext(CommandContext);
+  const { productsDispatch } = useContext(CommandContext);
 
   const toast = useToast();
-
-  useEffect(() => {
-    (async () => {
-      const products = await ProductsService.getAllProducts();
-      setAllProducts(products);
-    })();
-  }, []);
 
   function handleCloseModal() {
     setIsModalOpen(false);
@@ -171,14 +171,36 @@ export const AddProductModal = ({
         _id: commandId,
         products: newProducts,
       });
+      // SOCKET.IO -> broadcast the command products was updated
 
       setCommand(updatedCommand);
+      productsDispatch({
+        type: 'add-products',
+        payload: updatedCommand.products,
+      });
 
-      location.reload();
-      cleanModalValues();
+      // Diminish the amount of products selected in stock
+      selectedProducts.forEach(
+        (selectedProduct: { _id: string; amount: string }) => {
+          (async () => {
+            const { product: stockUpdatedProduct } =
+              await ProductsService.diminishAmount({
+                productId: selectedProduct._id,
+                amount: Number(selectedProduct.amount),
+              });
+
+            // Updating the AddProductModal list of stock products with new updtedProduc amount
+            allProductsDispatch({
+              type: 'UPDATE-ONE-PRODUCT',
+              payload: { product: stockUpdatedProduct },
+            });
+          })();
+        }
+      );
 
       // TODO: Broadcast to necessary entities the update of command
 
+      cleanModalValues();
       toast.closeAll();
       toast({
         status: 'success',

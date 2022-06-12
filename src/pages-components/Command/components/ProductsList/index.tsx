@@ -27,6 +27,7 @@ export const ProductsList = () => {
     searchContent,
     command,
     setCommand,
+    stockProductsDispatch,
   } = useContext(CommandContext);
 
   const toast = useToast();
@@ -102,18 +103,30 @@ export const ProductsList = () => {
       if (oldProductAmount > newAmount) {
         // If the amount of product before updated it is less than the newAmount. it means I NEED TO INCREASE THE AMOUNT IN STOCK
         const amountToIncreaseInStock = oldProductAmount - Number(newAmount);
-        await ProductsService.increaseAmount({
-          productId,
-          amount: amountToIncreaseInStock,
+        const { product: stockUpdatedProduct } =
+          await ProductsService.increaseAmount({
+            productId,
+            amount: amountToIncreaseInStock,
+          });
+
+        // Updating the AddProductModal list of stock products with new updtedProduc amount
+        stockProductsDispatch({
+          type: 'UPDATE-ONE-PRODUCT',
+          payload: { product: stockUpdatedProduct },
         });
       }
 
       if (newAmount > oldProductAmount) {
         // it means the amount increased. so I need to DECREASE THE diff between the old amount and new amount in stock
         const amountToDiminishInStock = Number(newAmount) - oldProductAmount;
-        await ProductsService.diminishAmount({
-          productId,
-          amount: amountToDiminishInStock,
+        const { product: stockUpdatedProduct } =
+          await ProductsService.diminishAmount({
+            productId,
+            amount: amountToDiminishInStock,
+          });
+        stockProductsDispatch({
+          type: 'UPDATE-ONE-PRODUCT',
+          payload: { product: stockUpdatedProduct },
         });
       }
 

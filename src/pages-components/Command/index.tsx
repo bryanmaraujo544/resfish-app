@@ -12,14 +12,22 @@ import {
 import { useToast } from '@chakra-ui/react';
 import { Command as CommandType } from 'types/Command';
 import { useRouter } from 'next/router';
+import { Product } from 'types/Product';
 import { productsReducer } from './reducers/productsReducer';
 import { AddProductModal } from './components/AddProductModal';
 import { DeleteProductModal } from './components/DeleteProductModal';
 import { CommandLayout } from './layout';
 import CommandService from './services/CommandService';
 import { PaymentModal } from './components/PaymentModal';
+import ProductsService from './services/ProductsService';
+import { stockProductsReducer } from './reducers/stockProductsReducer';
 
-type ContextProps = {
+interface StockProductsAction {
+  type: 'ADD-ALL-PRODUCTS' | 'UPDATE-ONE-PRODUCT';
+  payload: any;
+}
+
+interface ContextProps {
   products: { value: any[] };
   productsDispatch: any;
   isDeleteProductModalOpen: boolean;
@@ -39,13 +47,14 @@ type ContextProps = {
   setSearchContent: Dispatch<SetStateAction<string>>;
   command: CommandType;
   setCommand: Dispatch<SetStateAction<CommandType>>;
-};
+  stockProductsDispatch: Dispatch<StockProductsAction>;
+}
 
 export const CommandContext = createContext({} as ContextProps);
 
-type Props = {
+interface Props {
   commandId: string | string[] | undefined;
-};
+}
 
 const initialState = {
   value: [] as any[],
@@ -54,25 +63,26 @@ const initialState = {
 export const Command = ({ commandId }: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [command, setCommand] = useState<CommandType>({} as CommandType);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [productIdToDelete, setProductIdToDelete] = useState('');
-
-  const [filter, setFilter] = useState('');
-  const [orderBy, setOrderBy] = useState('');
-  const [orderByDir, setOrderByDir] = useState('' as 'asc' | 'desc');
-  const [searchContent, setSearchContent] = useState('');
-
-  const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
-  const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
-    useState(false);
-
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-
   const [products, productsDispatch] = useReducer(
     productsReducer,
     initialState
   );
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [productIdToDelete, setProductIdToDelete] = useState('');
+  const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
+  const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
+    useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+
+  const [stockProducts, stockProductsDispatch] = useReducer(
+    stockProductsReducer,
+    { value: [] as Product[] }
+  );
+  const [filter, setFilter] = useState('');
+  const [orderBy, setOrderBy] = useState('');
+  const [orderByDir, setOrderByDir] = useState('' as 'asc' | 'desc');
+  const [searchContent, setSearchContent] = useState('');
 
   const router = useRouter();
   const toast = useToast();
@@ -103,6 +113,14 @@ export const Command = ({ commandId }: Props) => {
       }
     })();
   }, [commandId, toast]);
+
+  // useEffect to load all of stock products to populate addProductModal
+  useEffect(() => {
+    (async () => {
+      const allProducts = await ProductsService.getAllProducts();
+      stockProductsDispatch({ type: 'ADD-ALL-PRODUCTS', payload: allProducts });
+    })();
+  }, []);
 
   const handleOpenDeleteModal = useCallback(
     ({ productId }: { productId: string }) => {
@@ -148,6 +166,7 @@ export const Command = ({ commandId }: Props) => {
         setOrderByDir,
         searchContent,
         setSearchContent,
+        stockProductsDispatch,
       }}
     >
       <CommandLayout
@@ -166,6 +185,8 @@ export const Command = ({ commandId }: Props) => {
         setIsModalOpen={setIsAddProductModalOpen}
         commandId={command?._id}
         setCommand={setCommand}
+        allProducts={stockProducts.value}
+        allProductsDispatch={stockProductsDispatch}
       />
       <PaymentModal
         isModalOpen={isPaymentModalOpen}
