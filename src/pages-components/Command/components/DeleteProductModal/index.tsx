@@ -11,8 +11,13 @@ type Props = {
 };
 
 export const DeleteProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
-  const { productIdToDelete, productsDispatch, command, setCommand } =
-    useContext(CommandContext);
+  const {
+    productIdToDelete,
+    productsDispatch,
+    command,
+    setCommand,
+    stockProductsDispatch,
+  } = useContext(CommandContext);
 
   const toast = useToast();
 
@@ -44,9 +49,16 @@ export const DeleteProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       const productToDelete = command?.products?.filter(
         ({ _id }) => _id === productIdToDelete
       )[0];
-      await ProductsService.increaseAmount({
+
+      const { product: updatedProduct } = await ProductsService.increaseAmount({
         productId: productIdToDelete,
         amount: productToDelete?.amount as number,
+      });
+
+      // Updating the list of stock products in <AddProductModal />
+      stockProductsDispatch({
+        type: 'UPDATE-ONE-PRODUCT',
+        payload: { product: updatedProduct },
       });
 
       handleCloseModal();
