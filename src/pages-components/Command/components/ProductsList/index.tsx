@@ -4,6 +4,7 @@ import { useToast } from '@chakra-ui/react';
 import CommandService from 'pages-components/Command/services/CommandService';
 import { formatAmount } from 'utils/formatAmount';
 import { Product } from 'types/Product';
+import ProductsService from 'pages-components/Command/services/ProductsService';
 import { CommandContext } from '../../index';
 import { ProductsListLayout } from './layout';
 import { PayProductModal } from './PayProductModal';
@@ -53,12 +54,14 @@ export const ProductsList = () => {
       e.preventDefault();
       setFishIdToEditAmount('');
 
-      const newAmount = isFish
-        ? formatAmount({
-            num: newProductAmount,
-            to: 'point',
-          })
-        : newProductAmount;
+      const newAmount = Number(
+        isFish
+          ? formatAmount({
+              num: newProductAmount,
+              to: 'point',
+            })
+          : newProductAmount
+      );
 
       if (Number.isNaN(newAmount)) {
         toast({
@@ -81,6 +84,28 @@ export const ProductsList = () => {
         }
         return product;
       });
+
+      const oldProductAmount = oldProducts?.find(
+        (product) => product._id === productId
+      )?.amount as number;
+
+      if (oldProductAmount > newAmount) {
+        // If the amount of product before updated it is less than the newAmount. it means I NEED TO INCREASE THE AMOUNT IN STOCK
+        const amountToIncreaseInStock = oldProductAmount - Number(newAmount);
+        await ProductsService.increaseAmount({
+          productId,
+          amount: amountToIncreaseInStock,
+        });
+      }
+
+      if (newAmount > oldProductAmount) {
+        // it means the amount increased. so I need to DECREASE THE diff between the old amount and new amount in stock
+        const amountToDiminishInStock = Number(newAmount) - oldProductAmount;
+        await ProductsService.diminishAmount({
+          productId,
+          amount: amountToDiminishInStock,
+        });
+      }
 
       const { command: updatedCommand } = await CommandService.updateCommand({
         _id: command?._id,
