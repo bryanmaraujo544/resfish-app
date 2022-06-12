@@ -73,6 +73,16 @@ export const ProductsList = () => {
         return;
       }
 
+      if (newAmount < 0) {
+        toast({
+          status: 'warning',
+          title: 'Quantidade menor que 0',
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
+
       const oldProducts = command?.products;
       const newProducts = oldProducts?.map((product) => {
         if (product._id === productId) {
