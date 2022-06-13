@@ -34,17 +34,18 @@ export const DeleteCommandModal = ({
         throw new Error('Any commandId was informed');
       }
 
-      const commandProducts = command.products as Product[];
-      commandProducts.forEach((product: Product) => {
-        (async () => {
-          // const { product: updatedProduct } =
-          await ProductsService.increaseAmount({
-            productId: product._id,
-            amount: product.amount,
-          });
-          router.push('/commands');
-        })();
-      });
+      if (command.isActive === true) {
+        const commandProducts = command.products as Product[];
+        commandProducts.forEach((product: Product) => {
+          (async () => {
+            // const { product: updatedProduct } =
+            await ProductsService.increaseAmount({
+              productId: product._id,
+              amount: product.amount,
+            });
+          })();
+        });
+      }
 
       const { message } = await CommandService.deleteCommand({ commandId });
 
@@ -55,6 +56,7 @@ export const DeleteCommandModal = ({
         isClosable: true,
       });
       handleCloseModal();
+      router.push('/commands');
     } catch (error: any) {
       toast({
         status: 'error',
@@ -62,7 +64,7 @@ export const DeleteCommandModal = ({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [commandId]);
+  }, [commandId, command.isActive]);
 
   return (
     <DeleteCommandModalLayout
