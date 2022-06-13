@@ -57,7 +57,7 @@ interface Props {
 }
 
 const initialState = {
-  value: [] as any[],
+  value: [] as Product[],
 };
 
 export const Command = ({ commandId }: Props) => {
