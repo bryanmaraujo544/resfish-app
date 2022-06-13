@@ -1,4 +1,4 @@
-import { useContext, useState, useMemo, useCallback, useRef } from 'react';
+import { useContext, useState, useMemo, useCallback } from 'react';
 import { useToast } from '@chakra-ui/react';
 
 import CommandService from 'pages-components/Command/services/CommandService';
@@ -22,9 +22,6 @@ export const ProductsList = () => {
 
   const [productToPay, setProductToPay] = useState<Product>({} as Product);
   const [isPayProductModalOpen, setIsPayProductModalOpen] = useState(false);
-
-  const timeoutRef = useRef(null as any);
-  const timeoutProduct = useRef(null as any);
 
   const {
     products,
@@ -160,7 +157,8 @@ export const ProductsList = () => {
       toast({
         status: 'error',
         title: error?.response?.data?.message,
-        duration: 3000,
+        duration: 2000,
+        isClosable: true,
       });
     }
   }
@@ -187,89 +185,126 @@ export const ProductsList = () => {
           payload: { id: productId },
         });
 
-        // Check if the last button clicked it was the this one
-        // If it is I clear the function of this button. The function cleaned it was the timeout
-        // the timeout is responsible to save the current amount in database
-        if (timeoutProduct.current === productId) {
-          clearTimeout(timeoutRef.current);
-        }
+        // Save the update in command
+        const newProducts = command?.products?.map((product: Product) => {
+          if (product._id === productId) {
+            const newProduct = {
+              ...product,
+              amount: amount + 1,
+            };
+            return newProduct;
+          }
+          return product;
+        });
 
-        timeoutProduct.current = productId;
-        const ref = setTimeout(() => {
-          // this timeout only runs after this button after 2 seconds clicked
-          // every time the button is clicked before this 2s interval, the counter restarts
-          productsDispatch({
-            type: 'save-amount',
-            payload: {
-              id: productId,
-              commandId: command?._id,
-              setCommand,
-              stockProductsDispatch,
-              toast,
-            },
+        const { command: updatedCommand } = await CommandService.updateCommand({
+          _id: command?._id as string,
+          products: newProducts,
+        });
+        setCommand(updatedCommand);
+
+        // Decreasing the amount of this product in stock
+        const { product: stockUpdatedProduct } =
+          await ProductsService.diminishAmount({
+            productId,
+            amount: 1,
           });
-        }, 1000);
-
-        timeoutRef.current = ref;
+        if (stockUpdatedProduct) {
+          stockProductsDispatch({
+            type: 'UPDATE-ONE-PRODUCT',
+            payload: { product: stockUpdatedProduct },
+          });
+        }
       } catch (err: any) {
+        toast.closeAll();
         toast({
           status: 'error',
           title: err?.response?.data?.message,
+          duration: 1000,
         });
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [productsDispatch, command?._id]
+    [productsDispatch, command]
   );
 
   const handleDecrementProductAmount = useCallback(
-    (product: AmountProduct) => {
-      const productId = product?._id;
-      // TODO: verify if when I'm decrementing the total will be less than total payed
-      const total =
-        Math.round(
-          (product.amount * product.unitPrice + Number.EPSILON) * 100
-        ) / 100;
+    async (product: AmountProduct) => {
+      try {
+        const productId = product?._id;
+        // TODO: verify if when I'm decrementing the total will be less than total payed
+        const total =
+          Math.round(
+            (product.amount * product.unitPrice + Number.EPSILON) * 100
+          ) / 100;
 
-      console.log({ total });
-      if (total - product.unitPrice < product.totalPayed) {
-        toast({
-          status: 'warning',
-          title:
-            'Abaixando a quantidade, o total do produto seria menor do que já foi pago',
-        });
-        return;
-      }
+        const newAmount = product.amount - 1;
+        if (newAmount < 0) {
+          toast.closeAll();
+          toast({
+            status: 'error',
+            duration: 1000,
+            isClosable: true,
+            title: 'Quantidade menor que 0',
+          });
+          return;
+        }
 
-      productsDispatch({
-        type: 'decrement-amount',
-        payload: { id: productId },
-      });
+        if (total - product.unitPrice < product.totalPayed) {
+          toast.closeAll();
+          toast({
+            status: 'warning',
+            title:
+              'Abaixando a quantidade, o total do produto seria menor do que já foi pago',
+          });
+          return;
+        }
 
-      if (timeoutProduct.current === productId) {
-        clearTimeout(timeoutRef.current);
-      }
-
-      timeoutProduct.current = productId;
-
-      const ref = setTimeout(() => {
-        // This methods save the new amount in database and diminishes the product amount in stock
         productsDispatch({
-          type: 'save-amount',
-          payload: {
-            id: productId,
-            commandId: command?._id,
-            setCommand,
-            stockProductsDispatch,
-            toast,
-          },
+          type: 'decrement-amount',
+          payload: { id: productId },
         });
-      }, 1000);
 
-      timeoutRef.current = ref;
+        // Save the update in command
+        const newProducts = command?.products?.map((prod: Product) => {
+          if (prod._id === productId) {
+            const newProduct = {
+              ...prod,
+              amount: product.amount - 1,
+            };
+            return newProduct;
+          }
+          return prod;
+        });
+        const { command: updatedCommand } = await CommandService.updateCommand({
+          _id: command?._id as string,
+          products: newProducts,
+        });
+        setCommand(updatedCommand);
+
+        // Decreasing the amount of this product in stock
+        const { product: stockUpdatedProduct } =
+          await ProductsService.increaseAmount({
+            productId,
+            amount: 1,
+          });
+        if (stockUpdatedProduct) {
+          stockProductsDispatch({
+            type: 'UPDATE-ONE-PRODUCT',
+            payload: { product: stockUpdatedProduct },
+          });
+        }
+      } catch (err: any) {
+        toast.closeAll();
+        toast({
+          status: 'error',
+          title: err?.response?.data?.message,
+          duration: 1000,
+        });
+      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [productsDispatch, command?._id]
+    [productsDispatch, command]
   );
 
   //

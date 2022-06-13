@@ -82,6 +82,7 @@ export const AddProductModal = ({
           selectedProduct.name === productToSetAmount.name
       );
       if (hasBeenSelected) {
+        toast.closeAll();
         toast({
           title: 'Produto já foi selecionado',
           status: 'warning',
@@ -97,7 +98,7 @@ export const AddProductModal = ({
         toast({
           status: 'error',
           title: 'Número inválido',
-          duration: 3000,
+          duration: 1000,
           isClosable: true,
         });
         return;
@@ -109,10 +110,11 @@ export const AddProductModal = ({
       });
 
       if (!isInStock) {
+        toast.closeAll();
         toast({
           status: 'error',
           title: 'Quantidade acima do estoque disponível',
-          duration: 3000,
+          duration: 2000,
           isClosable: true,
         });
         return;
@@ -128,10 +130,11 @@ export const AddProductModal = ({
       ]);
       setIsSetAmountModalOpen(false);
     } catch (error: any) {
+      toast.closeAll();
       toast({
         status: 'error',
         title: error?.response?.data?.message,
-        duration: 3000,
+        duration: 2000,
         isClosable: true,
       });
     }
@@ -155,9 +158,11 @@ export const AddProductModal = ({
       );
 
       if (hasSomeSelectedProductInCommand) {
+        toast.closeAll();
         toast({
           title: `O produto: ${hasSomeSelectedProductInCommand.name} já está na comanda`,
           status: 'error',
+          duration: 2000,
         });
         return;
       }
@@ -208,10 +213,11 @@ export const AddProductModal = ({
       });
       handleCloseModal();
     } catch (error: any) {
+      toast.closeAll();
       toast({
         status: 'error',
         title: error?.response?.data?.message,
-        duration: 3000,
+        duration: 2000,
         isClosable: true,
       });
     }
@@ -244,7 +250,7 @@ export const AddProductModal = ({
   const filteredBySearch = useMemo(() => {
     const filtered = filteredByFilter.filter((product: any) => {
       const productObjStr = Object.values(product).join('').toLocaleLowerCase();
-      if (productObjStr.includes(searchContent.toLowerCase())) {
+      if (productObjStr?.includes(searchContent.toLowerCase())) {
         return true;
       }
       return false;

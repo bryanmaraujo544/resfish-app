@@ -77,9 +77,11 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       e.preventDefault();
 
       if (paymentType === 'Dinheiro' && !receivedValue) {
+        toast.closeAll();
         toast({
           status: 'info',
           title: 'Insira o valor recebido do cliente',
+          duration: 2000,
         });
         return;
       }
@@ -101,16 +103,18 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         status: 'success',
         title: message,
         isClosable: true,
-        duration: 4000,
+        duration: 3000,
       });
 
       handleCloseModal();
     } catch (error: any) {
+      toast.closeAll();
       toast({
         status: 'error',
         title:
           error?.response?.data?.message ||
           'Erro no servidor. Recarregue a página.',
+        duration: 2000,
       });
     }
   };

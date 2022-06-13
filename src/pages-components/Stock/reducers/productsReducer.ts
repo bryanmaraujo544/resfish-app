@@ -16,11 +16,6 @@ interface ProductsState {
   value: Product[] | [];
 }
 
-type Reducer = (
-  state: ProductsState,
-  action: Action
-) => { value: ProductsState };
-
 export const productsReducer = (state: ProductsState, action: Action) => {
   switch (action.type) {
     case 'ADD-PRODUCTS': {

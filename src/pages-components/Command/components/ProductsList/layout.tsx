@@ -107,9 +107,7 @@ export const ProductsListLayout = ({
   handleIncrementProductAmount,
   handleDecrementProductAmount,
 }: Props) => {
-  console.log({ products });
   const { command } = useContext(CommandContext);
-
   const commandIsPayed = command?.isActive === false;
 
   const isFishingCategory = (category?: string) =>
@@ -185,7 +183,7 @@ export const ProductsListLayout = ({
                         </FormControl>
                       ) : (
                         <>
-                          {!commandIsPayed && (
+                          {!commandIsPayed && !isFishingCategory(category) && (
                             <Icon
                               as={AiOutlineMinusCircle}
                               onClick={() =>
@@ -216,7 +214,7 @@ export const ProductsListLayout = ({
                                 })} Kg`
                               : amount}
                           </Text>
-                          {!commandIsPayed && (
+                          {!commandIsPayed && !isFishingCategory(category) && (
                             <Icon
                               as={AiOutlinePlusCircle}
                               onClick={() =>
