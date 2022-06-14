@@ -1,12 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import {
-  FormControl,
-  Input,
-  Select,
-  Button,
-  Flex,
-  Text,
-} from '@chakra-ui/react';
+import { FormControl, Input, Button, Flex, Text } from '@chakra-ui/react';
 import { Modal } from 'components/Modal';
 import { ReactNode } from 'react';
 import { SubmitHandler } from 'react-hook-form';
@@ -14,7 +7,6 @@ import { SubmitHandler } from 'react-hook-form';
 interface EditCommandInputs {
   table: string;
   waiter: string;
-  fishingType: string;
 }
 
 interface Props {
@@ -63,14 +55,6 @@ export const EditCommandModalLayout = ({
           hasError={rhfErrors.waiter}
           errorMsg="Esse campo é necessário"
         />
-      </InputGroup>
-      <InputGroup>
-        <Text>Tipo de Pesca</Text>
-        <Select {...rhfRegister('fishingType')} cursor="pointer">
-          <option defaultChecked>Nenhum</option>
-          <option>Pesca Esportiva</option>
-          <option>Pesque Pague</option>
-        </Select>
       </InputGroup>
       <Button type="submit">Atualizar</Button>
     </FormControl>

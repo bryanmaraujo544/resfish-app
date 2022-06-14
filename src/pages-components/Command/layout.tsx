@@ -33,6 +33,7 @@ interface Props {
   isLoading: boolean;
   handleGoToCommands?: () => void;
   handleOpenPaymentModal: () => void;
+  handleDeleteCommand: () => void;
 }
 
 export const CommandLayout = ({
@@ -40,6 +41,7 @@ export const CommandLayout = ({
   isLoading,
   handleGoToCommands,
   handleOpenPaymentModal,
+  handleDeleteCommand,
 }: Props) => {
   const dt = DateTime.fromISO(command.createdAt as string).setLocale('pt-BR');
   const createdAtFormatted = dt.toLocaleString(DateTime.DATE_FULL);
@@ -143,7 +145,7 @@ export const CommandLayout = ({
                     </MenuItem>
                     <MenuItem
                       icon={<BsFillTrashFill fontSize={14} />}
-                      onClick={() => {}}
+                      onClick={() => handleDeleteCommand()}
                       color="blue.900"
                       display="flex"
                       alignItems="center"

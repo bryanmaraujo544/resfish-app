@@ -1,5 +1,6 @@
 import { useToast } from '@chakra-ui/react';
 import CommandService from 'pages-components/Command/services/CommandService';
+import ProductsService from 'pages-components/Command/services/ProductsService';
 import { Dispatch, SetStateAction, useContext } from 'react';
 import { CommandContext } from '../../index';
 import { DeleteProductModalLayout } from './layout';
@@ -10,8 +11,13 @@ type Props = {
 };
 
 export const DeleteProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
-  const { productIdToDelete, productsDispatch, command, setCommand } =
-    useContext(CommandContext);
+  const {
+    productIdToDelete,
+    productsDispatch,
+    command,
+    setCommand,
+    stockProductsDispatch,
+  } = useContext(CommandContext);
 
   const toast = useToast();
 
@@ -37,6 +43,24 @@ export const DeleteProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         type: 'delete',
         payload: { product: { _id: productIdToDelete } },
       });
+
+      // Diminish the amount in stock
+      // SOCKET.IO -> say to every device that the amount of this product was decreased in stock
+      const productToDelete = command?.products?.filter(
+        ({ _id }) => _id === productIdToDelete
+      )[0];
+
+      const { product: updatedProduct } = await ProductsService.increaseAmount({
+        productId: productIdToDelete,
+        amount: productToDelete?.amount as number,
+      });
+
+      // Updating the list of stock products in <AddProductModal />
+      stockProductsDispatch({
+        type: 'UPDATE-ONE-PRODUCT',
+        payload: { product: updatedProduct },
+      });
+
       handleCloseModal();
     } catch (error: any) {
       toast({

@@ -72,12 +72,13 @@ export const PayProductModalLayout = ({
             <Select
               w="auto"
               cursor="pointer"
+              value={typeOfPayment}
               onChange={(e) =>
                 setTypeOfPayment(e.target.value as 'unit' | 'free')
               }
             >
-              <option value="unit">Pagar por unidade</option>
               <option value="free">Pagar por valor livre</option>
+              <option value="unit">Pagar por unidade</option>
             </Select>
           </Flex>
 

@@ -19,7 +19,6 @@ interface Props {
 interface EditCommandInputs {
   table: string;
   waiter: string;
-  fishingType: string;
 }
 
 export const EditCommandModal = ({
@@ -41,7 +40,6 @@ export const EditCommandModal = ({
     // Setting the value of input of form with command's values
     setValue('table', command?.table || '');
     setValue('waiter', command?.waiter || '');
-    setValue('fishingType', command?.fishingType || 'Nenhum');
   }, [command, setValue]);
 
   function handleCloseModal() {
@@ -51,13 +49,8 @@ export const EditCommandModal = ({
   const handleEditCommand: SubmitHandler<EditCommandInputs> = async ({
     table,
     waiter,
-    fishingType,
   }) => {
-    if (
-      table === command.table &&
-      waiter === command.waiter &&
-      fishingType === command.fishingType
-    ) {
+    if (table === command.table && waiter === command.waiter) {
       handleCloseModal();
 
       toast({
@@ -76,7 +69,6 @@ export const EditCommandModal = ({
           _id: command._id,
           table,
           waiter,
-          fishingType,
         });
 
       allCommandsDispatch({

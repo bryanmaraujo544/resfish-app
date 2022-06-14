@@ -15,7 +15,6 @@ export const NavHeader = ({
   setOrderBy,
   setFilters,
 }: Props) => {
-  console.log('navheader');
   const { searchContent, setSearchContent } = useContext(StockContext);
 
   function handleSetFilter(filter: string) {

@@ -33,7 +33,7 @@ export const AddProductsModal = ({
   setIsModalOpen,
   commandId,
 }: Props) => {
-  const [allProducts, setAllProducts] = useState([]);
+  // const [allProducts, setAllProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([] as any);
 
   const [isSetAmountModalOpen, setIsSetAmountModalOpen] = useState(false);
@@ -41,19 +41,23 @@ export const AddProductsModal = ({
     {} as ProductNoAmount
   );
   const [amount, setAmount] = useState('1');
-
   const [filter, setFilter] = useState('');
   const [searchContent, setSearchContent] = useState('');
 
-  const { allCommandsDispatch } = useContext(CommandsContext);
+  const {
+    allCommandsDispatch,
+    stockProducts: allProducts,
+    stockProductsDispatch,
+  } = useContext(CommandsContext);
   const toast = useToast();
 
   useEffect(() => {
     (async () => {
       const products = await ProductsService.getAllProducts();
-      setAllProducts(products);
+      stockProductsDispatch({ type: 'ADD-ALL-PRODUCTS', payload: products });
+      // setAllProducts(products);
     })();
-  }, []);
+  }, [stockProductsDispatch]);
 
   function handleCloseModal() {
     setIsModalOpen(false);
@@ -170,7 +174,27 @@ export const AddProductsModal = ({
         payload: { command: updatedCommand },
       });
 
-      // TODO: Broadcast to necessary entities the update of command
+      // Diminish the amount of products selected in stock
+      selectedProducts.forEach(
+        (selectedProduct: { _id: string; amount: string }) => {
+          (async () => {
+            const { product: stockUpdatedProduct } =
+              await ProductsService.diminishAmount({
+                productId: selectedProduct._id,
+                amount: Number(selectedProduct.amount),
+              });
+
+            if (stockUpdatedProduct) {
+              stockProductsDispatch({
+                type: 'UPDATE-ONE-PRODUCT',
+                payload: { product: stockUpdatedProduct },
+              });
+            }
+          })();
+        }
+      );
+
+      // SOCKET.IO Broadcast to necessary entities the update of command
 
       cleanModalValues();
 

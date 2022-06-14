@@ -21,11 +21,11 @@ import {
 import { motion } from 'framer-motion';
 
 import { BsFillTrashFill } from 'react-icons/bs';
-import { FiEdit2 } from 'react-icons/fi';
 import { FaArrowUp } from 'react-icons/fa';
 import { CgOptions } from 'react-icons/cg';
 import { IoCashOutline } from 'react-icons/io5';
 import { BiSad } from 'react-icons/bi';
+import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { Product } from 'types/Product';
@@ -61,6 +61,13 @@ interface ActiveEditFish {
   amount: string;
 }
 
+interface AmountProduct {
+  _id: string;
+  unitPrice: number;
+  totalPayed: number;
+  amount: number;
+}
+
 interface Props {
   products: any[];
   handleOpenDeleteModal: ({ productId }: { productId: string }) => void;
@@ -69,11 +76,19 @@ interface Props {
   orderByDir: 'asc' | 'desc';
   fishIdToEditAmount: string;
   handleActiveEditFishAmount: ({ productId, amount }: ActiveEditFish) => void;
-  handleUpdateFishAmount: any;
+  handleUpdateProductAmount: any;
   newProductAmount: string;
   setNewProductAmount: Dispatch<SetStateAction<string>>;
   setFishIdToEditAmount: Dispatch<SetStateAction<string>>;
   handleOpenPayProductModal: (product: Product) => void;
+  handleDecrementProductAmount: (product: AmountProduct) => void;
+  handleIncrementProductAmount: ({
+    productId,
+    amount,
+  }: {
+    productId: string;
+    amount: number;
+  }) => void;
 }
 
 export const ProductsListLayout = ({
@@ -84,14 +99,15 @@ export const ProductsListLayout = ({
   handleToggleOrderByDir,
   handleActiveEditFishAmount,
   fishIdToEditAmount,
-  handleUpdateFishAmount,
+  handleUpdateProductAmount,
   newProductAmount,
   setNewProductAmount,
   setFishIdToEditAmount,
   handleOpenPayProductModal,
+  handleIncrementProductAmount,
+  handleDecrementProductAmount,
 }: Props) => {
   const { command } = useContext(CommandContext);
-
   const commandIsPayed = command?.isActive === false;
 
   const isFishingCategory = (category?: string) =>
@@ -143,13 +159,13 @@ export const ProductsListLayout = ({
                 <Tr key={`product-list${name}`} h={20}>
                   <Td>{name}</Td>
                   <Td>
-                    <Flex gap={4} align="center">
+                    <Flex gap={[2, 4]} align="center">
                       {/* Form to edit tha amount of fish products */}
                       {fishIdToEditAmount === _id ? (
                         <FormControl
                           as="form"
                           onSubmit={(e) =>
-                            handleUpdateFishAmount(e, {
+                            handleUpdateProductAmount(e, {
                               productId: _id,
                               isFish: isFishingCategory(category),
                             })
@@ -167,6 +183,20 @@ export const ProductsListLayout = ({
                         </FormControl>
                       ) : (
                         <>
+                          {!commandIsPayed && !isFishingCategory(category) && (
+                            <Icon
+                              as={AiOutlineMinusCircle}
+                              onClick={() =>
+                                handleDecrementProductAmount({
+                                  _id,
+                                  amount,
+                                  unitPrice,
+                                  totalPayed: Number(totalPayed) as number,
+                                })
+                              }
+                              cursor="pointer"
+                            />
+                          )}
                           <Text
                             onClick={() => {
                               if (!commandIsPayed) {
@@ -184,7 +214,19 @@ export const ProductsListLayout = ({
                                 })} Kg`
                               : amount}
                           </Text>
-                          {!commandIsPayed && (
+                          {!commandIsPayed && !isFishingCategory(category) && (
+                            <Icon
+                              as={AiOutlinePlusCircle}
+                              onClick={() =>
+                                handleIncrementProductAmount({
+                                  productId: _id,
+                                  amount,
+                                })
+                              }
+                              cursor="pointer"
+                            />
+                          )}
+                          {/* {!commandIsPayed && (
                             <Icon
                               onClick={() => {
                                 if (!commandIsPayed) {
@@ -201,7 +243,7 @@ export const ProductsListLayout = ({
                                 color: 'blue.500',
                               }}
                             />
-                          )}
+                          )} */}
                         </>
                       )}
                     </Flex>

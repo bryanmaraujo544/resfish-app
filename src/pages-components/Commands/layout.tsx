@@ -1,10 +1,10 @@
+import { Dispatch, SetStateAction } from 'react';
 import { Heading, Icon, Spinner, Flex, Select } from '@chakra-ui/react';
 import { MdPlaylistAdd } from 'react-icons/md';
 
 import { Button } from 'components/Button';
 import { Header } from 'components/Header';
 import { Layout } from 'components/Layout';
-import { Dispatch, SetStateAction } from 'react';
 import { NavHeader } from './components/NavHeader';
 import { CommandsList } from './components/CommandsList';
 
@@ -39,6 +39,7 @@ export const CommandsLayout = ({
           setCommandStatusFilter(e.target.value as 'Ativas' | 'Pagas')
         }
         bg="blue.50"
+        color="blue.900"
         fontWeight="600"
       >
         <option>Ativas</option>

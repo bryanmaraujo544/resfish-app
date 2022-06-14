@@ -4,9 +4,17 @@ import { useToast } from '@chakra-ui/react';
 import CommandService from 'pages-components/Command/services/CommandService';
 import { formatAmount } from 'utils/formatAmount';
 import { Product } from 'types/Product';
+import ProductsService from 'pages-components/Command/services/ProductsService';
 import { CommandContext } from '../../index';
 import { ProductsListLayout } from './layout';
 import { PayProductModal } from './PayProductModal';
+
+interface AmountProduct {
+  _id: string;
+  unitPrice: number;
+  totalPayed: number;
+  amount: number;
+}
 
 export const ProductsList = () => {
   const [fishIdToEditAmount, setFishIdToEditAmount] = useState('');
@@ -26,6 +34,7 @@ export const ProductsList = () => {
     searchContent,
     command,
     setCommand,
+    stockProductsDispatch,
   } = useContext(CommandContext);
 
   const toast = useToast();
@@ -45,7 +54,7 @@ export const ProductsList = () => {
   }
 
   // Function that updates the amount of fish product in fact
-  async function handleUpdateFishAmount(
+  async function handleUpdateProductAmount(
     e: any,
     { productId, isFish }: { productId: string; isFish: boolean }
   ) {
@@ -53,18 +62,30 @@ export const ProductsList = () => {
       e.preventDefault();
       setFishIdToEditAmount('');
 
-      const newAmount = isFish
-        ? formatAmount({
-            num: newProductAmount,
-            to: 'point',
-          })
-        : newProductAmount;
+      const newAmount = Number(
+        isFish
+          ? formatAmount({
+              num: newProductAmount,
+              to: 'point',
+            })
+          : newProductAmount
+      );
 
       if (Number.isNaN(newAmount)) {
         toast({
           status: 'error',
           title: 'Quantidade inválida',
           duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      if (newAmount < 0) {
+        toast({
+          status: 'warning',
+          title: 'Quantidade menor que 0',
+          duration: 2000,
           isClosable: true,
         });
         return;
@@ -81,6 +102,40 @@ export const ProductsList = () => {
         }
         return product;
       });
+
+      const oldProductAmount = oldProducts?.find(
+        (product) => product._id === productId
+      )?.amount as number;
+
+      if (oldProductAmount > newAmount) {
+        // If the amount of product before updated it is less than the newAmount. it means I NEED TO INCREASE THE AMOUNT IN STOCK
+        const amountToIncreaseInStock = oldProductAmount - Number(newAmount);
+        const { product: stockUpdatedProduct } =
+          await ProductsService.increaseAmount({
+            productId,
+            amount: amountToIncreaseInStock,
+          });
+
+        // Updating the AddProductModal list of stock products with new updtedProduc amount
+        stockProductsDispatch({
+          type: 'UPDATE-ONE-PRODUCT',
+          payload: { product: stockUpdatedProduct },
+        });
+      }
+
+      if (newAmount > oldProductAmount) {
+        // it means the amount increased. so I need to DECREASE THE diff between the old amount and new amount in stock
+        const amountToDiminishInStock = Number(newAmount) - oldProductAmount;
+        const { product: stockUpdatedProduct } =
+          await ProductsService.diminishAmount({
+            productId,
+            amount: amountToDiminishInStock,
+          });
+        stockProductsDispatch({
+          type: 'UPDATE-ONE-PRODUCT',
+          payload: { product: stockUpdatedProduct },
+        });
+      }
 
       const { command: updatedCommand } = await CommandService.updateCommand({
         _id: command?._id,
@@ -102,7 +157,8 @@ export const ProductsList = () => {
       toast({
         status: 'error',
         title: error?.response?.data?.message,
-        duration: 3000,
+        duration: 2000,
+        isClosable: true,
       });
     }
   }
@@ -112,7 +168,148 @@ export const ProductsList = () => {
     setProductToPay(product);
   }
 
-  // Command Filters Logic
+  const handleIncrementProductAmount = useCallback(
+    async ({ productId, amount }: { productId: string; amount: number }) => {
+      try {
+        // TODO: Verify if amount in stock is available
+        const { isInStock } = await ProductsService.verifyAmount({
+          productId,
+          amount: amount - (amount - 1),
+        });
+        if (!isInStock) {
+          return;
+        }
+
+        productsDispatch({
+          type: 'increment-amount',
+          payload: { id: productId },
+        });
+
+        // Save the update in command
+        const newProducts = command?.products?.map((product: Product) => {
+          if (product._id === productId) {
+            const newProduct = {
+              ...product,
+              amount: amount + 1,
+            };
+            return newProduct;
+          }
+          return product;
+        });
+
+        const { command: updatedCommand } = await CommandService.updateCommand({
+          _id: command?._id as string,
+          products: newProducts,
+        });
+        setCommand(updatedCommand);
+
+        // Decreasing the amount of this product in stock
+        const { product: stockUpdatedProduct } =
+          await ProductsService.diminishAmount({
+            productId,
+            amount: 1,
+          });
+        if (stockUpdatedProduct) {
+          stockProductsDispatch({
+            type: 'UPDATE-ONE-PRODUCT',
+            payload: { product: stockUpdatedProduct },
+          });
+        }
+      } catch (err: any) {
+        toast.closeAll();
+        toast({
+          status: 'error',
+          title: err?.response?.data?.message,
+          duration: 1000,
+        });
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [productsDispatch, command]
+  );
+
+  const handleDecrementProductAmount = useCallback(
+    async (product: AmountProduct) => {
+      try {
+        const productId = product?._id;
+        // TODO: verify if when I'm decrementing the total will be less than total payed
+        const total =
+          Math.round(
+            (product.amount * product.unitPrice + Number.EPSILON) * 100
+          ) / 100;
+
+        const newAmount = product.amount - 1;
+        if (newAmount < 0) {
+          toast.closeAll();
+          toast({
+            status: 'error',
+            duration: 1000,
+            isClosable: true,
+            title: 'Quantidade menor que 0',
+          });
+          return;
+        }
+
+        if (total - product.unitPrice < product.totalPayed) {
+          toast.closeAll();
+          toast({
+            status: 'warning',
+            title:
+              'Abaixando a quantidade, o total do produto seria menor do que já foi pago',
+          });
+          return;
+        }
+
+        productsDispatch({
+          type: 'decrement-amount',
+          payload: { id: productId },
+        });
+
+        // Save the update in command
+        const newProducts = command?.products?.map((prod: Product) => {
+          if (prod._id === productId) {
+            const newProduct = {
+              ...prod,
+              amount: product.amount - 1,
+            };
+            return newProduct;
+          }
+          return prod;
+        });
+        const { command: updatedCommand } = await CommandService.updateCommand({
+          _id: command?._id as string,
+          products: newProducts,
+        });
+        setCommand(updatedCommand);
+
+        // Decreasing the amount of this product in stock
+        const { product: stockUpdatedProduct } =
+          await ProductsService.increaseAmount({
+            productId,
+            amount: 1,
+          });
+        if (stockUpdatedProduct) {
+          stockProductsDispatch({
+            type: 'UPDATE-ONE-PRODUCT',
+            payload: { product: stockUpdatedProduct },
+          });
+        }
+      } catch (err: any) {
+        toast.closeAll();
+        toast({
+          status: 'error',
+          title: err?.response?.data?.message,
+          duration: 1000,
+        });
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [productsDispatch, command]
+  );
+
+  //
+  // ==================== Command Filters Logic ==================== //
+  //
 
   const handleToggleOrderByDir = useCallback(() => {
     setOrderByDir((prev: string) => (prev === 'asc' ? 'desc' : 'asc'));
@@ -172,11 +369,13 @@ export const ProductsList = () => {
         handleToggleOrderByDir={handleToggleOrderByDir}
         fishIdToEditAmount={fishIdToEditAmount}
         handleActiveEditFishAmount={handleActiveEditFishAmount}
-        handleUpdateFishAmount={handleUpdateFishAmount}
+        handleUpdateProductAmount={handleUpdateProductAmount}
         newProductAmount={newProductAmount}
         setNewProductAmount={setNewProductAmount}
         setFishIdToEditAmount={setFishIdToEditAmount}
         handleOpenPayProductModal={handleOpenPayProductModal}
+        handleIncrementProductAmount={handleIncrementProductAmount}
+        handleDecrementProductAmount={handleDecrementProductAmount}
       />
       <PayProductModal
         isModalOpen={isPayProductModalOpen}
