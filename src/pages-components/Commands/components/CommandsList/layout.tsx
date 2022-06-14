@@ -65,8 +65,8 @@ export const CommandsListLayout = ({
   handleOpenEditCommandModal,
   handleOpenDeleteCommandModal,
 }: Props) => (
-  <TableContainer>
-    <Table colorScheme="gray" bg="red" overflow="visible">
+  <TableContainer minHeight={400} pb={32}>
+    <Table colorScheme="gray" overflow="visible" minHeight={100}>
       <Thead>
         <Tr>
           {listColumns.map(({ text: listItem, prop }) => (
