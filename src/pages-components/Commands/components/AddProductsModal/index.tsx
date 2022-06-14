@@ -184,10 +184,12 @@ export const AddProductsModal = ({
                 amount: Number(selectedProduct.amount),
               });
 
-            stockProductsDispatch({
-              type: 'UPDATE-ONE-PRODUCT',
-              payload: { product: stockUpdatedProduct },
-            });
+            if (stockUpdatedProduct) {
+              stockProductsDispatch({
+                type: 'UPDATE-ONE-PRODUCT',
+                payload: { product: stockUpdatedProduct },
+              });
+            }
           })();
         }
       );

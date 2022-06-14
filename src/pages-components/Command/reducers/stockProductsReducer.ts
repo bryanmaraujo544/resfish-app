@@ -15,6 +15,9 @@ export const stockProductsReducer = (state: State, action: Action) => {
       return { value: action.payload };
     }
     case 'UPDATE-ONE-PRODUCT': {
+      if (!action.payload?.product?._id) {
+        return { value: state.value };
+      }
       const newState = state.value.map((product: Product) => {
         if (product._id === action.payload.product._id) {
           return action.payload.product;
