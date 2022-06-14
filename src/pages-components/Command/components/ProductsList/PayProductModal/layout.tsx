@@ -72,6 +72,7 @@ export const PayProductModalLayout = ({
             <Select
               w="auto"
               cursor="pointer"
+              value={typeOfPayment}
               onChange={(e) =>
                 setTypeOfPayment(e.target.value as 'unit' | 'free')
               }

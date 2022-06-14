@@ -45,7 +45,7 @@ export const PayProductModal = ({
     setIsModalOpen(false);
     setPaymentValue('0');
     setAmountToPay(0);
-    setTypeOfPayment('unit');
+    setTypeOfPayment('free');
   }
 
   async function handlePayProduct(e: any) {

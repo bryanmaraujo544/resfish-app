@@ -93,6 +93,15 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         });
         return;
       }
+
+      if (isReceivedValueInvalid.value === true) {
+        toast({
+          status: 'warning',
+          title: 'Valor recebido inválido!',
+          duration: 1000,
+        });
+        return;
+      }
       const { message, paymentInfos } = await PaymentsService.pay({
         commandId: command?._id as string,
         paymentType,
