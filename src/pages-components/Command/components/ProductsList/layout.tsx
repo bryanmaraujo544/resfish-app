@@ -118,8 +118,8 @@ export const ProductsListLayout = ({
   });
 
   return (
-    <TableContainer mt={16}>
-      <Table>
+    <TableContainer mt={16} minHeight={400} pb={32}>
+      <Table overflow="visible" minHeight={100}>
         <Thead>
           <Tr>
             {columns.slice(0, commandIsPayed ? 4 : 5).map(({ text, prop }) => (
