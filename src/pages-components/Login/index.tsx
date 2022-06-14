@@ -9,20 +9,27 @@ import LoginService from './services/LoginService';
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [accessKey, setAccessKey] = useState('');
+  const [sendedLoginRequest, setSendedLoginRequest] = useState(false);
 
   const router = useRouter();
   const toast = useToast();
 
   async function handleLogin(e: any) {
     e.preventDefault();
+    if (sendedLoginRequest) {
+      return;
+    }
     try {
+      setSendedLoginRequest(true);
       if (!accessKey) {
+        toast.closeAll();
         toast({
           status: 'error',
           title: 'Não deixe nada em branco :(',
           duration: 3000,
           isClosable: true,
         });
+        setSendedLoginRequest(false);
         return;
       }
 
@@ -30,15 +37,18 @@ export const Login = () => {
       const { isAuthorized, message } = await LoginService.login(accessKey);
 
       if (!isAuthorized) {
+        toast.closeAll();
         toast({
           status: 'error',
           title: 'Chave de acesso incorreta!',
           duration: 3000,
           isClosable: true,
         });
+        setSendedLoginRequest(false);
         return;
       }
 
+      toast.closeAll();
       toast({
         status: 'success',
         title: message,
@@ -51,6 +61,8 @@ export const Login = () => {
 
       router.push('/');
     } catch (error: any) {
+      setSendedLoginRequest(false);
+      toast.closeAll();
       toast({
         status: 'error',
         title: error?.response.data.message,
@@ -64,6 +76,7 @@ export const Login = () => {
       handleLogin={handleLogin}
       accessKey={accessKey}
       setAccessKey={setAccessKey}
+      sendedLoginRequest={sendedLoginRequest}
     />
   );
 };

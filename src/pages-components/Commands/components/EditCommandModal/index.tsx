@@ -1,7 +1,13 @@
 import { useToast } from '@chakra-ui/react';
 import { CommandsContext } from 'pages-components/Commands';
 import CommandsService from 'pages-components/Commands/services/CommandsService';
-import { Dispatch, SetStateAction, useContext, useEffect } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { EditCommandModalLayout } from './layout';
 
@@ -33,6 +39,8 @@ export const EditCommandModal = ({
     setValue,
   } = useForm<EditCommandInputs>();
 
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const { allCommandsDispatch } = useContext(CommandsContext);
   const toast = useToast();
 
@@ -44,6 +52,7 @@ export const EditCommandModal = ({
 
   function handleCloseModal() {
     setIsModalOpen(false);
+    setIsUpdating(false);
   }
 
   const handleEditCommand: SubmitHandler<EditCommandInputs> = async ({
@@ -52,18 +61,22 @@ export const EditCommandModal = ({
   }) => {
     if (table === command.table && waiter === command.waiter) {
       handleCloseModal();
-
       toast({
         status: 'info',
         title: 'Nada alterado',
         duration: 3000,
         isClosable: true,
       });
-
       return;
     }
 
     try {
+      if (isUpdating) {
+        return;
+      }
+
+      setIsUpdating(true);
+
       const { message, command: newCommand } =
         await CommandsService.updateCommand({
           _id: command._id,
@@ -79,13 +92,14 @@ export const EditCommandModal = ({
       toast.closeAll();
       toast({
         status: 'success',
-        title: message,
+        title: message || '',
         isClosable: true,
-        duration: 3000,
+        duration: 2000,
       });
 
       handleCloseModal();
     } catch (error: any) {
+      setIsUpdating(false);
       toast({
         status: 'error',
         title: error?.response?.data?.message,

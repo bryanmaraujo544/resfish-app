@@ -44,6 +44,9 @@ export const AddProductsModal = ({
   const [filter, setFilter] = useState('');
   const [searchContent, setSearchContent] = useState('');
 
+  const [isAddingProducts, setIsAddingProducts] = useState(false);
+  const [isSelectingProduct, setIsSelectingProduct] = useState(false);
+
   const {
     allCommandsDispatch,
     stockProducts: allProducts,
@@ -55,12 +58,13 @@ export const AddProductsModal = ({
     (async () => {
       const products = await ProductsService.getAllProducts();
       stockProductsDispatch({ type: 'ADD-ALL-PRODUCTS', payload: products });
-      // setAllProducts(products);
     })();
   }, [stockProductsDispatch]);
 
   function handleCloseModal() {
     setIsModalOpen(false);
+    setIsAddingProducts(false);
+    setIsSelectingProduct(false);
   }
 
   // This function receives the product infos of the product clicked and opens the modal to select the amount of this
@@ -72,8 +76,12 @@ export const AddProductsModal = ({
   // This function add in selected products list. Takes the object with infos based on the click of the user,
   // and add the amount propertie containing the amount selected by the user in modal
   async function handleAddProduct(e: any) {
+    e.preventDefault();
     try {
-      e.preventDefault();
+      if (isSelectingProduct) {
+        return;
+      }
+      setIsSelectingProduct(true);
       // TODO: check if there are enough amount of product selected in stock
       const hasBeenSelected = selectedProducts.some(
         (selectedProduct: any) =>
@@ -81,11 +89,15 @@ export const AddProductsModal = ({
       );
 
       if (hasBeenSelected) {
+        toast.closeAll();
         toast({
           title: 'Produto já foi selecionado',
           status: 'warning',
+          duration: 1000,
+          isClosable: true,
         });
         setIsSetAmountModalOpen(false);
+        setIsSelectingProduct(false);
         return;
       }
 
@@ -96,9 +108,10 @@ export const AddProductsModal = ({
         toast({
           status: 'error',
           title: 'Número inválido',
-          duration: 3000,
+          duration: 2000,
           isClosable: true,
         });
+        setIsSelectingProduct(false);
         return;
       }
 
@@ -109,12 +122,14 @@ export const AddProductsModal = ({
       });
 
       if (!isInStock) {
+        toast.closeAll();
         toast({
           status: 'error',
           title: 'Quantidade acima do estoque disponível',
-          duration: 3000,
+          duration: 2000,
           isClosable: true,
         });
+        setIsSelectingProduct(false);
         return;
       }
 
@@ -127,11 +142,14 @@ export const AddProductsModal = ({
         },
       ]);
       setIsSetAmountModalOpen(false);
+      setIsAddingProducts(false);
     } catch (error: any) {
+      toast.closeAll();
+      setIsAddingProducts(false);
       toast({
         status: 'error',
         title: error?.response?.data?.message,
-        duration: 3000,
+        duration: 2000,
         isClosable: true,
       });
     }
@@ -145,6 +163,10 @@ export const AddProductsModal = ({
 
   async function handleAddProductsInCommand() {
     try {
+      if (isAddingProducts) {
+        return;
+      }
+      setIsAddingProducts(true);
       // Grab command infos to get the products array and push all of selectedProducts in it.
       const { command } = await CommandsService.getOneCommand({ commandId });
       const hasSomeSelectedProductInCommand = command.products.find(
@@ -155,9 +177,13 @@ export const AddProductsModal = ({
       );
 
       if (hasSomeSelectedProductInCommand) {
+        setIsAddingProducts(false);
+        toast.closeAll();
         toast({
-          title: `O produto: ${hasSomeSelectedProductInCommand.name} já está na comanda`,
           status: 'error',
+          title: `O produto: ${hasSomeSelectedProductInCommand.name} já está na comanda`,
+          duration: 2000,
+          isClosable: true,
         });
         return;
       }
@@ -197,7 +223,6 @@ export const AddProductsModal = ({
       // SOCKET.IO Broadcast to necessary entities the update of command
 
       cleanModalValues();
-
       toast.closeAll();
       toast({
         status: 'success',
@@ -207,6 +232,8 @@ export const AddProductsModal = ({
       });
       handleCloseModal();
     } catch (error: any) {
+      setIsAddingProducts(false);
+      toast.closeAll();
       toast({
         status: 'error',
         title: error?.response?.data?.message,
@@ -265,6 +292,7 @@ export const AddProductsModal = ({
         handleChangeFilter={handleChangeFilter}
         searchContent={searchContent}
         setSearchContent={setSearchContent}
+        isAddingProducts={isAddingProducts}
       />
       {/* Set amount of product modal */}
       <SetAmountModal
@@ -276,6 +304,7 @@ export const AddProductsModal = ({
         isFishesCategory={
           productToSetAmount?.category?.toLowerCase() === 'peixes'
         }
+        isSelectingProduct={isSelectingProduct}
       />
     </>
   );

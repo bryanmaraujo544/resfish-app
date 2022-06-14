@@ -27,6 +27,8 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   });
   const [paymentType, setPaymentType] = useState('Dinheiro');
 
+  const [isPaying, setIsPaying] = useState(false);
+
   const toast = useToast();
 
   const totalToBePayed =
@@ -65,18 +67,26 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         to: 'comma',
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [receivedValue]);
 
   function handleCloseModal() {
     setIsModalOpen(false);
     setIsReceivedValueInvalid({ value: false, message: '' });
+    setIsPaying(false);
   }
 
   const handleMakePayment = async (e: any) => {
     try {
       e.preventDefault();
 
+      if (isPaying) {
+        return;
+      }
+      setIsPaying(true);
+
       if (paymentType === 'Dinheiro' && !receivedValue) {
+        setIsPaying(false);
         toast.closeAll();
         toast({
           status: 'info',
@@ -87,14 +97,18 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       }
 
       if (totalToBePayed === 0) {
+        setIsPaying(false);
         toast({
           status: 'info',
           title: 'Esta comanda já foi paga!',
+          duration: 1000,
         });
         return;
       }
 
       if (isReceivedValueInvalid.value === true) {
+        setIsPaying(false);
+        toast.closeAll();
         toast({
           status: 'warning',
           title: 'Valor recebido inválido!',
@@ -102,6 +116,7 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         });
         return;
       }
+
       const { message, paymentInfos } = await PaymentsService.pay({
         commandId: command?._id as string,
         paymentType,
@@ -117,6 +132,7 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
 
       handleCloseModal();
     } catch (error: any) {
+      setIsPaying(false);
       toast.closeAll();
       toast({
         status: 'error',
@@ -141,6 +157,7 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       setReceivedValue={setReceivedValue}
       isReceivedValueInvalid={isReceivedValueInvalid}
       totalToBePayed={totalToBePayed}
+      isPaying={isPaying}
     />
   );
 };

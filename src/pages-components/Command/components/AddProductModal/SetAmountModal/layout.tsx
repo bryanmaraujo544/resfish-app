@@ -18,6 +18,7 @@ type Props = {
   setAmount: Dispatch<SetStateAction<string>>;
   handleAddProduct: (e: any) => void;
   isFishesCategory: boolean;
+  isSelectingProduct: boolean;
 };
 
 export const SetAmountModalLayout = ({
@@ -27,6 +28,7 @@ export const SetAmountModalLayout = ({
   setAmount,
   handleAddProduct,
   isFishesCategory,
+  isSelectingProduct,
 }: Props) => {
   const inputRef = useRef(null);
 
@@ -60,8 +62,13 @@ export const SetAmountModalLayout = ({
             </NumberInputStepper>
           </NumberInput>
         )}
-        <Button w="100%" type="submit">
-          Adicionar Produto
+        <Button
+          w="100%"
+          type="submit"
+          isLoading={isSelectingProduct}
+          loadingText="Selecionando"
+        >
+          Selecionar Produto
         </Button>
       </Stack>
     </Modal>

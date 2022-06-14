@@ -29,6 +29,7 @@ interface Props {
   setAmountToPay: Dispatch<SetStateAction<number>>;
   typeOfPayment: 'unit' | 'free';
   setTypeOfPayment: Dispatch<SetStateAction<'unit' | 'free'>>;
+  isPaying: boolean;
 }
 
 export const PayProductModalLayout = ({
@@ -42,6 +43,7 @@ export const PayProductModalLayout = ({
   setAmountToPay,
   typeOfPayment,
   setTypeOfPayment,
+  isPaying,
 }: Props) => {
   const totalOfProduct = productInfos.amount * productInfos.unitPrice;
 
@@ -119,7 +121,13 @@ export const PayProductModalLayout = ({
           </Text>
         )}
         <Text>Total a ser pago: {totalToBePayed}</Text>
-        <Button type="submit">Pay</Button>
+        <Button
+          type="submit"
+          isLoading={isPaying}
+          loadingText="Pagando Produto"
+        >
+          Pagar Produto
+        </Button>
       </Stack>
     </Modal>
   );

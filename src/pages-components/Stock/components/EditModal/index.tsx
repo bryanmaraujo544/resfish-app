@@ -1,4 +1,4 @@
-import { SetStateAction, Dispatch, useContext } from 'react';
+import { SetStateAction, Dispatch, useContext, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
 
 import { formatPrice } from 'utils/formatPrice';
@@ -20,12 +20,17 @@ export const EditModal = ({
   itemInfos,
 }: Props) => {
   const { productsDispatch } = useContext(StockContext);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const toast = useToast();
 
   async function handleSubmit(e: any) {
     e.preventDefault();
+    if (isSubmitting) {
+      return;
+    }
 
     try {
+      setIsSubmitting(true);
       const {
         name,
         amount,
@@ -51,6 +56,7 @@ export const EditModal = ({
           duration: 5000,
           isClosable: true,
         });
+        setIsSubmitting(false);
         return;
       }
 
@@ -60,6 +66,7 @@ export const EditModal = ({
           title: 'Preencha os campos obrigatórios',
           isClosable: true,
         });
+        setIsSubmitting(false);
         return;
       }
 
@@ -86,15 +93,19 @@ export const EditModal = ({
 
       onClose();
     } catch (err: any) {
+      setIsSubmitting(false);
+      toast.closeAll();
       toast({
         status: 'error',
         title: err?.response.data.message,
+        duration: 2000,
       });
     }
   }
 
   function onClose() {
     setIsEditModalOpen(false);
+    setIsSubmitting(false);
   }
 
   function handleChangeUnitPrice(e: any) {
@@ -109,6 +120,7 @@ export const EditModal = ({
       itemInfos={itemInfos}
       handleSubmit={handleSubmit}
       handleChangeUnitPrice={handleChangeUnitPrice}
+      isSubmitting={isSubmitting}
     />
   );
 };

@@ -57,12 +57,16 @@ export const AddProductModal = ({
   const [filter, setFilter] = useState('');
   const [searchContent, setSearchContent] = useState('');
 
-  const { productsDispatch } = useContext(CommandContext);
+  const [isAddingProducts, setIsAddingProducts] = useState(false);
+  const [isSelectingProduct, setIsSelectingProduct] = useState(false);
 
+  const { productsDispatch } = useContext(CommandContext);
   const toast = useToast();
 
   function handleCloseModal() {
     setIsModalOpen(false);
+    setIsAddingProducts(false);
+    setIsSelectingProduct(false);
   }
 
   // This function receives the product infos of the product clicked and opens the modal to select the amount of this
@@ -74,20 +78,24 @@ export const AddProductModal = ({
   // This function add in selected products list. Takes the object with infos based on the click of the user,
   // and add the amount propertie containing the amount selected by the user in modal
   async function handleAddProduct(e: any) {
+    e.preventDefault();
     try {
-      e.preventDefault();
-
+      if (isSelectingProduct) {
+        return;
+      }
+      setIsSelectingProduct(true);
       const hasBeenSelected = selectedProducts.some(
         (selectedProduct: any) =>
           selectedProduct.name === productToSetAmount.name
       );
       if (hasBeenSelected) {
+        setIsSetAmountModalOpen(false);
+        setIsSelectingProduct(false);
         toast.closeAll();
         toast({
           title: 'Produto já foi selecionado',
           status: 'warning',
         });
-        setIsSetAmountModalOpen(false);
         return;
       }
 
@@ -95,6 +103,8 @@ export const AddProductModal = ({
         formatAmount({ num: amount, to: 'point' })
       );
       if (Number.isNaN(formattedAmount)) {
+        setIsSelectingProduct(false);
+        toast.closeAll();
         toast({
           status: 'error',
           title: 'Número inválido',
@@ -110,6 +120,7 @@ export const AddProductModal = ({
       });
 
       if (!isInStock) {
+        setIsSelectingProduct(false);
         toast.closeAll();
         toast({
           status: 'error',
@@ -129,7 +140,9 @@ export const AddProductModal = ({
         },
       ]);
       setIsSetAmountModalOpen(false);
+      setIsSelectingProduct(false);
     } catch (error: any) {
+      setIsSelectingProduct(false);
       toast.closeAll();
       toast({
         status: 'error',
@@ -148,6 +161,11 @@ export const AddProductModal = ({
 
   async function handleAddProductsInCommand() {
     try {
+      if (isAddingProducts) {
+        return;
+      }
+      setIsAddingProducts(true);
+
       // Grab command infos to get the products array and push all of selectedProducts in it.
       const { command } = await CommandService.getOneCommand({ commandId });
       const hasSomeSelectedProductInCommand = command.products.find(
@@ -158,6 +176,7 @@ export const AddProductModal = ({
       );
 
       if (hasSomeSelectedProductInCommand) {
+        setIsAddingProducts(false);
         toast.closeAll();
         toast({
           title: `O produto: ${hasSomeSelectedProductInCommand.name} já está na comanda`,
@@ -213,6 +232,7 @@ export const AddProductModal = ({
       });
       handleCloseModal();
     } catch (error: any) {
+      setIsAddingProducts(false);
       toast.closeAll();
       toast({
         status: 'error',
@@ -272,6 +292,7 @@ export const AddProductModal = ({
         handleChangeFilter={handleChangeFilter}
         searchContent={searchContent}
         setSearchContent={setSearchContent}
+        isAddingProducts={isAddingProducts}
       />
       {/* Set amount of product modal */}
       <SetAmountModal
@@ -283,6 +304,7 @@ export const AddProductModal = ({
         isFishesCategory={
           productToSetAmount?.category?.toLowerCase() === 'peixes'
         }
+        isSelectingProduct={isSelectingProduct}
       />
     </>
   );

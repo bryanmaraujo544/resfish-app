@@ -63,6 +63,7 @@ interface Props {
   searchContent: string;
   setSearchContent: Dispatch<SetStateAction<string>>;
   handleChangeFilter: (selectedFilter: string) => void;
+  isAddingProducts: boolean;
 }
 
 export const AddProductModalLayout = ({
@@ -77,6 +78,7 @@ export const AddProductModalLayout = ({
   handleChangeFilter,
   searchContent,
   setSearchContent,
+  isAddingProducts,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -208,7 +210,7 @@ export const AddProductModalLayout = ({
                         // handleAddProduct({ id, name, unitPrice, amount })
                       }
                     >
-                      Adicionar
+                      Selecionar
                     </Button>
                   </Td>
                 </Tr>
@@ -236,6 +238,8 @@ export const AddProductModalLayout = ({
           display="flex"
           alignItems="center"
           gap={2}
+          isLoading={isAddingProducts}
+          loadingText="Adicionando Produtos"
         >
           <Icon as={MdPlaylistAdd} fontSize={[20, 24]} />
           Adicionar Produtos

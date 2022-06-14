@@ -10,6 +10,7 @@ type Props = {
   setAmount: Dispatch<SetStateAction<string>>;
   handleAddProduct: (e: any) => void;
   isFishesCategory: boolean;
+  isSelectingProduct: boolean;
 };
 
 export const SetAmountModal = ({
@@ -19,6 +20,7 @@ export const SetAmountModal = ({
   setAmount,
   handleAddProduct,
   isFishesCategory,
+  isSelectingProduct,
 }: Props) => {
   function handleCloseAmountModal() {
     setIsSetAmountModalOpen(false);
@@ -32,6 +34,7 @@ export const SetAmountModal = ({
       setAmount={setAmount}
       handleAddProduct={handleAddProduct}
       isFishesCategory={isFishesCategory}
+      isSelectingProduct={isSelectingProduct}
     />
   );
 };

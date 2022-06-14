@@ -1,7 +1,8 @@
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
+
 import CommandService from 'pages-components/Command/services/CommandService';
 import ProductsService from 'pages-components/Command/services/ProductsService';
-import { Dispatch, SetStateAction, useContext } from 'react';
 import { CommandContext } from '../../index';
 import { DeleteProductModalLayout } from './layout';
 
@@ -11,6 +12,8 @@ type Props = {
 };
 
 export const DeleteProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const {
     productIdToDelete,
     productsDispatch,
@@ -23,20 +26,24 @@ export const DeleteProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
 
   function handleCloseModal() {
     setIsModalOpen(false);
+    setIsDeleting(false);
   }
 
   async function handleDeleteProduct() {
     // DELETE THE PRODUCT BASED ON ID
     try {
+      if (isDeleting) {
+        return;
+      }
+      setIsDeleting(true);
+
       const newProducts = command?.products?.filter(
         (product) => product._id !== productIdToDelete
       );
-
       const { command: updatedCommand } = await CommandService.updateCommand({
         _id: command._id,
         products: newProducts,
       });
-
       setCommand(updatedCommand);
 
       productsDispatch({
@@ -63,6 +70,8 @@ export const DeleteProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
 
       handleCloseModal();
     } catch (error: any) {
+      setIsDeleting(false);
+      toast.closeAll();
       toast({
         status: 'error',
         isClosable: true,
@@ -77,6 +86,7 @@ export const DeleteProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       isModalOpen={isModalOpen}
       handleCloseModal={handleCloseModal}
       handleDeleteProduct={handleDeleteProduct}
+      isDeleting={isDeleting}
     />
   );
 };

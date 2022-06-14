@@ -37,6 +37,7 @@ export const AddItemModal = ({
 
   const handleCloseModal = useCallback(() => {
     setIsAddItemModalOpen(false);
+    setIsSubmitting(false);
   }, [setIsAddItemModalOpen]);
 
   async function handleSubmit(e: any) {

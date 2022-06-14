@@ -5,12 +5,14 @@ type Props = {
   isModalOpen: boolean;
   handleCloseModal: any;
   handleDeleteItem: any;
+  isDeleting: boolean;
 };
 
 export const DeleteItemModalLayout = ({
   isModalOpen,
   handleCloseModal,
   handleDeleteItem,
+  isDeleting,
 }: Props) => (
   <Modal isOpen={isModalOpen} onClose={handleCloseModal} title="Deletar item?">
     <Flex gap={2}>
@@ -19,6 +21,8 @@ export const DeleteItemModalLayout = ({
       </Button>
       <Button
         onClick={() => handleDeleteItem()}
+        isLoading={isDeleting}
+        loadingText="Deletando"
         border="2px"
         borderColor="red.400"
         color="red.400"

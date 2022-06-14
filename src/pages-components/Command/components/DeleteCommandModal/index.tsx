@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback } from 'react';
+import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
 
 import CommandService from 'pages-components/Command/services/CommandService';
@@ -19,11 +19,14 @@ export const DeleteCommandModal = ({
   setIsModalOpen,
   command,
 }: Props) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const toast = useToast();
   const router = useRouter();
 
   function handleCloseModal() {
     setIsModalOpen(false);
+    setIsDeleting(false);
   }
 
   const commandId = command._id as string;
@@ -33,6 +36,11 @@ export const DeleteCommandModal = ({
       if (!command?._id) {
         throw new Error('Any commandId was informed');
       }
+
+      if (isDeleting) {
+        return;
+      }
+      setIsDeleting(true);
 
       if (command.isActive === true) {
         const commandProducts = command.products as Product[];
@@ -58,9 +66,12 @@ export const DeleteCommandModal = ({
       handleCloseModal();
       router.push('/commands');
     } catch (error: any) {
+      setIsDeleting(false);
+      toast.closeAll();
       toast({
         status: 'error',
-        title: error?.response?.data?.message,
+        title: error?.response?.data?.message || '',
+        duration: 2000,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,6 +82,7 @@ export const DeleteCommandModal = ({
       isModalOpen={isModalOpen}
       handleCloseModal={handleCloseModal}
       handleDeleteCommand={handleDeleteCommand}
+      isDeleting={isDeleting}
     />
   );
 };

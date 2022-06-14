@@ -28,6 +28,7 @@ interface Props {
   setReceivedValue: Dispatch<SetStateAction<string>>;
   isReceivedValueInvalid: { value: boolean; message: string };
   totalToBePayed: number;
+  isPaying: boolean;
 }
 
 const paymentOptions = [
@@ -49,6 +50,7 @@ export const PaymentModalLayout = ({
   setReceivedValue,
   isReceivedValueInvalid,
   totalToBePayed,
+  isPaying,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -209,6 +211,8 @@ export const PaymentModalLayout = ({
                 bg: 'green.100',
                 color: 'green.700',
               }}
+              isLoading={isPaying}
+              loadingText="Pagando"
             >
               Confirmar Pagamento
             </Button>

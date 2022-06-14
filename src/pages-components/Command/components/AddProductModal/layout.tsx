@@ -64,6 +64,7 @@ interface Props {
   setSearchContent: Dispatch<SetStateAction<string>>;
   // eslint-disable-next-line no-unused-vars
   handleChangeFilter: (selectedFilter: string) => void;
+  isAddingProducts: boolean;
 }
 
 export const AddProductModalLayout = ({
@@ -78,6 +79,7 @@ export const AddProductModalLayout = ({
   handleChangeFilter,
   searchContent,
   setSearchContent,
+  isAddingProducts,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -206,7 +208,7 @@ export const AddProductModalLayout = ({
                         })
                       }
                     >
-                      Adicionar
+                      Selecionar
                     </Button>
                   </Td>
                 </Tr>
@@ -228,7 +230,12 @@ export const AddProductModalLayout = ({
       </TableContainer>
       <Grid gridTemplateColumns={['1fr', '1fr 1fr']} gap={4}>
         <Button onClick={() => handleCloseModal()}>Cancelar</Button>
-        <Button onClick={() => handleAddProductsInCommand()} colorScheme="blue">
+        <Button
+          onClick={() => handleAddProductsInCommand()}
+          colorScheme="blue"
+          isLoading={isAddingProducts}
+          loadingText="Adicionando Produtos"
+        >
           Adicionar Produtos
         </Button>
       </Grid>

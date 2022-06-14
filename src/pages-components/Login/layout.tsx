@@ -5,9 +5,9 @@ interface Props {
   showPassword: boolean;
   setShowPassword: Dispatch<SetStateAction<boolean>>;
   handleLogin: any;
-
   accessKey: string;
   setAccessKey: Dispatch<SetStateAction<string>>;
+  sendedLoginRequest: boolean;
 }
 
 export const LoginLayout = ({
@@ -16,6 +16,7 @@ export const LoginLayout = ({
   handleLogin,
   accessKey,
   setAccessKey,
+  sendedLoginRequest,
 }: Props) => (
   <Flex
     justify="center"
@@ -64,6 +65,8 @@ export const LoginLayout = ({
         color="gray.100"
         fontSize={['md', 'lg', 'xl']}
         fontWeight={700}
+        isLoading={sendedLoginRequest}
+        loadingText="Logando"
         _hover={{
           backgroundColor: 'blue.400',
         }}

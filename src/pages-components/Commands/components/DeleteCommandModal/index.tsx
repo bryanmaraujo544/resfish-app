@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useCallback, useContext } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 import { useToast } from '@chakra-ui/react';
 
 import CommandsService from 'pages-components/Commands/services/CommandsService';
@@ -18,12 +24,15 @@ export const DeleteCommandModal = ({
   setIsModalOpen,
   commandId,
 }: Props) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const { allCommandsDispatch, stockProductsDispatch } =
     useContext(CommandsContext);
   const toast = useToast();
 
   function handleCloseModal() {
     setIsModalOpen(false);
+    setIsDeleting(false);
   }
 
   const handleDeleteCommand = useCallback(async () => {
@@ -32,6 +41,11 @@ export const DeleteCommandModal = ({
     }
 
     try {
+      if (isDeleting) {
+        return;
+      }
+      setIsDeleting(true);
+
       const { command } = await CommandsService.getOneCommand({ commandId });
       const commandProducts = command.products;
       commandProducts.forEach((product: Product) => {
@@ -65,9 +79,12 @@ export const DeleteCommandModal = ({
       });
       handleCloseModal();
     } catch (error: any) {
+      setIsDeleting(false);
+      toast.closeAll();
       toast({
         status: 'error',
-        title: error?.response?.data?.message,
+        title: error?.response?.data?.message || '',
+        duration: 2000,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,6 +95,7 @@ export const DeleteCommandModal = ({
       isModalOpen={isModalOpen}
       handleCloseModal={handleCloseModal}
       handleDeleteCommand={handleDeleteCommand}
+      isDeleting={isDeleting}
     />
   );
 };

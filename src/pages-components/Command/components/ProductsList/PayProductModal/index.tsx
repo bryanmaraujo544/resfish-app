@@ -27,6 +27,8 @@ export const PayProductModal = ({
   const [amountToPay, setAmountToPay] = useState(0);
   const [typeOfPayment, setTypeOfPayment] = useState<'unit' | 'free'>('free');
 
+  const [isPaying, setIsPaying] = useState(false);
+
   const toast = useToast();
   const { productsDispatch, command, setCommand } = useContext(CommandContext);
 
@@ -46,11 +48,16 @@ export const PayProductModal = ({
     setPaymentValue('0');
     setAmountToPay(0);
     setTypeOfPayment('free');
+    setIsPaying(false);
   }
 
   async function handlePayProduct(e: any) {
     e.preventDefault();
     try {
+      if (isPaying) {
+        return;
+      }
+      setIsPaying(true);
       // Converting one number with comma to valid number with point 32,90 ==> 32.90
       const paymentValueFormatted = Number(
         formatDecimalNum({
@@ -60,20 +67,25 @@ export const PayProductModal = ({
       );
 
       if (paymentValueFormatted <= 0) {
+        setIsPaying(false);
+        toast.closeAll();
         toast({
           status: 'warning',
           title: 'Valor de pagamento menor ou igual a 0',
-          duration: 3000,
+          duration: 2000,
           isClosable: true,
         });
         return;
       }
 
       if (Number.isNaN(paymentValueFormatted)) {
+        setIsPaying(false);
         toast.closeAll();
         toast({
           status: 'error',
           title: 'Valor inválido',
+          duration: 2000,
+          isClosable: true,
         });
         return;
       }
@@ -89,16 +101,15 @@ export const PayProductModal = ({
         ) / 100;
 
       if (paymentValueFormatted > restValueToBePayed) {
+        setIsPaying(false);
         toast.closeAll();
         toast({
           status: 'warning',
           title: 'Pagamento maior do que o necessário',
-          duration: 3000,
+          duration: 2000,
         });
         return;
       }
-
-      // UPDATE the totalPayed propertie of the product;
 
       const oldProducts = command?.products;
       const newProducts = oldProducts?.map((product) => {
@@ -126,7 +137,6 @@ export const PayProductModal = ({
       });
 
       handleCloseModal();
-
       toast.closeAll();
       toast({
         status: 'success',
@@ -134,9 +144,13 @@ export const PayProductModal = ({
         duration: 2000,
       });
     } catch (error: any) {
+      setIsPaying(false);
+      toast.closeAll();
       toast({
         status: 'error',
         title: error?.response?.data?.message,
+        duration: 2000,
+        isClosable: true,
       });
     }
   }
@@ -153,6 +167,7 @@ export const PayProductModal = ({
       setAmountToPay={setAmountToPay}
       typeOfPayment={typeOfPayment}
       setTypeOfPayment={setTypeOfPayment}
+      isPaying={isPaying}
     />
   );
 };

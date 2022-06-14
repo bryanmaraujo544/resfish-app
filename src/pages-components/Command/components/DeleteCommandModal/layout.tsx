@@ -5,12 +5,14 @@ interface Props {
   isModalOpen: boolean;
   handleCloseModal: () => void;
   handleDeleteCommand: () => void;
+  isDeleting: boolean;
 }
 
 export const DeleteCommandModalLayout = ({
   isModalOpen,
   handleCloseModal,
   handleDeleteCommand,
+  isDeleting,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -21,7 +23,13 @@ export const DeleteCommandModalLayout = ({
       <Button onClick={() => handleCloseModal()} flex="1">
         Cancelar
       </Button>
-      <Button onClick={() => handleDeleteCommand()} flex="1" colorScheme="red">
+      <Button
+        onClick={() => handleDeleteCommand()}
+        flex="1"
+        colorScheme="red"
+        isLoading={isDeleting}
+        loadingText="Deletando"
+      >
         Deletar
       </Button>
     </Flex>

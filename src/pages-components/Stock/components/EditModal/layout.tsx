@@ -19,6 +19,7 @@ interface Props {
   itemInfos: Item;
   handleSubmit: any;
   handleChangeUnitPrice: any;
+  isSubmitting: boolean;
 }
 
 export const EditModalLayout = ({
@@ -28,6 +29,7 @@ export const EditModalLayout = ({
   itemInfos,
   handleSubmit,
   handleChangeUnitPrice,
+  isSubmitting,
 }: Props) => (
   <Modal isOpen={isEditModalOpen} onClose={onClose} title={title}>
     <FormControl
@@ -68,7 +70,9 @@ export const EditModalLayout = ({
           <NumberDecrementStepper />
         </NumberInputStepper>
       </NumberInput>
-      <Button type="submit">Atualizar Item</Button>
+      <Button type="submit" isLoading={isSubmitting} loadingText="Atualizando">
+        Atualizar Item
+      </Button>
     </FormControl>
   </Modal>
 );

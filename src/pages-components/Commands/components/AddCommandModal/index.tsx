@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useContext } from 'react';
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import CommandsService from 'pages-components/Commands/services/CommandsService';
@@ -18,6 +18,8 @@ type AddCommandInputs = {
 };
 
 export const AddCommandModal = ({ isModalOpen, setIsModalOpen }: Props) => {
+  const [isAdding, setIsAdding] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -30,6 +32,7 @@ export const AddCommandModal = ({ isModalOpen, setIsModalOpen }: Props) => {
 
   function handleCloseModal() {
     setIsModalOpen(false);
+    setIsAdding(false);
   }
 
   const handleAddCommand: SubmitHandler<AddCommandInputs> = async ({
@@ -38,6 +41,10 @@ export const AddCommandModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     fishingType,
   }) => {
     try {
+      if (isAdding) {
+        return;
+      }
+      setIsAdding(true);
       const { message, command } = await CommandsService.storeCommand({
         table,
         waiter,
@@ -58,6 +65,7 @@ export const AddCommandModal = ({ isModalOpen, setIsModalOpen }: Props) => {
 
       handleCloseModal();
     } catch (error: any) {
+      setIsAdding(false);
       toast.closeAll();
       toast({
         status: 'error',
@@ -76,6 +84,7 @@ export const AddCommandModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       handleAddCommand={handleAddCommand}
       rhfRegister={register}
       rhfErrors={errors}
+      isAdding={isAdding}
     />
   );
 };

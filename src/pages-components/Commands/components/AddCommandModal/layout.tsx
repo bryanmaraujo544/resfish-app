@@ -25,6 +25,7 @@ type Props = {
   rhfHandleSubmit: any;
   rhfRegister: any;
   rhfErrors: any;
+  isAdding: boolean;
 };
 
 export const AddCommandModalLayout = ({
@@ -34,6 +35,7 @@ export const AddCommandModalLayout = ({
   rhfHandleSubmit,
   rhfRegister,
   rhfErrors,
+  isAdding,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -77,7 +79,9 @@ export const AddCommandModalLayout = ({
           <option>Pesque Pague</option>
         </Select>
       </InputGroup>
-      <Button type="submit">Adicionar</Button>
+      <Button type="submit" isLoading={isAdding} loadingText="Adicionando">
+        Adicionar
+      </Button>
     </FormControl>
   </Modal>
 );
