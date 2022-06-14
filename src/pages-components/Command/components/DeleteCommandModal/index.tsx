@@ -64,7 +64,7 @@ export const DeleteCommandModal = ({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [commandId, command.isActive]);
+  }, [commandId, command]);
 
   return (
     <DeleteCommandModalLayout
