@@ -22,6 +22,7 @@ import { PaymentModal } from './components/PaymentModal';
 import ProductsService from './services/ProductsService';
 import { stockProductsReducer } from './reducers/stockProductsReducer';
 import { DeleteCommandModal } from './components/DeleteCommandModal';
+import { SendToKitchenModal } from './components/SendToKitchenModal';
 
 interface StockProductsAction {
   type: 'ADD-ALL-PRODUCTS' | 'UPDATE-ONE-PRODUCT';
@@ -68,7 +69,6 @@ export const Command = ({ commandId }: Props) => {
     initialState
   );
 
-  const [isLoading, setIsLoading] = useState(true);
   const [productIdToDelete, setProductIdToDelete] = useState('');
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] =
@@ -76,16 +76,20 @@ export const Command = ({ commandId }: Props) => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isDeleteCommandModalOpen, setIsDeleteCommandModalOpen] =
     useState(false);
+  const [isSendToKitchenModalOpen, setIsSendToKitchenModalOpen] =
+    useState(false);
 
-  const [stockProducts, stockProductsDispatch] = useReducer(
-    stockProductsReducer,
-    { value: [] as Product[] }
-  );
   const [filter, setFilter] = useState('');
   const [orderBy, setOrderBy] = useState('');
   const [orderByDir, setOrderByDir] = useState('' as 'asc' | 'desc');
   const [searchContent, setSearchContent] = useState('');
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [stockProducts, stockProductsDispatch] = useReducer(
+    stockProductsReducer,
+    { value: [] as Product[] }
+  );
   const router = useRouter();
   const toast = useToast();
 
@@ -136,6 +140,10 @@ export const Command = ({ commandId }: Props) => {
     setIsPaymentModalOpen(true);
   }, []);
 
+  const handleOpenSentToKitchenModal = useCallback(() => {
+    setIsSendToKitchenModalOpen(true);
+  }, []);
+
   const handleGoToCommands = useCallback(() => {
     router.push('/commands');
   }, [router]);
@@ -174,6 +182,7 @@ export const Command = ({ commandId }: Props) => {
         handleGoToCommands={handleGoToCommands}
         handleOpenPaymentModal={handleOpenPaymentModal}
         handleDeleteCommand={handleDeleteCommand}
+        handleOpenSentToKitchenModal={handleOpenSentToKitchenModal}
       />
       <DeleteProductModal
         isModalOpen={isDeleteProductModalOpen}
@@ -195,6 +204,10 @@ export const Command = ({ commandId }: Props) => {
       <PaymentModal
         isModalOpen={isPaymentModalOpen}
         setIsModalOpen={setIsPaymentModalOpen}
+      />
+      <SendToKitchenModal
+        isModalOpen={isSendToKitchenModalOpen}
+        setIsModalOpen={setIsSendToKitchenModalOpen}
       />
     </CommandContext.Provider>
   );

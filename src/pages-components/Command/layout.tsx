@@ -13,6 +13,7 @@ import {
   Grid,
   GridItem,
   Stack,
+  Button,
 } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 
@@ -34,6 +35,7 @@ interface Props {
   handleGoToCommands?: () => void;
   handleOpenPaymentModal: () => void;
   handleDeleteCommand: () => void;
+  handleOpenSentToKitchenModal: () => void;
 }
 
 export const CommandLayout = ({
@@ -42,6 +44,7 @@ export const CommandLayout = ({
   handleGoToCommands,
   handleOpenPaymentModal,
   handleDeleteCommand,
+  handleOpenSentToKitchenModal,
 }: Props) => {
   const dt = DateTime.fromISO(command.createdAt as string).setLocale('pt-BR');
   const createdAtFormatted = dt.toLocaleString(DateTime.DATE_FULL);
@@ -49,7 +52,7 @@ export const CommandLayout = ({
   return (
     <Layout>
       <Header hasBackPageBtn handleBackPage={handleGoToCommands}>
-        {command.isActive === false && (
+        {command.isActive === false ? (
           <BgBox
             bg="green.300"
             gap={3}
@@ -67,6 +70,27 @@ export const CommandLayout = ({
               color="green.50"
             />
           </BgBox>
+        ) : (
+          <Button
+            bg="blue.200"
+            h="100%"
+            as="button"
+            _hover={{
+              bg: 'blue.300',
+            }}
+            _active={{
+              bg: 'blue.200',
+            }}
+            onClick={() => handleOpenSentToKitchenModal()}
+          >
+            <Heading
+              fontSize={[14, 16, 18]}
+              textAlign="center"
+              color="blue.900"
+            >
+              Mandar para Cozinha
+            </Heading>
+          </Button>
         )}
       </Header>
       {isLoading ? (
