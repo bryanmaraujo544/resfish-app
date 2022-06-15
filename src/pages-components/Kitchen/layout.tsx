@@ -1,7 +1,7 @@
 import { Heading } from '@chakra-ui/react';
 import { Header } from 'components/Header';
 import { Layout } from 'components/Layout';
-import { OrdersList } from './OrdersList';
+import { OrdersList } from './components/OrdersList';
 import { Order } from './types/Order';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 
 export const KitchenLayout = ({ orders }: Props) => (
   <Layout>
-    <Header>'kitchen'</Header>
+    <Header />
     <Heading color="blue.800" fontSize={[16, 20, 24, 28]}>
       Cozinha
     </Heading>

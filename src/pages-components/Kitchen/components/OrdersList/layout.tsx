@@ -1,7 +1,7 @@
 import { Stack } from '@chakra-ui/react';
 
 import { Order } from '../Order';
-import { Order as OrderProps } from '../types/Order';
+import { Order as OrderProps } from '../../types/Order';
 
 interface Props {
   orders: OrderProps[];

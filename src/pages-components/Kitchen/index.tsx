@@ -1,15 +1,37 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable react/jsx-no-constructed-context-values */
+import { createContext, useEffect, useReducer, useState } from 'react';
+import { CheckOrderModal } from './components/CheckOrderModal';
 import { KitchenLayout } from './layout';
 import orders from './mocks/orders';
-import { Order } from './types/Order';
+import { allOrdersReducer } from './reducers/allOrdersReducer';
+import { KitchenContextProps } from './types/KitchenContext';
+
+export const KitchenContext = createContext({} as KitchenContextProps);
 
 export const Kitchen = () => {
-  console.log('Kitchen');
-  const [allOrders, setAllOrders] = useState<Order[]>([]);
+  const [isCheckOrderModalOpen, setIsCheckOrderModalOpen] = useState(false);
+
+  const [allOrders, allOrdersDispatch] = useReducer(allOrdersReducer, {
+    value: [],
+  });
 
   useEffect(() => {
-    setAllOrders(orders);
+    allOrdersDispatch({ type: 'ADD-ORDERS', payload: orders });
   }, []);
 
-  return <KitchenLayout orders={allOrders} />;
+  return (
+    <KitchenContext.Provider
+      value={{
+        allOrders: allOrders.value,
+        allOrdersDispatch,
+        setIsCheckOrderModalOpen,
+      }}
+    >
+      <KitchenLayout orders={allOrders.value} />
+      <CheckOrderModal
+        isModalOpen={isCheckOrderModalOpen}
+        setIsModalOpen={setIsCheckOrderModalOpen}
+      />
+    </KitchenContext.Provider>
+  );
 };

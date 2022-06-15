@@ -8,19 +8,20 @@ const orders: Order[] = [
     waiter: 'Julio',
     products: [
       {
-        _id: 'fkjfdk3333',
+        _id: 'coquinhafkjfdk3333',
         name: 'Coca-Cola',
+        isMade: true,
         category: 'Bebidas',
         amount: 3,
       },
       {
-        _id: 'fkjfdk3333',
+        _id: 'porçõafdfkjfdk3333',
         name: 'Porções',
         category: 'Porção de tilápica',
         amount: 3,
       },
       {
-        _id: 'fkjfdk3333',
+        _id: 'pratosfkjfdk3333',
         name: 'Pratos',
         category: 'Arroz com feijão',
         amount: 4,
