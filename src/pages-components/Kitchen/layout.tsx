@@ -1,10 +1,19 @@
-import { Text } from '@chakra-ui/react';
+import { Heading } from '@chakra-ui/react';
 import { Header } from 'components/Header';
 import { Layout } from 'components/Layout';
+import { OrdersList } from './OrdersList';
+import { Order } from './types/Order';
 
-export const KitchenLayout = () => (
+interface Props {
+  orders: Order[];
+}
+
+export const KitchenLayout = ({ orders }: Props) => (
   <Layout>
     <Header>'kitchen'</Header>
-    <Text>Kitchen</Text>
+    <Heading color="blue.800" fontSize={[16, 20, 24, 28]}>
+      Cozinha
+    </Heading>
+    <OrdersList orders={orders} />
   </Layout>
 );

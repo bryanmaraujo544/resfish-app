@@ -67,7 +67,7 @@ export const HeaderLayout = ({
         justify="space-between"
         gap={6}
         flexDirection={['column', null, 'row']}
-        py={[4, 6, 8, 10]}
+        py={[4, 6, 8]}
         mb={[1, 2]}
         w="100%"
       >
