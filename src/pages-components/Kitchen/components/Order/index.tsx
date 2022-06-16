@@ -1,6 +1,6 @@
 import { KitchenContext } from 'pages-components/Kitchen';
 import { OrderProduct } from 'pages-components/Kitchen/types/OrderProduct';
-import { useContext } from 'react';
+import { useContext, useCallback } from 'react';
 import { Order as OrderProps } from '../../types/Order';
 import { OrderLayout } from './layout';
 
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const Order = ({ order }: Props) => {
-  const { allOrdersDispatch, setIsCheckOrderModalOpen } =
+  const { allOrdersDispatch, setIsCheckOrderModalOpen, setOrderToCheck } =
     useContext(KitchenContext);
 
   function handleCheckOneProduct(product: OrderProduct) {
@@ -19,9 +19,13 @@ export const Order = ({ order }: Props) => {
     });
   }
 
-  function handleOpenCheckOrderModal() {
-    setIsCheckOrderModalOpen(true);
-  }
+  const handleOpenCheckOrderModal = useCallback(
+    (orderToCheck: OrderProps) => {
+      setIsCheckOrderModalOpen(true);
+      setOrderToCheck(orderToCheck);
+    },
+    [setIsCheckOrderModalOpen, setOrderToCheck]
+  );
 
   return (
     <OrderLayout

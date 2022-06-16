@@ -34,6 +34,13 @@ export const allOrdersReducer = (
 
       return { value: updatedOrders as Order[] };
     }
+    case 'REMOVE-ONE-ORDER': {
+      const orderIdToDelete = action.payload.order._id;
+      const newOrders = state.value.filter(
+        ({ _id }) => _id !== orderIdToDelete
+      );
+      return { value: newOrders };
+    }
     default: {
       throw new Error('This type is invalid');
     }

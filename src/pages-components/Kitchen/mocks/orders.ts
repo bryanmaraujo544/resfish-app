@@ -35,19 +35,19 @@ const orders: Order[] = [
     waiter: 'Diego',
     products: [
       {
-        _id: 'fkjfdk3333',
+        _id: 'cocaaafkjfdk3333',
         name: 'Coca-Cola',
         category: 'Bebidas',
         amount: 3,
       },
       {
-        _id: 'fkjfdk3333',
+        _id: 'porçoesfkjfdk3333',
         name: 'Porções',
         category: 'Porção de tilápica',
         amount: 3,
       },
       {
-        _id: 'fkjfdk3333',
+        _id: 'arrozfkjfdk3333',
         name: 'Pratos',
         category: 'Arroz com feijão',
         amount: 4,
@@ -55,25 +55,25 @@ const orders: Order[] = [
     ],
   },
   {
-    _id: 'fdkj3333lddfdfdf33',
+    _id: 'fdkj3333lddfdfdf3LL3',
     observation: 'limão com coca',
     table: 'Ashley',
     waiter: 'Julio',
     products: [
       {
-        _id: 'fkjfdk3333',
+        _id: 'cocafkjfdk3333',
         name: 'Coca-Cola',
         category: 'Bebidas',
         amount: 3,
       },
       {
-        _id: 'fkjfdk3333',
+        _id: 'porçõesfkjfdk3333',
         name: 'Porções',
         category: 'Porção de tilápica',
         amount: 3,
       },
       {
-        _id: 'fkjfdk3333',
+        _id: 'arrozfkjfdk3333',
         name: 'Pratos',
         category: 'Arroz com feijão',
         amount: 4,
