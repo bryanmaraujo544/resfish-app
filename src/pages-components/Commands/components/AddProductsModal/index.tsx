@@ -143,6 +143,7 @@ export const AddProductsModal = ({
       ]);
       setIsSetAmountModalOpen(false);
       setIsAddingProducts(false);
+      setIsSelectingProduct(false);
     } catch (error: any) {
       toast.closeAll();
       setIsAddingProducts(false);
