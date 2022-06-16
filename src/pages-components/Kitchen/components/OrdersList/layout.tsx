@@ -17,13 +17,14 @@ export const OrdersListLayout = ({ orders }: Props) => (
         gap={2}
         mt={4}
         align="center"
+        justify="center"
         bg="blue.50"
         p={[2, 4]}
         boxShadow="sm"
         rounded={4}
       >
         <Icon as={RiZzzFill} fontSize={[20, 24]} color="blue.800" />
-        <Heading color="blue.800" fontSize={[20, 24]}>
+        <Heading color="blue.800" fontSize={[20, 24]} textAlign="center">
           Nenhum pedido a ser preparado
         </Heading>
       </Flex>

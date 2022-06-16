@@ -69,6 +69,8 @@ export const OrderLayout = ({
       py={[2, 3]}
       rounded={4}
       boxShadow="sm"
+      overflow="visible"
+      pb="42px !important"
     >
       <Table size="md" textAlign="left">
         <Thead>
