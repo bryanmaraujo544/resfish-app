@@ -53,7 +53,7 @@ export const OrderLayout = ({
     mt={[4, 6]}
     border="1px solid"
     borderColor="gray.300"
-    gap={[2, 4]}
+    gap={[1, 2]}
   >
     <Text color="blue.800" fontSize={[18, 20]} fontWeight={600}>
       Mesa:{' '}
@@ -61,7 +61,7 @@ export const OrderLayout = ({
         {order.table}
       </Box>
     </Text>
-
+    {order.observation && <Text color="blue.800">{order.observation}</Text>}
     <TableContainer
       bg="whiteAlpha.700"
       // bg="blue.50"
