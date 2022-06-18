@@ -6,6 +6,7 @@ import ProductsService from 'pages-components/Command/services/ProductsService';
 import { Product } from 'types/Product';
 import { Command } from 'types/Command';
 import { useRouter } from 'next/router';
+import KitchenService from 'pages-components/Command/services/KitchenService';
 import { DeleteCommandModalLayout } from './layout';
 
 interface Props {
@@ -46,7 +47,6 @@ export const DeleteCommandModal = ({
         const commandProducts = command.products as Product[];
         commandProducts.forEach((product: Product) => {
           (async () => {
-            // const { product: updatedProduct } =
             await ProductsService.increaseAmount({
               productId: product._id,
               amount: product.amount,
@@ -56,6 +56,8 @@ export const DeleteCommandModal = ({
       }
 
       const { message } = await CommandService.deleteCommand({ commandId });
+
+      await KitchenService.deleteOrdersOfCommand({ commandId });
 
       toast({
         status: 'success',

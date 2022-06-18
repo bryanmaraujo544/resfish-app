@@ -11,6 +11,7 @@ import CommandsService from 'pages-components/Commands/services/CommandsService'
 import ProductsService from 'pages-components/Commands/services/ProductsService';
 import { CommandsContext } from 'pages-components/Commands';
 import { Product } from 'types/Product';
+import KitchenService from 'pages-components/Commands/services/KitchenService';
 import { DeleteCommandModalLayout } from './layout';
 
 interface Props {
@@ -70,6 +71,8 @@ export const DeleteCommandModal = ({
         type: 'REMOVE-ONE-COMMAND',
         payload: { commandId },
       });
+
+      await KitchenService.deleteOrdersOfCommand({ commandId });
 
       toast({
         status: 'success',
