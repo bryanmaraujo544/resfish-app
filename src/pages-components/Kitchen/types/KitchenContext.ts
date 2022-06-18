@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { Order } from './Order';
+import { Order } from '../../../types/Order';
 import { AllOrdersReducerAction as Action } from './AllOrdersReducerAction';
 
 export interface KitchenContextProps {

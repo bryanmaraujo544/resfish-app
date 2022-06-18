@@ -20,8 +20,8 @@ import {
 import { CgOptions } from 'react-icons/cg';
 import { BsPatchCheck, BsPatchCheckFill } from 'react-icons/bs';
 
-import { OrderProduct } from 'pages-components/Kitchen/types/OrderProduct';
-import { Order } from '../../types/Order';
+import { OrderProduct } from 'types/OrderProduct';
+import { Order } from '../../../../types/Order';
 
 const productColumns = [
   {
@@ -53,7 +53,7 @@ export const OrderLayout = ({
     mt={[4, 6]}
     border="1px solid"
     borderColor="gray.300"
-    gap={[2, 4]}
+    gap={[1, 2]}
   >
     <Text color="blue.800" fontSize={[18, 20]} fontWeight={600}>
       Mesa:{' '}
@@ -61,7 +61,7 @@ export const OrderLayout = ({
         {order.table}
       </Box>
     </Text>
-
+    {order.observation && <Text color="blue.800">{order.observation}</Text>}
     <TableContainer
       bg="whiteAlpha.700"
       // bg="blue.50"
@@ -69,6 +69,8 @@ export const OrderLayout = ({
       py={[2, 3]}
       rounded={4}
       boxShadow="sm"
+      overflow="visible"
+      pb="42px !important"
     >
       <Table size="md" textAlign="left">
         <Thead>

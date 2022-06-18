@@ -5,12 +5,14 @@ interface Props {
   isModalOpen: boolean;
   handleCloseModal: () => void;
   handleCheckOrder: () => void;
+  isSending: boolean;
 }
 
 export const CheckOrderModalLayout = ({
   isModalOpen,
   handleCloseModal,
   handleCheckOrder,
+  isSending,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -21,7 +23,13 @@ export const CheckOrderModalLayout = ({
       <Button flex="1" onClick={() => handleCloseModal()}>
         Cancelar
       </Button>
-      <Button flex="1" colorScheme="blue" onClick={() => handleCheckOrder()}>
+      <Button
+        onClick={() => handleCheckOrder()}
+        flex="1"
+        colorScheme="blue"
+        isLoading={isSending}
+        loadingText="Enviando"
+      >
         Confirmar
       </Button>
     </Flex>
