@@ -20,8 +20,8 @@ import {
 import { CgOptions } from 'react-icons/cg';
 import { BsPatchCheck, BsPatchCheckFill } from 'react-icons/bs';
 
-import { OrderProduct } from 'pages-components/Kitchen/types/OrderProduct';
-import { Order } from '../../types/Order';
+import { OrderProduct } from 'types/OrderProduct';
+import { Order } from '../../../../types/Order';
 
 const productColumns = [
   {

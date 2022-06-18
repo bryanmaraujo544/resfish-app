@@ -2,7 +2,7 @@ import { Flex, Heading, Icon, Stack } from '@chakra-ui/react';
 import { RiZzzFill } from 'react-icons/ri';
 
 import { Order } from '../Order';
-import { Order as OrderProps } from '../../types/Order';
+import { Order as OrderProps } from '../../../../types/Order';
 
 interface Props {
   orders: OrderProps[];

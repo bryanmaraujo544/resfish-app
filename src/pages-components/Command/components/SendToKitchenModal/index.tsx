@@ -8,8 +8,10 @@ import {
   useContext,
   useState,
 } from 'react';
+import { Order as OrderProps } from 'types/Order';
 
 import { SendToKitchenModalLayout } from './layout';
+import { OrderActions } from './OrderActions';
 
 interface Props {
   isModalOpen: boolean;
@@ -30,12 +32,18 @@ export const SendToKitchenModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   const [isSending, setIsSending] = useState(false);
   const [observation, setObservation] = useState('');
 
+  const [isOrderActionsModalOpen, setIsOrderActionsModalOpen] = useState(false);
+  const [kitchenOrderSended, setKitchenOrderSended] = useState<OrderProps>(
+    {} as OrderProps
+  );
+
   const { command } = useContext(CommandContext);
   const toast = useToast();
 
   function handleCloseModal() {
     setIsModalOpen(false);
     setIsSending(false);
+    setObservation('');
   }
 
   const handleSendToKitchen = useCallback(async () => {
@@ -54,14 +62,17 @@ export const SendToKitchenModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       );
 
       // const { kitchenOrder: orderSendedToKitchen } =
-      await KitchenService.storeKitchenOrder({
+      const { kitchenOrder } = await KitchenService.storeKitchenOrder({
         commandId,
         table,
         waiter,
         products: productsToPrepare,
         observation,
       } as StoreKitchen);
+      setKitchenOrderSended(kitchenOrder);
       handleCloseModal();
+
+      setIsOrderActionsModalOpen(true);
       toast.closeAll();
       toast({
         status: 'success',
@@ -81,13 +92,20 @@ export const SendToKitchenModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   }, [command, isSending, observation]);
 
   return (
-    <SendToKitchenModalLayout
-      isModalOpen={isModalOpen}
-      handleCloseModal={handleCloseModal}
-      handleSendToKitchen={handleSendToKitchen}
-      isSending={isSending}
-      observation={observation}
-      setObservation={setObservation}
-    />
+    <>
+      <SendToKitchenModalLayout
+        isModalOpen={isModalOpen}
+        handleCloseModal={handleCloseModal}
+        handleSendToKitchen={handleSendToKitchen}
+        isSending={isSending}
+        observation={observation}
+        setObservation={setObservation}
+      />
+      <OrderActions
+        kitchenOrder={kitchenOrderSended}
+        isModalOpen={isOrderActionsModalOpen}
+        setIsModalOpen={setIsOrderActionsModalOpen}
+      />
+    </>
   );
 };

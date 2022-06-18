@@ -1,9 +1,9 @@
 import { useToast } from '@chakra-ui/react';
 import { KitchenContext } from 'pages-components/Kitchen';
 import KitchenOrdersService from 'pages-components/Kitchen/services/KitchenOrdersService';
-import { OrderProduct } from 'pages-components/Kitchen/types/OrderProduct';
+import { OrderProduct } from 'types/OrderProduct';
 import { useContext, useCallback } from 'react';
-import { Order as OrderProps } from '../../types/Order';
+import { Order as OrderProps } from '../../../../types/Order';
 import { OrderLayout } from './layout';
 
 interface Props {

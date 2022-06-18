@@ -1,5 +1,5 @@
 import { serverApi } from 'services/serverApi';
-import { OrderProduct } from '../types/OrderProduct';
+import { OrderProduct } from '../../../types/OrderProduct';
 
 interface CheckOneProduct {
   orderId: string;

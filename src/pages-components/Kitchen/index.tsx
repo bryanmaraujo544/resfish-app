@@ -7,7 +7,7 @@ import { KitchenLayout } from './layout';
 import { allOrdersReducer } from './reducers/allOrdersReducer';
 import KitchenOrdersService from './services/KitchenOrdersService';
 import { KitchenContextProps } from './types/KitchenContext';
-import { Order } from './types/Order';
+import { Order } from '../../types/Order';
 
 export const KitchenContext = createContext({} as KitchenContextProps);
 

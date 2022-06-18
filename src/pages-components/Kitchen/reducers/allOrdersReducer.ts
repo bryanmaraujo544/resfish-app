@@ -1,4 +1,4 @@
-import { Order } from '../types/Order';
+import { Order } from '../../../types/Order';
 import { AllOrdersReducerAction as Action } from '../types/AllOrdersReducerAction';
 
 interface State {

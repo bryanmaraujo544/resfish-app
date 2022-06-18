@@ -1,7 +1,7 @@
 import { useToast } from '@chakra-ui/react';
 import { KitchenContext } from 'pages-components/Kitchen';
 import KitchenOrdersService from 'pages-components/Kitchen/services/KitchenOrdersService';
-import { Order } from 'pages-components/Kitchen/types/Order';
+import { Order } from 'types/Order';
 import {
   Dispatch,
   SetStateAction,
