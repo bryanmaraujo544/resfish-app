@@ -36,7 +36,7 @@ export const CashierLayout = ({ cashier, handleBackPage }: Props) => {
             <BoldText color="blue.50">
               R$
               {formatDecimalNum({
-                num: cashier?.total?.toString(),
+                num: cashier?.total?.toString() || '',
                 to: 'comma',
               })}
             </BoldText>
