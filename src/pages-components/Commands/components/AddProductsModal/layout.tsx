@@ -84,7 +84,7 @@ export const AddProductModalLayout = ({
     isOpen={isModalOpen}
     onClose={() => handleCloseModal()}
     title="Adicionar Produto"
-    size="6xl"
+    size="full"
     modalBodyOverflow="hidden"
   >
     <Stack spacing={[4, 6]} overflowY="scroll">
@@ -175,7 +175,7 @@ export const AddProductModalLayout = ({
 
       {/* List of products to add in command */}
       <TableContainer overflowY="scroll" flex="1">
-        <Table w="100%" mt={[2, 4]}>
+        <Table w="100%" mt={[2, 4]} size="sm">
           <Thead>
             <Tr>
               {productsColumns.map((column) => (

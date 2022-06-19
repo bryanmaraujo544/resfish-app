@@ -26,6 +26,7 @@ import { Header } from 'components/Header';
 import { Layout } from 'components/Layout';
 import { Command } from 'types/Command';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
+import { GiCook } from 'react-icons/gi';
 import { NavHeader } from './components/NavHeader';
 import { ProductsList } from './components/ProductsList';
 
@@ -72,24 +73,31 @@ export const CommandLayout = ({
           </BgBox>
         ) : (
           <Button
-            bg="blue.200"
+            onClick={() => handleOpenSentToKitchenModal()}
+            display="flex"
+            alignItems="center"
+            gap={3}
+            bg="blue.50"
+            border="1px solid"
+            borderColor="gray.300"
             h="100%"
             as="button"
             _hover={{
-              bg: 'blue.300',
+              bg: 'blue.200',
             }}
             _active={{
               bg: 'blue.200',
             }}
-            onClick={() => handleOpenSentToKitchenModal()}
+            color="blue.800"
           >
             <Heading
               fontSize={[14, 16, 18]}
               textAlign="center"
-              color="blue.900"
+              color="blue.800"
             >
               Mandar para Cozinha
             </Heading>
+            <Icon as={GiCook} />
           </Button>
         )}
       </Header>
