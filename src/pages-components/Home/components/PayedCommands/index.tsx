@@ -13,6 +13,7 @@ export const PayedCommands = () => {
   );
   const [payments, setPayments] = useState<Payment[]>([]);
 
+  const [isGettingPayments, setIsGettingPayments] = useState(true);
   const [isCloseCashierModalOpen, setIsCloseCashierModalOpen] = useState(false);
 
   const router = useRouter();
@@ -22,12 +23,14 @@ export const PayedCommands = () => {
       const allPayments = await PaymentsService.getAll({
         date: get10PastDays()[0].date,
       });
+      setIsGettingPayments(false);
       setPayments(allPayments);
     })();
   }, []);
 
   useEffect(() => {
     (async () => {
+      setIsGettingPayments(true);
       const currentDate = get10PastDays().find(
         ({ formatted }) => formatted === payedCommandsDate
       )?.date;
@@ -37,7 +40,7 @@ export const PayedCommands = () => {
       const paymentsOfDate = await PaymentsService.getAll({
         date: currentDateISO,
       });
-
+      setIsGettingPayments(false);
       setPayments(paymentsOfDate);
     })();
   }, [payedCommandsDate]);
@@ -59,6 +62,7 @@ export const PayedCommands = () => {
         payments={payments}
         handleGoToCommandPage={handleGoToCommandPage}
         handleCloseCashier={handleCloseCashier}
+        isGettingPayments={isGettingPayments}
       />
       <CloseCashier
         isModalOpen={isCloseCashierModalOpen}

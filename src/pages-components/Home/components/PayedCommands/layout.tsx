@@ -10,6 +10,7 @@ import {
   Divider,
   Button,
   Icon,
+  Spinner,
 } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import { Payment } from 'pages-components/Home/types/Payment';
@@ -24,6 +25,7 @@ interface Props {
   payments: Payment[];
   handleGoToCommandPage: (commandId: string) => void;
   handleCloseCashier: () => void;
+  isGettingPayments: boolean;
 }
 
 export const PayedCommandsLayout = ({
@@ -32,6 +34,7 @@ export const PayedCommandsLayout = ({
   payments,
   handleGoToCommandPage,
   handleCloseCashier,
+  isGettingPayments,
 }: Props) => {
   const past10Days = get10PastDays();
 
@@ -65,96 +68,102 @@ export const PayedCommandsLayout = ({
       </Flex>
 
       <Grid gridTemplateColumns={['1fr', '1fr', '1fr 1fr']} gap={[2, 4]}>
-        {payments.map(
-          ({ _id, totalPayed, paymentType, createdAt, command }) => (
-            <Flex
-              key={`home-payments-${_id}`}
-              bg="blue.50"
-              p={[2, 4]}
-              rounded={4}
-              border="1px solid"
-              borderColor="gray.200"
-              color="blue.800"
-              justify="center"
-              align="flex-start"
-              flexDirection="column"
-              fontWeight={400}
-              fontSize={[14, 16, 18]}
-            >
-              <Text>
-                Total:{' '}
-                <BoldText>
-                  R${' '}
-                  {formatDecimalNum({
-                    num: totalPayed.toString(),
-                    to: 'comma',
-                  })}
-                </BoldText>
-              </Text>
-              <Text>
-                Meio de Pagamento: <BoldText>{paymentType}</BoldText>
-              </Text>
-              <Text>
-                Criada em:{' '}
-                <BoldText>
-                  {DateTime.fromISO(createdAt)
-                    .setLocale('pt-BR')
-                    .toLocaleString(DateTime.DATETIME_MED)}
-                </BoldText>
-              </Text>
-              <Divider my={2} />
-              <Stack
-                gap={[1, 2]}
-                w="100%"
+        {isGettingPayments ? (
+          <Spinner size="xl" />
+        ) : (
+          payments?.map(
+            ({ _id, totalPayed, paymentType, createdAt, command }) => (
+              <Flex
+                key={`home-payments-${_id}`}
+                bg="blue.50"
+                p={[2, 4]}
+                rounded={4}
+                border="1px solid"
+                borderColor="gray.200"
+                color="blue.800"
+                justify="center"
                 align="flex-start"
-                fontSize={[14, 16]}
-                color="blue.600"
-                fontWeight={600}
+                flexDirection="column"
+                fontWeight={400}
+                fontSize={[14, 16, 18]}
               >
-                <Stack>
-                  {(command?.products?.length as any) > 3
-                    ? command.products
-                        ?.slice(0, 2)
-                        ?.map(({ _id: productId, name, amount }) => (
-                          <Box key={`pay-${_id}-${productId}`}>
-                            <Text>
-                              {name} - {amount}
-                            </Text>
-                          </Box>
-                        ))
-                    : command.products?.map(
-                        ({ _id: productId, name, amount }) => (
-                          <Box key={`pay-${_id}-${productId}`}>
-                            <Text>
-                              {name} - {amount}
-                            </Text>
-                          </Box>
-                        )
-                      )}
-                  {(command?.products?.length as any) > 3 && (
-                    <BoldText>...</BoldText>
-                  )}
-                </Stack>
-                <Button
-                  onClick={() => handleGoToCommandPage(command._id as string)}
-                  colorScheme="blue"
+                <Text>
+                  Total:{' '}
+                  <BoldText>
+                    R${' '}
+                    {formatDecimalNum({
+                      num: totalPayed?.toString(),
+                      to: 'comma',
+                    })}
+                  </BoldText>
+                </Text>
+                <Text>
+                  Meio de Pagamento: <BoldText>{paymentType}</BoldText>
+                </Text>
+                <Text>
+                  Criada em:{' '}
+                  <BoldText>
+                    {DateTime.fromISO(createdAt)
+                      .setLocale('pt-BR')
+                      .toLocaleString(DateTime.DATETIME_MED)}
+                  </BoldText>
+                </Text>
+                <Divider my={2} />
+                <Stack
+                  gap={[1, 2]}
+                  w="100%"
+                  align="flex-start"
                   fontSize={[14, 16]}
-                  h="auto"
-                  py={2}
-                  alignSelf="flex-end"
-                  bg="none"
-                  color="blue.500"
-                  border="2px solid"
-                  borderColor="blue.500"
-                  _hover={{
-                    bg: 'blue.500',
-                    color: 'white',
-                  }}
+                  color="blue.600"
+                  fontWeight={600}
                 >
-                  Ver comanda
-                </Button>
-              </Stack>
-            </Flex>
+                  <Stack>
+                    {(command?.products?.length as any) > 3
+                      ? command?.products
+                          ?.slice(0, 2)
+                          ?.map(({ _id: productId, name, amount }) => (
+                            <Box key={`pay-${_id}-${productId}`}>
+                              <Text>
+                                {name} - {amount}
+                              </Text>
+                            </Box>
+                          ))
+                      : command?.products?.map(
+                          ({ _id: productId, name, amount }) => (
+                            <Box key={`pay-${_id}-${productId}`}>
+                              <Text>
+                                {name} - {amount}
+                              </Text>
+                            </Box>
+                          )
+                        )}
+                    {(command?.products?.length as any) > 3 && (
+                      <BoldText>...</BoldText>
+                    )}
+                  </Stack>
+                  <Button
+                    onClick={() =>
+                      handleGoToCommandPage(command?._id as string)
+                    }
+                    colorScheme="blue"
+                    fontSize={[14, 16]}
+                    h="auto"
+                    py={2}
+                    alignSelf="flex-end"
+                    bg="none"
+                    color="blue.500"
+                    border="2px solid"
+                    borderColor="blue.500"
+                    _hover={{
+                      bg: 'blue.500',
+                      color: 'white',
+                    }}
+                  >
+                    Ver comanda
+                  </Button>
+                </Stack>
+              </Flex>
+            )
           )
         )}
       </Grid>
