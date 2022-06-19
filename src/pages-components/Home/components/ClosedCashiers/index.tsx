@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import { ClosedCashiersLayout } from './layout';
 
 export const ClosedCashiers = () => {
-  console.log('closed cashiers');
   const [allCashiers, setAllCashiers] = useState<Cashier[]>([]);
 
   const router = useRouter();

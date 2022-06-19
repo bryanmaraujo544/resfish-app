@@ -39,7 +39,6 @@ export const CloseCashier = ({
       const activeCommands = await CommandService.getTodayCommands({
         isActive: 'true',
       });
-      console.log({ activeCommands });
       if (activeCommands?.length > 0) {
         toast.closeAll();
         handleCloseModal();
