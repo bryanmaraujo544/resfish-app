@@ -25,10 +25,22 @@ export const CashierLayout = ({ cashier, handleBackPage }: Props) => {
   return (
     <Layout>
       <Header hasBackPageBtn handleBackPage={handleBackPage} />
-      <Heading fontSize={[18, 22, 26]} color="blue.800" fontWeight={600}>
-        Caixa do dia:{' '}
-        <BoldText>{dt.toLocaleString(DateTime.DATE_FULL)}</BoldText>
-      </Heading>
+      <Flex justify="space-between">
+        <Heading fontSize={[18, 22, 26]} color="blue.800" fontWeight={600}>
+          Caixa do dia:{' '}
+          <BoldText>{dt.toLocaleString(DateTime.DATE_FULL)}</BoldText>
+        </Heading>
+        <Box bg="blue.400" p={1} px={[2, 4]} rounded={4}>
+          <Text fontSize={[20, 22]} color="blue.50">
+            Total:{' '}
+            <BoldText color="blue.50">
+              R$
+              {formatDecimalNum({ num: cashier.total.toString(), to: 'comma' })}
+            </BoldText>
+          </Text>
+        </Box>
+      </Flex>
+
       <Stack gap={[4, 8]} mt={[6, 12]}>
         {cashier?.payments?.map(({ _id, totalPayed, paymentType, command }) => (
           <Flex
