@@ -22,7 +22,7 @@ interface Props {
   payedCommandsDate: any;
   setPayedCommandsDate: any;
   payments: Payment[];
-  hanleToCommandPage: (commandId: string) => void;
+  handleGoToCommandPage: (commandId: string) => void;
   handleCloseCashier: () => void;
 }
 
@@ -30,7 +30,7 @@ export const PayedCommandsLayout = ({
   payedCommandsDate,
   setPayedCommandsDate,
   payments,
-  hanleToCommandPage,
+  handleGoToCommandPage,
   handleCloseCashier,
 }: Props) => {
   const past10Days = get10PastDays();
@@ -136,7 +136,7 @@ export const PayedCommandsLayout = ({
                   )}
                 </Stack>
                 <Button
-                  onClick={() => hanleToCommandPage(command._id as string)}
+                  onClick={() => handleGoToCommandPage(command._id as string)}
                   colorScheme="blue"
                   fontSize={[14, 16]}
                   h="auto"

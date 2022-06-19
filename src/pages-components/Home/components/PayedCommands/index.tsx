@@ -42,7 +42,7 @@ export const PayedCommands = () => {
     })();
   }, [payedCommandsDate]);
 
-  const hanleToCommandPage = useCallback((commandId: string) => {
+  const handleGoToCommandPage = useCallback((commandId: string) => {
     router.push(`/command/${commandId}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -57,7 +57,7 @@ export const PayedCommands = () => {
         payedCommandsDate={payedCommandsDate}
         setPayedCommandsDate={setPayedCommandsDate}
         payments={payments}
-        hanleToCommandPage={hanleToCommandPage}
+        handleGoToCommandPage={handleGoToCommandPage}
         handleCloseCashier={handleCloseCashier}
       />
       <CloseCashier

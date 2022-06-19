@@ -10,4 +10,5 @@ export interface Command {
   isActive?: boolean;
   totalPayed?: number;
   createdAt?: string;
+  waiterExtra?: number;
 }
