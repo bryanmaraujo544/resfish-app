@@ -7,6 +7,8 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  Select,
+  Text,
 } from '@chakra-ui/react';
 
 import { Modal } from 'components/Modal';
@@ -21,6 +23,17 @@ interface Props {
   handleChangeUnitPrice: any;
   isSubmitting: boolean;
 }
+
+const categories = [
+  'Pesca',
+  'Peixes',
+  'Pratos',
+  'Bebidas',
+  'Doses',
+  'Sobremesas',
+  'Porções',
+  'Misturas Congeladas',
+];
 
 export const EditModalLayout = ({
   isEditModalOpen,
@@ -39,29 +52,42 @@ export const EditModalLayout = ({
       flexDirection="column"
       gap={2}
     >
-      <Input
-        placeholder="URL da Imagem"
-        value={itemInfos.image}
-        onChange={(e) => itemInfos.setImage(e.target.value)}
-      />
+      <InputText title="Nome" />
       <Input
         placeholder="Nome"
         value={itemInfos.name}
         onChange={(e) => itemInfos.setName(e.target.value)}
+        mb={2}
       />
+      <InputText title="URL da imagem" />
       <Input
-        placeholder="Categoria"
+        placeholder="URL da Imagem"
+        value={itemInfos.image}
+        onChange={(e) => itemInfos.setImage(e.target.value)}
+        mb={2}
+      />
+      <InputText title="Categoria" />
+      <Select
         value={itemInfos.category || ''}
         onChange={(e) => itemInfos.setCategory(e.target.value)}
-      />
+        mb={2}
+      >
+        {categories.map((categorie) => (
+          <option key={`edit-categorie-${categorie}`}>{categorie}</option>
+        ))}
+      </Select>
+      <InputText title="Preço da unidade" />
       <Input
         placeholder="Preço da Unidade"
         value={itemInfos.unitPrice || ''}
         onChange={(e) => handleChangeUnitPrice(e)}
+        mb={2}
       />
+      <InputText title="Quantidade" />
       <NumberInput
         value={itemInfos.amount || ''}
         onChange={(e) => itemInfos.setAmount(Number(e))}
+        mb={2}
       >
         <NumberInputField placeholder="Quantidade" />
 
@@ -76,3 +102,5 @@ export const EditModalLayout = ({
     </FormControl>
   </Modal>
 );
+
+const InputText = ({ title }: { title: string }) => <Text>{title}</Text>;
