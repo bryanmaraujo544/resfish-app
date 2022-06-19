@@ -44,6 +44,9 @@ export const AddItemModal = ({
     e.preventDefault();
 
     try {
+      if (isSubmitting) {
+        return;
+      }
       setIsSubmitting(true);
       // taking out the "R$" of the string and getting only the number;
       const unitPriceNum = unitPrice.split(' ')[1];
@@ -114,6 +117,7 @@ export const AddItemModal = ({
       handleCloseModal();
     } catch (error: any) {
       setIsSubmitting(false);
+      toast.closeAll();
       toast({
         status: 'error',
         title: error?.response.data.message,

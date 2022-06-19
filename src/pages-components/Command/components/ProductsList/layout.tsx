@@ -111,7 +111,8 @@ export const ProductsListLayout = ({
   const commandIsPayed = command?.isActive === false;
 
   const isFishingCategory = (category?: string) =>
-    category?.toLowerCase() === 'peixes';
+    category?.toLowerCase() === 'peixes' ||
+    category?.toLowerCase() === 'misturas congeladas';
 
   const editAmountInputRef = useClickOutsideToClose(() => {
     setFishIdToEditAmount('');

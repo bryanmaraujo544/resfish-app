@@ -3,6 +3,7 @@ import CashierService from 'pages-components/Home/services/CashierService';
 import { Payment } from 'pages-components/Home/types/Payment';
 import { get10PastDays } from 'utils/get10PastDays';
 import { useToast } from '@chakra-ui/react';
+import CommandService from 'pages-components/Home/services/CommandService';
 import { CloseCashierLayout } from './layout';
 
 interface Props {
@@ -33,6 +34,23 @@ export const CloseCashier = ({
         return;
       }
       setIsSending(true);
+
+      // Verify if there are open commands
+      const activeCommands = await CommandService.getTodayCommands({
+        isActive: 'true',
+      });
+      console.log({ activeCommands });
+      if (activeCommands?.length > 0) {
+        toast.closeAll();
+        handleCloseModal();
+        toast({
+          status: 'warning',
+          title: 'Há comandas ativas. Exclua ou pague-as para fechar o caixa. ',
+          isClosable: true,
+          duration: 5000,
+        });
+        return;
+      }
 
       const currentDate = get10PastDays().find(
         ({ formatted }) => formatted === payedCommandsDate

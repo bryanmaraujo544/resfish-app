@@ -25,7 +25,12 @@ export const CashierLayout = ({ cashier, handleBackPage }: Props) => {
   return (
     <Layout>
       <Header hasBackPageBtn handleBackPage={handleBackPage} />
-      <Flex justify="space-between">
+      <Flex
+        justify={['center', 'center', 'space-between']}
+        flexWrap="wrap"
+        gap={4}
+        align="center"
+      >
         <Heading fontSize={[18, 22, 26]} color="blue.800" fontWeight={600}>
           Caixa do dia:{' '}
           <BoldText>{dt.toLocaleString(DateTime.DATE_FULL)}</BoldText>
@@ -67,6 +72,11 @@ export const CashierLayout = ({ cashier, handleBackPage }: Props) => {
             >
               <TextWhiteBox>
                 <Text>
+                  Mesa: <BoldText>{command.table}</BoldText>
+                </Text>
+              </TextWhiteBox>
+              <TextWhiteBox>
+                <Text>
                   Total:{' '}
                   <BoldText>
                     R${' '}
@@ -79,17 +89,12 @@ export const CashierLayout = ({ cashier, handleBackPage }: Props) => {
               </TextWhiteBox>
               <TextWhiteBox>
                 <Text>
-                  Meio de Pagamento: <BoldText>{paymentType}</BoldText>
-                </Text>
-              </TextWhiteBox>
-              <TextWhiteBox>
-                <Text>
-                  Mesa: <BoldText>{command.table}</BoldText>
-                </Text>
-              </TextWhiteBox>
-              <TextWhiteBox>
-                <Text>
                   Garçom: <BoldText>{command.waiter}</BoldText>
+                </Text>
+              </TextWhiteBox>
+              <TextWhiteBox>
+                <Text>
+                  Meio de Pagamento: <BoldText>{paymentType}</BoldText>
                 </Text>
               </TextWhiteBox>
             </Grid>

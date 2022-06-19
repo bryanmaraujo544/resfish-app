@@ -14,6 +14,7 @@ interface Props {
   orderBy: string;
   setOrderBy: Dispatch<SetStateAction<string>>;
   setIsAddItemModalOpen: Dispatch<SetStateAction<boolean>>;
+  handleGoToHome: () => void;
 }
 
 export const StockLayout = ({
@@ -22,9 +23,10 @@ export const StockLayout = ({
   orderBy,
   setOrderBy,
   setIsAddItemModalOpen,
+  handleGoToHome,
 }: Props) => (
   <Layout>
-    <Header>
+    <Header hasBackPageBtn handleBackPage={() => handleGoToHome()}>
       <Button
         onClick={() => setIsAddItemModalOpen(true)}
         isCallAction

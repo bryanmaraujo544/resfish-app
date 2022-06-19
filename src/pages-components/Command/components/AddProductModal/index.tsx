@@ -302,7 +302,8 @@ export const AddProductModal = ({
         setAmount={setAmount}
         handleAddProduct={handleAddProduct}
         isFishesCategory={
-          productToSetAmount?.category?.toLowerCase() === 'peixes'
+          productToSetAmount?.category?.toLowerCase() === 'peixes' ||
+          productToSetAmount?.category?.toLowerCase() === 'misturas congeladas'
         }
         isSelectingProduct={isSelectingProduct}
       />

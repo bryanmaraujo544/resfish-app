@@ -145,7 +145,7 @@ export const Command = ({ commandId }: Props) => {
   }, []);
 
   const handleGoToCommands = useCallback(() => {
-    router.push('/commands');
+    router.back();
   }, [router]);
 
   const handleDeleteCommand = useCallback(() => {

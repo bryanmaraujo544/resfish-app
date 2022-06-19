@@ -9,6 +9,7 @@ import {
   useEffect,
 } from 'react';
 
+import { useRouter } from 'next/router';
 import StockService from './services/index';
 import { StockLayout } from './layout';
 import { AddItemModal } from './components/AddItemModal';
@@ -51,6 +52,8 @@ export const Stock = () => {
 
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
+  const router = useRouter();
+
   useEffect(() => {
     (async () => {
       const allProducts = await StockService.getAllProducts();
@@ -62,6 +65,10 @@ export const Stock = () => {
     () => setOrderByDir((prev) => (prev === 'asc' ? 'desc' : 'asc')),
     []
   );
+
+  function handleGoToHome() {
+    router.push('/');
+  }
 
   return (
     <StockContext.Provider
@@ -88,6 +95,7 @@ export const Stock = () => {
         orderBy={orderBy}
         setOrderBy={setOrderBy}
         setIsAddItemModalOpen={setIsAddItemModalOpen}
+        handleGoToHome={handleGoToHome}
       />
     </StockContext.Provider>
   );
