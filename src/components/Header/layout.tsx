@@ -14,16 +14,22 @@ import {
   DrawerBody,
 } from '@chakra-ui/react';
 
-import { BiIdCard } from 'react-icons/bi';
 import { MdInventory2 } from 'react-icons/md';
 import { GiCook } from 'react-icons/gi';
 import { CgMenu } from 'react-icons/cg';
 import { FaArrowUp } from 'react-icons/fa';
+import { AiFillHome } from 'react-icons/ai';
+import { IoMdListBox } from 'react-icons/io';
 
 const headerButtons = [
   {
+    text: 'Home',
+    icon: AiFillHome,
+    path: '/',
+  },
+  {
     text: 'Comandas',
-    icon: BiIdCard,
+    icon: IoMdListBox,
     path: '/commands',
   },
   {
@@ -146,6 +152,7 @@ export const HeaderLayout = ({
                   fontSize={['sm', 'md', 'lg']}
                   fontWeight={600}
                   p={[2, 4, 6]}
+                  justifyContent="space-between"
                   _hover={{
                     bg: 'blue.100',
                     color: 'blue.900',
@@ -157,8 +164,8 @@ export const HeaderLayout = ({
                   h={[12, 14]}
                   w="100%"
                 >
-                  <Icon as={BtnIcon} />
                   {text}
+                  <Icon as={BtnIcon} />
                 </Button>
               ))}
             </Flex>
