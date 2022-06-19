@@ -20,7 +20,7 @@ interface Props {
 }
 
 export const CashierLayout = ({ cashier, handleBackPage }: Props) => {
-  const dt = DateTime.fromISO(cashier.date).setLocale('pt-BR');
+  const dt = DateTime.fromISO(cashier?.date).setLocale('pt-BR');
 
   return (
     <Layout>
@@ -35,7 +35,10 @@ export const CashierLayout = ({ cashier, handleBackPage }: Props) => {
             Total:{' '}
             <BoldText color="blue.50">
               R$
-              {formatDecimalNum({ num: cashier.total.toString(), to: 'comma' })}
+              {formatDecimalNum({
+                num: cashier?.total?.toString(),
+                to: 'comma',
+              })}
             </BoldText>
           </Text>
         </Box>
