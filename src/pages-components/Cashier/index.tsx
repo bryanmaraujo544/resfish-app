@@ -10,7 +10,7 @@ interface Props {
 
 export const Cashier = ({ cashierId }: Props) => {
   const [cashier, setCashier] = useState<CashierProps>({} as CashierProps);
-  // console.log({ cashier });
+  const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
 
@@ -18,6 +18,7 @@ export const Cashier = ({ cashierId }: Props) => {
     (async () => {
       const { cashier: cashierFound } = await CashierService.getOne(cashierId);
       setCashier(cashierFound);
+      setIsLoading(false);
     })();
   }, [cashierId]);
 
@@ -25,5 +26,11 @@ export const Cashier = ({ cashierId }: Props) => {
     router.back();
   }
 
-  return <CashierLayout cashier={cashier} handleBackPage={handleBackPage} />;
+  return (
+    <CashierLayout
+      cashier={cashier}
+      handleBackPage={handleBackPage}
+      isLoading={isLoading}
+    />
+  );
 };
