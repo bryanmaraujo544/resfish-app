@@ -1,4 +1,4 @@
-import { Button, Heading } from '@chakra-ui/react';
+import { Heading } from '@chakra-ui/react';
 import { Header } from 'components/Header';
 import { Layout } from 'components/Layout';
 import { OrdersList } from './components/OrdersList';
