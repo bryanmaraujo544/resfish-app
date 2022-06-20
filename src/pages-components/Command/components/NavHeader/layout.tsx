@@ -11,7 +11,7 @@ import {
   MenuList,
   Text,
 } from '@chakra-ui/react';
-import { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { AiFillFilter } from 'react-icons/ai';
 import { BiAddToQueue, BiSortAlt2 } from 'react-icons/bi';
 
@@ -112,9 +112,8 @@ export const NavHeaderLayout = ({
           </MenuButton>
           <MenuList bg="blue.50" color="blue.900" p={2}>
             {filterOptions.map((filterText) => (
-              <>
+              <React.Fragment key={`commands-filter-${filterText}`}>
                 <MenuItem
-                  key={`commands-${filterText}`}
                   onClick={() => handleChangeFilter(filterText)}
                   display="flex"
                   flexDir="column"
@@ -134,7 +133,7 @@ export const NavHeaderLayout = ({
                   {filterText}
                 </MenuItem>
                 <Divider />
-              </>
+              </React.Fragment>
             ))}
           </MenuList>
         </Menu>
@@ -168,9 +167,8 @@ export const NavHeaderLayout = ({
           </MenuButton>
           <MenuList bg="blue.50" color="blue.900" p={2}>
             {sortOptions.map(({ text, prop }) => (
-              <>
+              <React.Fragment key={`commands-sort-opn-${prop}`}>
                 <MenuItem
-                  key={`commands-${prop}`}
                   onClick={() => handleChangeOrderBy(prop)}
                   display="flex"
                   flexDir="column"
@@ -188,7 +186,7 @@ export const NavHeaderLayout = ({
                   {text}
                 </MenuItem>
                 <Divider />
-              </>
+              </React.Fragment>
             ))}
           </MenuList>
         </Menu>

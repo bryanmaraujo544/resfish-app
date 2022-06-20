@@ -7,14 +7,18 @@ import {
   useReducer,
   useState,
 } from 'react';
+import useSound from 'use-sound';
 import { SocketContext } from 'pages/_app';
-import { CheckOrderModal } from './components/CheckOrderModal';
+
+import { Order } from 'types/Order';
+import { animateScroll } from 'react-scroll';
 import { KitchenLayout } from './layout';
-// import orders from './mocks/orders';
 import { allOrdersReducer } from './reducers/allOrdersReducer';
 import KitchenOrdersService from './services/KitchenOrdersService';
 import { KitchenContextProps } from './types/KitchenContext';
-import { Order } from '../../types/Order';
+
+import NotifySound from '../../../public/kitchenalarm.mp3';
+import { CheckOrderModal } from './components/CheckOrderModal';
 
 export const KitchenContext = createContext({} as KitchenContextProps);
 
@@ -26,9 +30,12 @@ export const Kitchen = () => {
     value: [],
   });
 
+  const [playSound, setPlaySound] = useState(false);
+
   const { socket } = useContext(SocketContext);
 
   const toast = useToast();
+  const [playNotify] = useSound<any>(NotifySound);
 
   useEffect(() => {
     (async () => {
@@ -48,14 +55,23 @@ export const Kitchen = () => {
 
   useEffect(() => {
     socket.once('kitchen-order-created', (payload: any) => {
-      console.log(payload);
       allOrdersDispatch({ type: 'ADD-ONE-ORDER', payload: { order: payload } });
+      animateScroll.scrollToBottom();
+      setPlaySound(true);
     });
 
     return () => {
       socket.off('kitchen-order-created');
     };
   }, []);
+
+  useEffect(() => {
+    if (playSound) {
+      console.log('play-sound');
+      playNotify();
+      setPlaySound(false);
+    }
+  }, [playSound, playNotify]);
 
   return (
     <KitchenContext.Provider

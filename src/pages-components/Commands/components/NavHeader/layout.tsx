@@ -1,5 +1,5 @@
 /* eslint-disable react/no-children-prop */
-import { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import {
   Divider,
   Flex,
@@ -102,9 +102,8 @@ export const NavHeaderLayout = ({
           </MenuButton>
           <MenuList bg="blue.50" color="blue.900" p={2}>
             {filterOptions.map((filterText) => (
-              <>
+              <React.Fragment key={`commandss-filter-${filterText}`}>
                 <MenuItem
-                  key={`commands-${filterText}`}
                   onClick={() => handleChangeFilter(filterText)}
                   display="flex"
                   flexDir="column"
@@ -124,7 +123,7 @@ export const NavHeaderLayout = ({
                   {filterText}
                 </MenuItem>
                 <Divider />
-              </>
+              </React.Fragment>
             ))}
           </MenuList>
         </Menu>
@@ -157,9 +156,8 @@ export const NavHeaderLayout = ({
           </MenuButton>
           <MenuList bg="blue.50" color="blue.900" p={2}>
             {sortOptions.map(({ text, prop }) => (
-              <>
+              <React.Fragment key={`commandss-sort-${prop}`}>
                 <MenuItem
-                  key={`commands-${prop}`}
                   onClick={() => handleChangeOrderBy(prop)}
                   display="flex"
                   flexDir="column"
@@ -177,7 +175,7 @@ export const NavHeaderLayout = ({
                   {text}
                 </MenuItem>
                 <Divider />
-              </>
+              </React.Fragment>
             ))}
           </MenuList>
         </Menu>
