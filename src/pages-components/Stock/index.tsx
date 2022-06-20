@@ -7,9 +7,11 @@ import {
   useReducer,
   useState,
   useEffect,
+  useContext,
 } from 'react';
 
 import { useRouter } from 'next/router';
+import { SocketContext } from 'pages/_app';
 import StockService from './services/index';
 import { StockLayout } from './layout';
 import { AddItemModal } from './components/AddItemModal';
@@ -51,6 +53,8 @@ export const Stock = () => {
   const [searchContent, setSearchContent] = useState('');
 
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+  const { socket } = useContext(SocketContext);
+  console.log({ socket });
 
   const router = useRouter();
 
