@@ -83,7 +83,7 @@ export const ItemsTableLayout = ({
         <Tbody>
           {items.map(({ _id, imageURL, amount, category, unitPrice, name }) => (
             <Tr
-              key={_id}
+              key={`stock-product-_id${_id}`}
               cursor="pointer"
               _hover={{
                 bg: 'blue.50',
@@ -91,9 +91,7 @@ export const ItemsTableLayout = ({
             >
               <Td>
                 <Image
-                  src={
-                    imageURL || 'https://wallpaperaccess.com/full/5227230.png'
-                  }
+                  src="https://wallpaperaccess.com/full/5227230.png"
                   width={32}
                   height={32}
                   objectFit="cover"

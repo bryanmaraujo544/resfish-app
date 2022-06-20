@@ -41,6 +41,18 @@ export const allOrdersReducer = (
       );
       return { value: newOrders };
     }
+    case 'ADD-ONE-ORDER': {
+      const newOrder = action.payload.order;
+      const orderExists = state.value.some(
+        ({ _id }: any) => _id === newOrder._id
+      );
+
+      if (orderExists) {
+        return state;
+      }
+
+      return { value: [...state.value, newOrder] };
+    }
     default: {
       throw new Error('This type is invalid');
     }

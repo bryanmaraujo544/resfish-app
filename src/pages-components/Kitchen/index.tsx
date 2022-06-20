@@ -1,6 +1,13 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { useToast } from '@chakra-ui/react';
-import { createContext, useEffect, useReducer, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
+import { SocketContext } from 'pages/_app';
 import { CheckOrderModal } from './components/CheckOrderModal';
 import { KitchenLayout } from './layout';
 // import orders from './mocks/orders';
@@ -19,6 +26,8 @@ export const Kitchen = () => {
     value: [],
   });
 
+  const { socket } = useContext(SocketContext);
+
   const toast = useToast();
 
   useEffect(() => {
@@ -35,6 +44,17 @@ export const Kitchen = () => {
         });
       }
     })();
+  }, []);
+
+  useEffect(() => {
+    socket.once('kitchen-order-created', (payload: any) => {
+      console.log(payload);
+      allOrdersDispatch({ type: 'ADD-ONE-ORDER', payload: { order: payload } });
+    });
+
+    return () => {
+      socket.off('kitchen-order-created');
+    };
   }, []);
 
   return (

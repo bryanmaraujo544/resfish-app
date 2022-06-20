@@ -3,6 +3,7 @@ export interface AllOrdersReducerAction {
     | 'ADD-ORDERS'
     | 'UPDATE-ONE-PRODUCT'
     | 'CHECK-ONE-PRODUCT'
-    | 'REMOVE-ONE-ORDER';
+    | 'REMOVE-ONE-ORDER'
+    | 'ADD-ONE-ORDER';
   payload: any;
 }
