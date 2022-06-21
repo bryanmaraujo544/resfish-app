@@ -53,8 +53,6 @@ export const Stock = () => {
   const [searchContent, setSearchContent] = useState('');
 
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-  const { socket } = useContext(SocketContext);
-  console.log({ socket });
 
   const router = useRouter();
 

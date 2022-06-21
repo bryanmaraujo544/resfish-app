@@ -54,20 +54,39 @@ export const Kitchen = () => {
   }, []);
 
   useEffect(() => {
-    socket.once('kitchen-order-created', (payload: any) => {
-      allOrdersDispatch({ type: 'ADD-ONE-ORDER', payload: { order: payload } });
-      animateScroll.scrollToBottom();
-      setPlaySound(true);
-    });
+    try {
+      socket.on('kitchen-order-created', (payload: any) => {
+        allOrdersDispatch({
+          type: 'ADD-ONE-ORDER',
+          payload: { order: payload },
+        });
+        animateScroll.scrollToBottom();
+        setPlaySound(true);
+      });
+
+      socket.on('kitchen-order-updated', (payload: any) => {
+        allOrdersDispatch({
+          type: 'UPDATE-ONE-PRODUCT',
+          payload: { order: payload[0] || {} },
+        });
+      });
+    } catch (error: any) {
+      toast({
+        status: 'error',
+        title:
+          'Algo deu errado no carregamento em tempo real. Recarre a página!',
+        isClosable: true,
+      });
+    }
 
     return () => {
       socket.off('kitchen-order-created');
+      socket.off('kitchen-order-updated');
     };
   }, []);
 
   useEffect(() => {
     if (playSound) {
-      console.log('play-sound');
       playNotify();
       setPlaySound(false);
     }

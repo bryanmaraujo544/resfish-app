@@ -53,6 +53,16 @@ export const allOrdersReducer = (
 
       return { value: [...state.value, newOrder] };
     }
+    case 'UPDATE-ONE-PRODUCT': {
+      const updatedOrder = action.payload.order;
+      const newOrders = state.value.map((order) => {
+        if (order._id === updatedOrder._id) {
+          return updatedOrder;
+        }
+        return order;
+      });
+      return { value: newOrders };
+    }
     default: {
       throw new Error('This type is invalid');
     }
