@@ -19,7 +19,16 @@ export const commandsReducer = (state: CommandsState, action: Action) => {
       return { value: action.payload.commands };
     }
     case 'ADD-ONE-COMMAND': {
-      const updatedCommands = [...state.value, action.payload.command];
+      const newCommand = action.payload.command;
+      const commandAlreadyExists = state.value.some(
+        (command) => command._id === newCommand._id
+      );
+
+      if (commandAlreadyExists) {
+        return state;
+      }
+
+      const updatedCommands = [...state.value, newCommand];
       return { value: updatedCommands };
     }
     case 'UPDATE-ONE-COMMAND': {
