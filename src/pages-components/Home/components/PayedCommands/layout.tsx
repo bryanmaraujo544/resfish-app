@@ -120,7 +120,7 @@ export const PayedCommandsLayout = ({
                   <Stack>
                     {(command?.products?.length as any) > 3
                       ? command?.products
-                          ?.slice(0, 2)
+                          ?.slice(0, 3)
                           ?.map(({ _id: productId, name, amount }) => (
                             <Box key={`pay-${_id}-${productId}`}>
                               <Text>
