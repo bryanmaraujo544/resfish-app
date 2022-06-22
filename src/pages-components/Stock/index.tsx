@@ -51,7 +51,7 @@ export const Stock = () => {
   const [searchContent, setSearchContent] = useState('');
 
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
-
+  const { socket } = useContext(SocketContext);
   const router = useRouter();
 
   useEffect(() => {
@@ -59,6 +59,19 @@ export const Stock = () => {
       const allProducts = await StockService.getAllProducts();
       productsDispatch({ type: 'ADD-PRODUCTS', payload: allProducts });
     })();
+  }, []);
+
+  useEffect(() => {
+    socket.on('product-updated', (updatedProduct: Product) => {
+      productsDispatch({
+        type: 'UPDATE-ONE-PRODUCT',
+        payload: { product: updatedProduct },
+      });
+    });
+
+    return () => {
+      socket.off('product-updated');
+    };
   }, []);
 
   const handleToggleOrderByDir = useCallback(

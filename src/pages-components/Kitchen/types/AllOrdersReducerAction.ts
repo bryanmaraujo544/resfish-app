@@ -4,6 +4,7 @@ export interface AllOrdersReducerAction {
     | 'UPDATE-ONE-PRODUCT'
     | 'CHECK-ONE-PRODUCT'
     | 'REMOVE-ONE-ORDER'
-    | 'ADD-ONE-ORDER';
+    | 'ADD-ONE-ORDER'
+    | 'REMOVE-COMMAND-ORDERS';
   payload: any;
 }

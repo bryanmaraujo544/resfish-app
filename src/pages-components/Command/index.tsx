@@ -4,6 +4,7 @@ import {
   Dispatch,
   SetStateAction,
   useCallback,
+  useContext,
   useEffect,
   useReducer,
   useState,
@@ -13,6 +14,7 @@ import { useToast } from '@chakra-ui/react';
 import { Command as CommandType } from 'types/Command';
 import { useRouter } from 'next/router';
 import { Product } from 'types/Product';
+import { SocketContext } from 'pages/_app';
 import { productsReducer } from './reducers/productsReducer';
 import { AddProductModal } from './components/AddProductModal';
 import { DeleteProductModal } from './components/DeleteProductModal';
@@ -68,6 +70,7 @@ export const Command = ({ commandId }: Props) => {
     productsReducer,
     initialState
   );
+  const [isLoading, setIsLoading] = useState(true);
 
   const [productIdToDelete, setProductIdToDelete] = useState('');
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
@@ -84,12 +87,13 @@ export const Command = ({ commandId }: Props) => {
   const [orderByDir, setOrderByDir] = useState('' as 'asc' | 'desc');
   const [searchContent, setSearchContent] = useState('');
 
-  const [isLoading, setIsLoading] = useState(true);
-
   const [stockProducts, stockProductsDispatch] = useReducer(
     stockProductsReducer,
     { value: [] as Product[] }
   );
+
+  const { socket } = useContext(SocketContext);
+
   const router = useRouter();
   const toast = useToast();
 
@@ -126,6 +130,45 @@ export const Command = ({ commandId }: Props) => {
       const allProducts = await ProductsService.getAllProducts();
       stockProductsDispatch({ type: 'ADD-ALL-PRODUCTS', payload: allProducts });
     })();
+  }, []);
+
+  useEffect(() => {
+    socket.on('command-updated', (updatedCommand: CommandType) => {
+      if (updatedCommand._id === commandId) {
+        setCommand(updatedCommand);
+
+        productsDispatch({
+          type: 'add-products',
+          payload: updatedCommand?.products,
+        });
+      }
+    });
+
+    socket.on('command-deleted', (deletedCommandId: string) => {
+      if (deletedCommandId === commandId) {
+        toast.closeAll();
+        toast({
+          status: 'error',
+          title: 'Comanda deletada',
+          duration: 1000,
+          isClosable: true,
+        });
+        router.push('/commands');
+      }
+    });
+
+    socket.on('product-updated', (updatedProduct: Product) => {
+      stockProductsDispatch({
+        type: 'UPDATE-ONE-PRODUCT',
+        payload: { product: updatedProduct },
+      });
+    });
+
+    return () => {
+      socket.off('command-updated');
+      socket.off('command-deleted');
+      socket.off('product-updated');
+    };
   }, []);
 
   const handleOpenDeleteModal = useCallback(

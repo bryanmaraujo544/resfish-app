@@ -70,6 +70,13 @@ export const Kitchen = () => {
           payload: { order: payload[0] || {} },
         });
       });
+
+      socket.on('kitchen-order-deleted', (payload: { commandId: string }) => {
+        allOrdersDispatch({
+          type: 'REMOVE-COMMAND-ORDERS',
+          payload: { commandId: payload.commandId },
+        });
+      });
     } catch (error: any) {
       toast({
         status: 'error',

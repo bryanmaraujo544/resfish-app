@@ -63,6 +63,13 @@ export const allOrdersReducer = (
       });
       return { value: newOrders };
     }
+    case 'REMOVE-COMMAND-ORDERS': {
+      const { commandId } = action.payload;
+      const newOrders = state.value.filter(
+        (order) => order.commandId !== commandId
+      );
+      return { value: newOrders };
+    }
     default: {
       throw new Error('This type is invalid');
     }

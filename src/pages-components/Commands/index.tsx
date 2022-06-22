@@ -1,6 +1,15 @@
-import { createContext, useMemo, useState, useReducer, useEffect } from 'react';
+import {
+  createContext,
+  useMemo,
+  useState,
+  useReducer,
+  useEffect,
+  useContext,
+} from 'react';
 
 import { Product } from 'types/Product';
+import { SocketContext } from 'pages/_app';
+import { Command } from 'types/Command';
 import { ContextProps } from './types/ContextProps';
 import { AddCommandModal } from './components/AddCommandModal';
 import { CommandsLayout } from './layout';
@@ -30,6 +39,8 @@ export const Commands = () => {
   const [isAddCommandModalOpen, setIsAddCommandModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const { socket } = useContext(SocketContext);
+
   useEffect(() => {
     (async () => {
       const commands = await CommandsService.getAllCommands();
@@ -39,6 +50,44 @@ export const Commands = () => {
       });
       setIsLoading(false);
     })();
+  }, []);
+
+  useEffect(() => {
+    socket.on('command-created', (newCommand: Command) => {
+      allCommandsDispatch({
+        type: 'ADD-ONE-COMMAND',
+        payload: { command: newCommand },
+      });
+    });
+
+    socket.on('command-updated', (commandUpdated: Command) => {
+      allCommandsDispatch({
+        type: 'UPDATE-ONE-COMMAND',
+        payload: { command: commandUpdated },
+      });
+    });
+
+    socket.on('command-deleted', (commandId: string) => {
+      allCommandsDispatch({
+        type: 'REMOVE-ONE-COMMAND',
+        payload: { commandId },
+      });
+    });
+
+    socket.on('product-updated', (updatedProduct: Product) => {
+      stockProductsDispatch({
+        type: 'UPDATE-ONE-PRODUCT',
+        payload: { product: updatedProduct },
+      });
+    });
+
+    return () => {
+      socket.off('command-created');
+      socket.off('command-updated');
+      socket.off('command-deleted');
+      socket.off('product-updated');
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleOpenAddCommandModal() {

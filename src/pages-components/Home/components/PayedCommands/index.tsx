@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { get10PastDays } from 'utils/get10PastDays';
 import { Payment } from 'pages-components/Home/types/Payment';
 import PaymentsService from 'pages-components/Home/services/PaymentsService';
+import { SocketContext } from 'pages/_app';
 import { PayedCommandsLayout } from './layout';
 import { CloseCashier } from '../CloseCahier';
 
@@ -15,6 +16,8 @@ export const PayedCommands = () => {
 
   const [isGettingPayments, setIsGettingPayments] = useState(true);
   const [isCloseCashierModalOpen, setIsCloseCashierModalOpen] = useState(false);
+
+  const { socket } = useContext(SocketContext);
 
   const router = useRouter();
 
@@ -44,6 +47,22 @@ export const PayedCommands = () => {
       setPayments(paymentsOfDate);
     })();
   }, [payedCommandsDate]);
+
+  useEffect(() => {
+    socket.on('payment-created', (paymentCreated: Payment) => {
+      setPayments((prevPayments) => {
+        const paymentAlreadyExists = prevPayments.some(
+          (prevPayment) => prevPayment._id === paymentCreated._id
+        );
+
+        if (paymentAlreadyExists) {
+          return prevPayments;
+        }
+
+        return [...prevPayments, paymentCreated];
+      });
+    });
+  }, []);
 
   const handleGoToCommandPage = useCallback((commandId: string) => {
     router.push(`/command/${commandId}`);
