@@ -28,7 +28,10 @@ export const ClosedCashiersLayout = ({
   handleGoToCashierPage,
 }: Props) => {
   function formatDate(date: any) {
-    const dt = DateTime.fromISO(date).setLocale('pt-BR');
+    const dt = DateTime.fromISO(date, {
+      zone: 'pt-BR',
+      setZone: true,
+    }).setLocale('pt-BR');
     return dt.toLocaleString(DateTime.DATE_FULL);
   }
 

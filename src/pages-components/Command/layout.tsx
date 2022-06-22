@@ -47,7 +47,10 @@ export const CommandLayout = ({
   handleDeleteCommand,
   handleOpenSentToKitchenModal,
 }: Props) => {
-  const dt = DateTime.fromISO(command.createdAt as string).setLocale('pt-BR');
+  const dt = DateTime.fromISO(command.createdAt as string, {
+    zone: 'pt-BR',
+    setZone: true,
+  }).setLocale('pt-BR');
   const createdAtFormatted = dt.toLocaleString(DateTime.DATE_FULL);
 
   return (

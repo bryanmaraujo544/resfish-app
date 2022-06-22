@@ -103,7 +103,10 @@ export const PayedCommandsLayout = ({
                 <Text>
                   Criada em:{' '}
                   <BoldText>
-                    {DateTime.fromISO(createdAt)
+                    {DateTime.fromISO(createdAt, {
+                      zone: 'pt-BR',
+                      setZone: true,
+                    })
                       .setLocale('pt-BR')
                       .toLocaleString(DateTime.DATETIME_MED)}
                   </BoldText>

@@ -24,7 +24,10 @@ export const ClosedCashiers = () => {
     socket.on('cashier-created', (newCashier: Cashier) => {
       setAllCashiers((prevCashiers) => {
         const cashierAlreadyExists = prevCashiers.find((prevCashier) => {
-          const prevDt = DateTime.fromISO(prevCashier.date).setLocale('pt-BR');
+          const prevDt = DateTime.fromISO(prevCashier.date, {
+            zone: 'pt-BR',
+            setZone: true,
+          }).setLocale('pt-BR');
           const newCashierDt = DateTime.fromISO(newCashier.date).setLocale(
             'pt-BR'
           );
