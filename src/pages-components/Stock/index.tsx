@@ -7,9 +7,11 @@ import {
   useReducer,
   useState,
   useEffect,
+  useContext,
 } from 'react';
 
 import { useRouter } from 'next/router';
+import { SocketContext } from 'pages/_app';
 import StockService from './services/index';
 import { StockLayout } from './layout';
 import { AddItemModal } from './components/AddItemModal';
