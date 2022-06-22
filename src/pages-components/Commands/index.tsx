@@ -74,10 +74,18 @@ export const Commands = () => {
       });
     });
 
+    socket.on('product-updated', (updatedProduct: Product) => {
+      stockProductsDispatch({
+        type: 'UPDATE-ONE-PRODUCT',
+        payload: { product: updatedProduct },
+      });
+    });
+
     return () => {
       socket.off('command-created');
       socket.off('command-updated');
       socket.off('command-deleted');
+      socket.off('product-updated');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

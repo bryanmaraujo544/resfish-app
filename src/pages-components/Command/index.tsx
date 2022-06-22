@@ -157,9 +157,17 @@ export const Command = ({ commandId }: Props) => {
       }
     });
 
+    socket.on('product-updated', (updatedProduct: Product) => {
+      stockProductsDispatch({
+        type: 'UPDATE-ONE-PRODUCT',
+        payload: { product: updatedProduct },
+      });
+    });
+
     return () => {
       socket.off('command-updated');
       socket.off('command-deleted');
+      socket.off('product-updated');
     };
   }, []);
 
