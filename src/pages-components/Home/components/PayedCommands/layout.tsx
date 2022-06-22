@@ -72,7 +72,14 @@ export const PayedCommandsLayout = ({
           <Spinner size="xl" />
         ) : (
           payments?.map(
-            ({ _id, totalPayed, paymentType, createdAt, command }) => (
+            ({
+              _id,
+              totalPayed,
+              paymentType,
+              createdAt,
+              command,
+              waiterExtra,
+            }) => (
               <Flex
                 key={`home-payments-${_id}`}
                 bg="blue.50"
@@ -87,6 +94,9 @@ export const PayedCommandsLayout = ({
                 fontWeight={400}
                 fontSize={[14, 16, 18]}
               >
+                <Text>
+                  Mesa: <BoldText>{command.table}</BoldText>
+                </Text>
                 <Text>
                   Total:{' '}
                   <BoldText>
@@ -109,6 +119,17 @@ export const PayedCommandsLayout = ({
                     })
                       .setLocale('pt-BR')
                       .toLocaleString(DateTime.DATETIME_MED)}
+                  </BoldText>
+                </Text>
+                <Text>
+                  Caixinha {command.waiter}:{' '}
+                  <BoldText>
+                    R${' '}
+                    {formatDecimalNum({
+                      num:
+                        (waiterExtra?.toString() as string) || ('0' as string),
+                      to: 'comma',
+                    })}
                   </BoldText>
                 </Text>
                 <Divider my={2} />

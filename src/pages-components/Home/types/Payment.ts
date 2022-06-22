@@ -6,4 +6,5 @@ export interface Payment {
   paymentType: string;
   createdAt: string;
   command: Command;
+  waiterExtra?: number;
 }

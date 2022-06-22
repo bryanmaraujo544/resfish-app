@@ -61,7 +61,7 @@ export const CashierLayout = ({
 
           <Stack gap={[4, 8]} mt={[6, 12]}>
             {cashier?.payments?.map(
-              ({ _id, totalPayed, paymentType, command }) => (
+              ({ _id, totalPayed, paymentType, command, waiterExtra }) => (
                 <Flex
                   key={`home-payments-${_id}`}
                   bg="blue.50"
@@ -100,7 +100,14 @@ export const CashierLayout = ({
                     </TextWhiteBox>
                     <TextWhiteBox>
                       <Text>
-                        Garçom: <BoldText>{command.waiter}</BoldText>
+                        Caixinha {command.waiter}:{' '}
+                        <BoldText>
+                          R${' '}
+                          {formatDecimalNum({
+                            num: waiterExtra?.toString() || ('0' as string),
+                            to: 'comma',
+                          })}
+                        </BoldText>
                       </Text>
                     </TextWhiteBox>
                     <TextWhiteBox>
@@ -128,7 +135,7 @@ export const CashierLayout = ({
                           rounded={4}
                           textAlign="center"
                         >
-                          <Text>
+                          <Text color="blue.600">
                             {name} - {amount}
                           </Text>
                         </Box>
@@ -146,7 +153,7 @@ export const CashierLayout = ({
 };
 
 const BoldText = (props: any) => (
-  <Box as="span" color="blue.800" fontWeight={700} {...props}>
+  <Box as="span" color="blue.600" fontWeight={700} {...props}>
     {props.children}
   </Box>
 );
@@ -154,12 +161,12 @@ const BoldText = (props: any) => (
 const TextWhiteBox = (props: any) => (
   <Box
     p={2}
-    bg="blue.100"
+    bg="white"
     textAlign="center"
     border="1px solid"
     borderColor="gray.200"
     rounded={4}
-    color="blue.900"
+    color="blue.800"
     fontWeight={600}
   >
     {props.children}
