@@ -21,9 +21,11 @@ interface CashierPayment {
   waiterExtra?: number;
 }
 
-export interface Cashier {
+interface Cashier {
   _id: string;
   total: number;
   date: any;
   payments: CashierPayment[];
 }
+
+export type { Cashier, CashierPayment };

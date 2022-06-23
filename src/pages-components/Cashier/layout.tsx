@@ -8,23 +8,32 @@ import {
   Grid,
   Heading,
   Spinner,
+  Input,
 } from '@chakra-ui/react';
 import { Header } from 'components/Header';
 import { Layout } from 'components/Layout';
 import { DateTime } from 'luxon';
-import { Cashier } from 'types/Cashier';
+import { Dispatch, SetStateAction } from 'react';
+// eslint-disable-next-line import/named
+import { Cashier, CashierPayment } from 'types/Cashier';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 
 interface Props {
   cashier: Cashier;
   handleBackPage: () => void;
   isLoading: boolean;
+  payments: CashierPayment[];
+  search: string;
+  setSearch: Dispatch<SetStateAction<string>>;
 }
 
 export const CashierLayout = ({
   cashier,
   handleBackPage,
   isLoading,
+  payments,
+  search,
+  setSearch,
 }: Props) => {
   const dt = DateTime.fromISO(cashier?.date).setLocale('pt-BR');
 
@@ -58,9 +67,15 @@ export const CashierLayout = ({
               </Text>
             </Box>
           </Flex>
+          <Input
+            placeholder="Pesquise por um pagamento..."
+            mt={[4, 6]}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
 
           <Stack gap={[4, 8]} mt={[6, 12]}>
-            {cashier?.payments?.map(
+            {payments?.map(
               ({ _id, totalPayed, paymentType, command, waiterExtra }) => (
                 <Flex
                   key={`home-payments-${_id}`}

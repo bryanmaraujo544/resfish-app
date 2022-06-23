@@ -29,14 +29,6 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   const [waiterExtra, setWaiterExtra] = useState('');
   const [waiterExtraPercent, setWaiterExtraPercent] = useState(0);
 
-  console.log(
-    'Extra: ',
-    waiterExtra,
-    ' - ',
-    'Extra Percent: ',
-    waiterExtraPercent
-  );
-
   const [isPaying, setIsPaying] = useState(false);
 
   const toast = useToast();
