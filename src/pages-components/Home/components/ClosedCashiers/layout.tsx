@@ -16,16 +16,17 @@ import { formatDecimalNum } from 'utils/formatDecimalNum';
 
 import { MdOutlineReadMore } from 'react-icons/md';
 
+const columns = ['Data', 'Total', 'Comandas', ''];
 interface Props {
   allCashiers: Cashier[];
   handleGoToCashierPage: (cashierId: string) => void;
+  handleDownloadCashiers: (e: any) => void;
 }
-
-const columns = ['Data', 'Total', 'Comandas', ''];
 
 export const ClosedCashiersLayout = ({
   allCashiers,
   handleGoToCashierPage,
+  handleDownloadCashiers,
 }: Props) => {
   function formatDate(date: any) {
     const dt = DateTime.fromISO(date, {
@@ -37,6 +38,7 @@ export const ClosedCashiersLayout = ({
 
   return (
     <Stack>
+      <Button onClick={handleDownloadCashiers}>Baixar Caixas</Button>
       <TableContainer>
         <Table size="lg">
           <Thead>

@@ -10,6 +10,8 @@ import {
 import { Product } from 'types/Product';
 import { SocketContext } from 'pages/_app';
 import { Command } from 'types/Command';
+import { downloadFile } from 'utils/downloadFile';
+import { DateTime } from 'luxon';
 import { ContextProps } from './types/ContextProps';
 import { AddCommandModal } from './components/AddCommandModal';
 import { CommandsLayout } from './layout';
@@ -94,6 +96,18 @@ export const Commands = () => {
     setIsAddCommandModalOpen(true);
   }
 
+  function handleDownload(e: any) {
+    e.preventDefault();
+
+    const dt = DateTime.local().setZone('UTC-3').setLocale('pt-BR');
+
+    downloadFile({
+      data: JSON.stringify(allCommands.value),
+      fileName: `comandas-${dt.day}-${dt.month}-${dt.year}.json`,
+      fileType: 'text/json',
+    });
+  }
+
   const contextValues = useMemo(
     () => ({
       filter,
@@ -132,6 +146,7 @@ export const Commands = () => {
         isLoading={isLoading}
         commandStatusFilter={commandStatusFilter}
         setCommandStatusFilter={setCommandStatusFilter}
+        handleDownload={handleDownload}
       />
       <AddCommandModal
         isModalOpen={isAddCommandModalOpen}

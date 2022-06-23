@@ -13,6 +13,7 @@ type Props = {
   isLoading: boolean;
   commandStatusFilter: 'Ativas' | 'Pagas';
   setCommandStatusFilter: Dispatch<SetStateAction<'Ativas' | 'Pagas'>>;
+  handleDownload: (e: any) => void;
 };
 
 export const CommandsLayout = ({
@@ -20,9 +21,11 @@ export const CommandsLayout = ({
   isLoading,
   commandStatusFilter,
   setCommandStatusFilter,
+  handleDownload,
 }: Props) => (
   <Layout>
     <Header>
+      <Button onClick={handleDownload}>Baixar Dados</Button>
       <Button isCallAction onClick={() => handleOpenAddCommandModal()}>
         <Icon as={MdPlaylistAdd} fontSize={[20, 24]} />
         Adicionar Comanda

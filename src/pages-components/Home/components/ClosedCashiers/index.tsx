@@ -5,6 +5,7 @@ import CashierService from 'pages-components/Home/services/CashierService';
 import { useRouter } from 'next/router';
 import { SocketContext } from 'pages/_app';
 import { DateTime } from 'luxon';
+import { downloadFile } from 'utils/downloadFile';
 import { ClosedCashiersLayout } from './layout';
 
 export const ClosedCashiers = () => {
@@ -63,10 +64,23 @@ export const ClosedCashiers = () => {
     router.push(`/cashier/${cashierId}`);
   }
 
+  function handleDownloadCashiers(e: any) {
+    e.preventDefault();
+
+    const dt = DateTime.local().setZone('UTC-3').setLocale('pt-BR');
+
+    downloadFile({
+      data: JSON.stringify(allCashiers),
+      fileName: `caixas-${dt.day}-${dt.month}-${dt.year}.json`,
+      fileType: 'text/json',
+    });
+  }
+
   return (
     <ClosedCashiersLayout
       allCashiers={allCashiers}
       handleGoToCashierPage={handleGoToCashierPage}
+      handleDownloadCashiers={handleDownloadCashiers}
     />
   );
 };

@@ -12,6 +12,7 @@ import {
 
 import { useRouter } from 'next/router';
 import { SocketContext } from 'pages/_app';
+import { downloadFile } from 'utils/downloadFile';
 import StockService from './services/index';
 import { StockLayout } from './layout';
 import { AddItemModal } from './components/AddItemModal';
@@ -81,6 +82,15 @@ export const Stock = () => {
     []
   );
 
+  function handleDownload(e: any) {
+    e.preventDefault();
+    downloadFile({
+      data: JSON.stringify(products),
+      fileName: 'produtos-do-estoque.json',
+      fileType: 'text/json',
+    });
+  }
+
   function handleGoToHome() {
     router.push('/');
   }
@@ -111,6 +121,7 @@ export const Stock = () => {
         setOrderBy={setOrderBy}
         setIsAddItemModalOpen={setIsAddItemModalOpen}
         handleGoToHome={handleGoToHome}
+        handleDownload={handleDownload}
       />
     </StockContext.Provider>
   );

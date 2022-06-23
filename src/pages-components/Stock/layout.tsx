@@ -15,6 +15,7 @@ interface Props {
   setOrderBy: Dispatch<SetStateAction<string>>;
   setIsAddItemModalOpen: Dispatch<SetStateAction<boolean>>;
   handleGoToHome: () => void;
+  handleDownload: (e: any) => void;
 }
 
 export const StockLayout = ({
@@ -24,15 +25,14 @@ export const StockLayout = ({
   setOrderBy,
   setIsAddItemModalOpen,
   handleGoToHome,
+  handleDownload,
 }: Props) => (
   <Layout>
     <Header hasBackPageBtn handleBackPage={() => handleGoToHome()}>
-      <Button
-        onClick={() => setIsAddItemModalOpen(true)}
-        isCallAction
-        h="100%"
-        w="100%"
-      >
+      <Button onClick={handleDownload} w="auto">
+        Baixar Dados
+      </Button>
+      <Button onClick={() => setIsAddItemModalOpen(true)} isCallAction h="100%">
         <Icon as={MdOutlineAddBox} />
         Adicionar Item
       </Button>
