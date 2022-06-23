@@ -35,7 +35,10 @@ export const CashierLayout = ({
   search,
   setSearch,
 }: Props) => {
-  const dt = DateTime.fromISO(cashier?.date).setLocale('pt-BR');
+  const dt = DateTime.fromISO(cashier?.date, {
+    zone: 'pt-BR',
+    setZone: true,
+  }).setLocale('pt-BR');
 
   return (
     <Layout>

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 
 export const get10PastDays = () => {
-  const todayDate = DateTime.now().setLocale('pt-BR');
+  const todayDate = DateTime.local().setZone('UTC-3').setLocale('pt-BR');
   const dates = [
     {
       date: todayDate,

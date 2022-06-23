@@ -28,9 +28,10 @@ export const ClosedCashiers = () => {
             zone: 'pt-BR',
             setZone: true,
           }).setLocale('pt-BR');
-          const newCashierDt = DateTime.fromISO(newCashier.date).setLocale(
-            'pt-BR'
-          );
+          const newCashierDt = DateTime.fromISO(newCashier.date, {
+            zone: 'pt-BR',
+            setZone: true,
+          }).setLocale('pt-BR');
 
           if (
             prevDt.day === newCashierDt.day &&

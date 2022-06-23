@@ -1,5 +1,5 @@
 import { Cashier as CashierProps } from 'types/Cashier';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { CashierLayout } from './layout';
 import CashierService from './services/CashierService';
