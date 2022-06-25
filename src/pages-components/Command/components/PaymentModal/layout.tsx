@@ -79,7 +79,7 @@ export const PaymentModalLayout = ({
         <BgBox flex="1">
           <Text fontSize={[14, 18, 20]}>
             Mesa:{' '}
-            <Text display="inline-block" fontWeight="700">
+            <Text as="span" fontWeight="700">
               {command?.table}
             </Text>
           </Text>
@@ -92,7 +92,7 @@ export const PaymentModalLayout = ({
         >
           <Text fontSize={[14, 18, 20]}>
             Total:{' '}
-            <Text display="inline-block" fontWeight="700">
+            <Text as="span" fontWeight="700">
               R${' '}
               {formatDecimalNum({
                 num: command?.total?.toString() || '',
@@ -104,7 +104,7 @@ export const PaymentModalLayout = ({
         <BgBox flex="1" justifyContent="center">
           <Text fontSize={[14, 18, 20]}>
             Pago:{' '}
-            <Text display="inline-block" fontWeight="700">
+            <Text as="span" fontWeight="700">
               R${' '}
               {formatDecimalNum({
                 num: command?.totalPayed?.toString() || '',
@@ -116,7 +116,7 @@ export const PaymentModalLayout = ({
         <BgBox flex="1" border="2px solid" borderColor="red.300">
           <Text fontSize={[14, 18, 20]}>
             A pagar:{' '}
-            <Text display="inline-block" fontWeight="700">
+            <Text as="span" fontWeight="700">
               R${' '}
               {formatDecimalNum({
                 num: totalToBePayed.toString(),
