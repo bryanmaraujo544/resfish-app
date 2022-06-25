@@ -4,6 +4,7 @@ import { Payment } from 'pages-components/Home/types/Payment';
 import { get10PastDays } from 'utils/get10PastDays';
 import { useToast } from '@chakra-ui/react';
 import CommandService from 'pages-components/Home/services/CommandService';
+import { DateTime } from 'luxon';
 import { CloseCashierLayout } from './layout';
 
 interface Props {
@@ -39,7 +40,14 @@ export const CloseCashier = ({
       const activeCommands = await CommandService.getTodayCommands({
         isActive: 'true',
       });
-      if (activeCommands?.length > 0) {
+
+      const todayDate = DateTime.local().setZone('UTC-3').setLocale('pt-BR');
+      const todayDateFormatted = todayDate.toLocaleString(DateTime.DATE_FULL);
+
+      if (
+        activeCommands?.length > 0 &&
+        todayDateFormatted === payedCommandsDate
+      ) {
         toast.closeAll();
         handleCloseModal();
         toast({
