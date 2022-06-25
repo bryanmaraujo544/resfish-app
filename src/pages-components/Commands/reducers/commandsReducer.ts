@@ -28,7 +28,7 @@ export const commandsReducer = (state: CommandsState, action: Action) => {
         return state;
       }
 
-      const updatedCommands = [...state.value, newCommand];
+      const updatedCommands = [newCommand, ...state.value];
       return { value: updatedCommands };
     }
     case 'UPDATE-ONE-COMMAND': {
