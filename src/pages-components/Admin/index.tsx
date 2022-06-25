@@ -4,7 +4,6 @@ import { Layout } from 'components/Layout';
 import { Modal } from 'components/Modal';
 
 export const Admin = () => {
-  console.log('admin');
   const [isConfirmResetModalOpen, setIsConfirmResetModalOpen] = useState(false);
   const [isReseting, setIsReseting] = useState(false);
   const toast = useToast();
@@ -31,7 +30,9 @@ export const Admin = () => {
       });
 
       handleCloseModal();
-      console.log('RESET MODAL');
+      toast({
+        title: 'Função em desenvolvimento',
+      });
     } catch (err: any) {
       toast({
         status: 'error',
@@ -86,7 +87,9 @@ export const Admin = () => {
         onClose={handleCloseModal}
       >
         <Flex>
-          <Button flex="1">Cancelar</Button>
+          <Button flex="1" onClick={() => handleCloseModal()}>
+            Cancelar
+          </Button>
           <Button
             onClick={handleResetSystem}
             colorScheme="red"

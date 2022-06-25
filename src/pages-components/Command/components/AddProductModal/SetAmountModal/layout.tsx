@@ -53,7 +53,6 @@ export const SetAmountModalLayout = ({
             onChange={(numStr) => setAmount(numStr)}
             color="blue.800"
             fontWeight={700}
-            // type="number"
           >
             <NumberInputField ref={inputRef} />
             <NumberInputStepper>
