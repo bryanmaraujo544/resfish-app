@@ -148,7 +148,7 @@ export const Command = ({ commandId }: Props) => {
       if (deletedCommandId === commandId) {
         toast.closeAll();
         toast({
-          status: 'error',
+          status: 'info',
           title: 'Comanda deletada',
           duration: 1000,
           isClosable: true,
