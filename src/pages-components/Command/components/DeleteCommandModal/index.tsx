@@ -55,16 +55,16 @@ export const DeleteCommandModal = ({
         });
       }
 
-      await CommandService.deleteCommand({ commandId });
+      const { message } = await CommandService.deleteCommand({ commandId });
 
       await KitchenService.deleteOrdersOfCommand({ commandId });
 
-      // toast({
-      //   status: 'success',
-      //   title: message,
-      //   duration: 2000,
-      //   isClosable: true,
-      // });
+      toast({
+        status: 'success',
+        title: message,
+        duration: 2000,
+        isClosable: true,
+      });
       handleCloseModal();
       router.push('/commands');
     } catch (error: any) {

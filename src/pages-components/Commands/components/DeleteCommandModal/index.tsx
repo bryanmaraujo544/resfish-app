@@ -66,7 +66,7 @@ export const DeleteCommandModal = ({
         })();
       });
 
-      await CommandsService.deleteCommand(commandId);
+      const { message } = await CommandsService.deleteCommand(commandId);
       allCommandsDispatch({
         type: 'REMOVE-ONE-COMMAND',
         payload: { commandId },
@@ -74,12 +74,12 @@ export const DeleteCommandModal = ({
 
       await KitchenService.deleteOrdersOfCommand({ commandId });
 
-      // toast({
-      //   status: 'success',
-      //   title: message,
-      //   duration: 2000,
-      //   isClosable: true,
-      // });
+      toast({
+        status: 'success',
+        title: message,
+        duration: 2000,
+        isClosable: true,
+      });
       handleCloseModal();
     } catch (error: any) {
       setIsDeleting(false);

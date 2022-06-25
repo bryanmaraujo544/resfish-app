@@ -29,7 +29,19 @@ export const commandsReducer = (state: CommandsState, action: Action) => {
       }
 
       const updatedCommands = [newCommand, ...state.value];
-      return { value: updatedCommands };
+      const sortedCommands = updatedCommands.sort((a, b) => {
+        if (a?.table < b?.table) {
+          return -1;
+        }
+        if (b?.table < a?.table) {
+          return 1;
+        }
+        if (b?.table === a?.table) {
+          return 0;
+        }
+        return 0;
+      });
+      return { value: sortedCommands };
     }
     case 'UPDATE-ONE-COMMAND': {
       const updatedCommands = state.value.map((command) => {
