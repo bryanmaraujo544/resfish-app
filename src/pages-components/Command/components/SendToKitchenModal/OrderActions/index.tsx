@@ -105,8 +105,8 @@ export const OrderActions = ({
                       productTotalAmountSendedToKitchen + amountToShip.current,
                   },
                 ],
-                table: kitchenOrder.table,
-                waiter: kitchenOrder.waiter,
+                table: kitchenOrder?.table,
+                waiter: kitchenOrder?.waiter,
                 observation: '',
                 isMade: true,
               });
@@ -148,8 +148,8 @@ export const OrderActions = ({
                   productTotalAmountSendedToKitchen + amountToShip.current,
               },
             ],
-            table: kitchenOrder.table,
-            waiter: kitchenOrder.waiter,
+            table: kitchenOrder?.table,
+            waiter: kitchenOrder?.waiter,
             observation: '',
             isMade: true,
           });

@@ -56,7 +56,7 @@ export const AddCommandModalLayout = ({
           {...rhfRegister('table', { required: true })}
         />
         <ErrorText
-          hasError={rhfErrors.table}
+          hasError={rhfErrors?.table}
           errorMsg="Esse campo é necessário"
         />
       </InputGroup>

@@ -30,7 +30,7 @@ export const DeleteCommandModal = ({
     setIsDeleting(false);
   }
 
-  const commandId = command._id as string;
+  const commandId = command?._id as string;
 
   const handleDeleteCommand = useCallback(async () => {
     try {
@@ -43,8 +43,8 @@ export const DeleteCommandModal = ({
       }
       setIsDeleting(true);
 
-      if (command.isActive === true) {
-        const commandProducts = command.products as Product[];
+      if (command?.isActive === true) {
+        const commandProducts = command?.products as Product[];
         commandProducts.forEach((product: Product) => {
           (async () => {
             await ProductsService.increaseAmount({

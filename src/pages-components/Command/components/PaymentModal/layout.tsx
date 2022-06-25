@@ -80,7 +80,7 @@ export const PaymentModalLayout = ({
           <Text fontSize={[14, 18, 20]}>
             Mesa:{' '}
             <Text display="inline-block" fontWeight="700">
-              {command.table}
+              {command?.table}
             </Text>
           </Text>
         </BgBox>
@@ -195,7 +195,7 @@ export const PaymentModalLayout = ({
           <Text>
             Caixinha:{' '}
             <TitleText as="span" fontSize={[12, 14, 18]}>
-              {command.waiter}
+              {command?.waiter}
             </TitleText>
           </Text>
           <Input

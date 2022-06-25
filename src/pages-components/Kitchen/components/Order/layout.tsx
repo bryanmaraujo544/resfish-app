@@ -58,7 +58,7 @@ export const OrderLayout = ({
     <Text color="blue.800" fontSize={[18, 20]} fontWeight={600}>
       Mesa:{' '}
       <Box as="span" display="inline-block" fontWeight={700}>
-        {order.table}
+        {order?.table}
       </Box>
     </Text>
     {order.observation && <Text color="blue.800">{order.observation}</Text>}

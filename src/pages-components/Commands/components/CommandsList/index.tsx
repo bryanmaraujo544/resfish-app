@@ -60,10 +60,10 @@ export const CommandsList = () => {
     if (!filter) {
       return allCommands.filter((command) => {
         if (commandStatusFilter === 'Ativas') {
-          return command.isActive;
+          return command?.isActive;
         }
 
-        return !command.isActive;
+        return !command?.isActive;
       });
     }
 
@@ -71,10 +71,10 @@ export const CommandsList = () => {
 
     const filtered = allCommands.filter((command) => {
       if (commandStatusFilter === 'Ativas') {
-        return command.fishingType === filter && command.isActive;
+        return command?.fishingType === filter && command?.isActive;
       }
 
-      return command.fishingType === filter && !command.isActive;
+      return command?.fishingType === filter && !command?.isActive;
     });
     return filtered;
   }, [filter, allCommands, commandStatusFilter]);

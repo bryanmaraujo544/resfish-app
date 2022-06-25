@@ -59,7 +59,7 @@ export const EditCommandModal = ({
     table,
     waiter,
   }) => {
-    if (table === command.table && waiter === command.waiter) {
+    if (table === command?.table && waiter === command?.waiter) {
       handleCloseModal();
       toast({
         status: 'info',

@@ -47,7 +47,7 @@ export const CommandLayout = ({
   handleDeleteCommand,
   handleOpenSentToKitchenModal,
 }: Props) => {
-  const dt = DateTime.fromISO(command.createdAt as string, {
+  const dt = DateTime.fromISO(command?.createdAt as string, {
     zone: 'pt-BR',
     setZone: true,
   }).setLocale('pt-BR');
@@ -56,7 +56,7 @@ export const CommandLayout = ({
   return (
     <Layout>
       <Header hasBackPageBtn handleBackPage={handleGoToCommands}>
-        {command.isActive === false ? (
+        {command?.isActive === false ? (
           <BgBox
             bg="green.300"
             gap={3}
@@ -201,7 +201,7 @@ export const CommandLayout = ({
               </Flex>
             </GridItem>
           </Grid>
-          {command.isActive && <NavHeader />}
+          {command?.isActive && <NavHeader />}
           <ProductsList />
         </>
       )}

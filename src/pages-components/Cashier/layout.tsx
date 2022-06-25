@@ -101,7 +101,7 @@ export const CashierLayout = ({
                   >
                     <TextWhiteBox>
                       <Text>
-                        Mesa: <BoldText>{command.table}</BoldText>
+                        Mesa: <BoldText>{command?.table}</BoldText>
                       </Text>
                     </TextWhiteBox>
                     <TextWhiteBox>
@@ -118,7 +118,7 @@ export const CashierLayout = ({
                     </TextWhiteBox>
                     <TextWhiteBox>
                       <Text>
-                        Caixinha {command.waiter}:{' '}
+                        Caixinha {command?.waiter}:{' '}
                         <BoldText>
                           R${' '}
                           {formatDecimalNum({

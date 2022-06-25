@@ -41,7 +41,7 @@ export const DeleteProductModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         (product) => product._id !== productIdToDelete
       );
       const { command: updatedCommand } = await CommandService.updateCommand({
-        _id: command._id,
+        _id: command?._id,
         products: newProducts,
       });
       setCommand(updatedCommand);

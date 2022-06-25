@@ -170,7 +170,7 @@ export const AddProductsModal = ({
       setIsAddingProducts(true);
       // Grab command infos to get the products array and push all of selectedProducts in it.
       const { command } = await CommandsService.getOneCommand({ commandId });
-      const hasSomeSelectedProductInCommand = command.products.find(
+      const hasSomeSelectedProductInCommand = command?.products?.find(
         (product: any) =>
           selectedProducts.some(
             (selectedProduct: any) => selectedProduct.name === product.name
@@ -182,14 +182,14 @@ export const AddProductsModal = ({
         toast.closeAll();
         toast({
           status: 'error',
-          title: `O produto: ${hasSomeSelectedProductInCommand.name} já está na comanda`,
+          title: `O produto: ${hasSomeSelectedProductInCommand?.name} já está na comanda`,
           duration: 2000,
           isClosable: true,
         });
         return;
       }
 
-      const newProducts = [...command.products, ...selectedProducts];
+      const newProducts = [...(command?.products as any), ...selectedProducts];
 
       const { command: updatedCommand } = await CommandsService.updateCommand({
         _id: commandId,

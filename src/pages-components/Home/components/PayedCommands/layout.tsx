@@ -95,7 +95,7 @@ export const PayedCommandsLayout = ({
                 fontSize={[14, 16, 18]}
               >
                 <Text>
-                  Mesa: <BoldText>{command.table}</BoldText>
+                  Mesa: <BoldText>{command?.table}</BoldText>
                 </Text>
                 <Text>
                   Total:{' '}
@@ -122,7 +122,7 @@ export const PayedCommandsLayout = ({
                   </BoldText>
                 </Text>
                 <Text>
-                  Caixinha {command.waiter}:{' '}
+                  Caixinha {command?.waiter}:{' '}
                   <BoldText>
                     R${' '}
                     {formatDecimalNum({
