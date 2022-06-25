@@ -109,16 +109,6 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         return;
       }
 
-      if (totalToBePayed === 0) {
-        setIsPaying(false);
-        toast({
-          status: 'info',
-          title: 'Esta comanda já foi paga!',
-          duration: 1000,
-        });
-        return;
-      }
-
       if (isReceivedValueInvalid.value === true) {
         setIsPaying(false);
         toast.closeAll();
