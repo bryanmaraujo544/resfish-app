@@ -30,7 +30,7 @@ export const PayProductModal = ({
   const [isPaying, setIsPaying] = useState(false);
 
   const toast = useToast();
-  const { productsDispatch, command, setCommand } = useContext(CommandContext);
+  const { command, setCommand } = useContext(CommandContext);
 
   useEffect(() => {
     const paymentTotal = (Math.round(
@@ -129,12 +129,12 @@ export const PayProductModal = ({
       });
       setCommand(updatedCommand);
 
-      productsDispatch({
-        type: 'update-product-total-payed',
-        payload: {
-          product: { id: productToPay._id, totalPayed: paymentValueFormatted },
-        },
-      });
+      // productsDispatch({
+      //   type: 'update-product-total-payed',
+      //   payload: {
+      //     product: { id: productToPay._id, totalPayed: paymentValueFormatted },
+      //   },
+      // });
 
       handleCloseModal();
       toast.closeAll();
