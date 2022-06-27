@@ -59,6 +59,7 @@ class KitchenService {
       return product;
     });
 
+    // Taking out products that the amount is 0 when waiter mark products to ship now
     const newOrderProductsUpdated = newOrderProducts.filter(
       (product: any) => product.amount !== 0
     );
