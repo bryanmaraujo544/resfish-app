@@ -91,10 +91,11 @@ export const OrderActions = ({
                 await KitchenService.getCommandOrdersProducts({
                   commandId: kitchenOrder?.commandId as string,
                 });
+
               const productTotalAmountSendedToKitchen =
                 commandOrdersProducts.find(
                   ({ _id }: any) => _id === productToShip._id
-                ).amount;
+                )?.amount;
 
               await KitchenService.storeKitchenOrder({
                 commandId: kitchenOrder?.commandId as string,
@@ -135,9 +136,10 @@ export const OrderActions = ({
             await KitchenService.getCommandOrdersProducts({
               commandId: kitchenOrder?.commandId as string,
             });
+
           const productTotalAmountSendedToKitchen = commandOrdersProducts.find(
             ({ _id }: any) => _id === productToShip._id
-          ).amount;
+          )?.amount;
 
           await KitchenService.storeKitchenOrder({
             commandId: kitchenOrder?.commandId as string,

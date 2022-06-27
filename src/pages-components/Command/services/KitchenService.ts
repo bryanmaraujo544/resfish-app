@@ -59,8 +59,12 @@ class KitchenService {
       return product;
     });
 
+    const newOrderProductsUpdated = newOrderProducts.filter(
+      (product: any) => product.amount !== 0
+    );
+
     const { data } = await serverApi.put(`/kitchen/orders/${orderId}`, {
-      products: newOrderProducts,
+      products: newOrderProductsUpdated,
     });
     return data;
   }

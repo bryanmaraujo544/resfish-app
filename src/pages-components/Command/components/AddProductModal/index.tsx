@@ -102,6 +102,7 @@ export const AddProductModal = ({
       const formattedAmount = Number(
         formatAmount({ num: amount, to: 'point' })
       );
+
       if (Number.isNaN(formattedAmount)) {
         setIsSelectingProduct(false);
         toast.closeAll();

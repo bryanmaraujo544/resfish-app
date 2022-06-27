@@ -65,6 +65,13 @@ export const Kitchen = () => {
       });
 
       socket.on('kitchen-order-updated', (payload: any) => {
+        if (payload?.[0]?.isMade) {
+          allOrdersDispatch({
+            type: 'REMOVE-ONE-ORDER',
+            payload: { order: payload?.[0] },
+          });
+        }
+
         allOrdersDispatch({
           type: 'UPDATE-ONE-PRODUCT',
           payload: { order: payload[0] || {} },
