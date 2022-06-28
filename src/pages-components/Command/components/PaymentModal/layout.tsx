@@ -29,10 +29,10 @@ interface Props {
   isReceivedValueInvalid: { value: boolean; message: string };
   totalToBePayed: number;
   isPaying: boolean;
-  waiterExtra: string;
-  setWaiterExtra: Dispatch<SetStateAction<string>>;
-  waiterExtraPercent: number;
-  setWaiterExtraPercent: Dispatch<SetStateAction<number>>;
+  // waiterExtra: string;
+  // setWaiterExtra: Dispatch<SetStateAction<string>>;
+  // waiterExtraPercent: number;
+  // setWaiterExtraPercent: Dispatch<SetStateAction<number>>;
 }
 
 const paymentOptions = [
@@ -55,11 +55,11 @@ export const PaymentModalLayout = ({
   isReceivedValueInvalid,
   totalToBePayed,
   isPaying,
-  waiterExtra,
-  setWaiterExtra,
-  waiterExtraPercent,
-  setWaiterExtraPercent,
-}: Props) => (
+}: // waiterExtra,
+// setWaiterExtra,
+// waiterExtraPercent,
+// setWaiterExtraPercent,
+Props) => (
   <Modal
     isOpen={isModalOpen}
     onClose={handleCloseModal}
@@ -191,7 +191,7 @@ export const PaymentModalLayout = ({
             </TitleText>
           </BgBox>
         )}
-        <Flex gap={[2, 4, 6]} alignItems="center">
+        {/* <Flex gap={[2, 4, 6]} alignItems="center">
           <Text>
             Caixinha:{' '}
             <TitleText as="span" fontSize={[12, 14, 18]}>
@@ -215,7 +215,7 @@ export const PaymentModalLayout = ({
             <option value={5}>5%</option>
             <option value={10}>10%</option>
           </Select>
-        </Flex>
+        </Flex> */}
         <Divider />
         {/* ACTION BUTTONS */}
         <Grid gridTemplateColumns="1fr 1fr" gap={[1, 2, 4]}>

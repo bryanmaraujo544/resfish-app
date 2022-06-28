@@ -37,6 +37,7 @@ interface Props {
   handleOpenPaymentModal: () => void;
   handleDeleteCommand: () => void;
   handleOpenSentToKitchenModal: () => void;
+  handleOpenCloseCommandModal: () => void;
 }
 
 export const CommandLayout = ({
@@ -46,6 +47,7 @@ export const CommandLayout = ({
   handleOpenPaymentModal,
   handleDeleteCommand,
   handleOpenSentToKitchenModal,
+  handleOpenCloseCommandModal,
 }: Props) => {
   const dt = DateTime.fromISO(command?.createdAt as string, {
     zone: 'pt-BR',
@@ -138,6 +140,29 @@ export const CommandLayout = ({
                     })}
                   </Heading>
                 </BgBox>
+                <Button
+                  onClick={() => handleOpenPaymentModal()}
+                  isDisabled={command.isActive === false}
+                  bg="blue.50"
+                  color="blue.500"
+                  fontWeight="700"
+                  display="flex"
+                  alignItems="center"
+                  rounded={4}
+                  gap={2}
+                  _focus={{
+                    bg: 'green.100',
+                    color: 'green.500',
+                  }}
+                  _hover={{
+                    bg: 'green.100',
+                    color: 'green.500',
+                  }}
+                  fontSize={[16, 20]}
+                >
+                  <Icon as={IoCashOutline} mt={0.8} />
+                  <Text>Pagar</Text>
+                </Button>
                 <Menu>
                   <MenuButton
                     bg="blue.50"
@@ -157,26 +182,27 @@ export const CommandLayout = ({
                       color="blue.800"
                     />
                   </MenuButton>
+
                   <MenuList bg="blue.50" p={2}>
                     <MenuItem
                       icon={<IoCashOutline fontSize={14} />}
-                      onClick={() => handleOpenPaymentModal()}
+                      onClick={() => handleOpenCloseCommandModal()}
                       isDisabled={command.isActive === false}
-                      color="green.400"
+                      color="blue.400"
                       fontWeight="700"
                       display="flex"
                       alignItems="center"
                       rounded={4}
                       _focus={{
-                        bg: 'green.100',
-                        color: 'green.500',
+                        bg: 'blue.100',
+                        color: 'blue.500',
                       }}
                       _hover={{
-                        bg: 'green.100',
-                        color: 'green.500',
+                        bg: 'blue.100',
+                        color: 'blue.500',
                       }}
                     >
-                      <Text>Pagar</Text>
+                      <Text>Fechar Comanda</Text>
                     </MenuItem>
                     <MenuItem
                       icon={<BsFillTrashFill fontSize={14} />}

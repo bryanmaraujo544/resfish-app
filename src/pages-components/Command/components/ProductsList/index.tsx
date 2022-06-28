@@ -260,11 +260,6 @@ export const ProductsList = () => {
           return;
         }
 
-        productsDispatch({
-          type: 'decrement-amount',
-          payload: { id: productId },
-        });
-
         // Save the update in command
         const newProducts = command?.products?.map((prod: Product) => {
           if (prod._id === productId) {
@@ -280,6 +275,12 @@ export const ProductsList = () => {
           _id: command?._id as string,
           products: newProducts,
         });
+
+        // I'm already receiving the updated version of socket event -> so I don't need to udpate in fr
+        // productsDispatch({
+        //   type: 'decrement-amount',
+        //   payload: { id: productId },
+        // });
         setCommand(updatedCommand);
 
         // Decreasing the amount of this product in stock

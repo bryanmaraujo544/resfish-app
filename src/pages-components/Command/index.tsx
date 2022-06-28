@@ -25,6 +25,7 @@ import ProductsService from './services/ProductsService';
 import { stockProductsReducer } from './reducers/stockProductsReducer';
 import { DeleteCommandModal } from './components/DeleteCommandModal';
 import { SendToKitchenModal } from './components/SendToKitchenModal';
+import { CloseCommandModal } from './components/CloseCommandModal';
 
 interface StockProductsAction {
   type: 'ADD-ALL-PRODUCTS' | 'UPDATE-ONE-PRODUCT';
@@ -81,6 +82,7 @@ export const Command = ({ commandId }: Props) => {
     useState(false);
   const [isSendToKitchenModalOpen, setIsSendToKitchenModalOpen] =
     useState(false);
+  const [isCloseCommandModalOpen, setIsCloseCommandModalOpen] = useState(false);
 
   const [filter, setFilter] = useState('');
   const [orderBy, setOrderBy] = useState('');
@@ -187,6 +189,10 @@ export const Command = ({ commandId }: Props) => {
     setIsSendToKitchenModalOpen(true);
   }, []);
 
+  const handleOpenCloseCommandModal = useCallback(() => {
+    setIsCloseCommandModalOpen(true);
+  }, []);
+
   const handleGoToCommands = useCallback(() => {
     router.back();
   }, [router]);
@@ -226,6 +232,7 @@ export const Command = ({ commandId }: Props) => {
         handleOpenPaymentModal={handleOpenPaymentModal}
         handleDeleteCommand={handleDeleteCommand}
         handleOpenSentToKitchenModal={handleOpenSentToKitchenModal}
+        handleOpenCloseCommandModal={handleOpenCloseCommandModal}
       />
       <DeleteProductModal
         isModalOpen={isDeleteProductModalOpen}
@@ -247,6 +254,10 @@ export const Command = ({ commandId }: Props) => {
       <PaymentModal
         isModalOpen={isPaymentModalOpen}
         setIsModalOpen={setIsPaymentModalOpen}
+      />
+      <CloseCommandModal
+        isModalOpen={isCloseCommandModalOpen}
+        setIsModalOpen={setIsCloseCommandModalOpen}
       />
       <SendToKitchenModal
         isModalOpen={isSendToKitchenModalOpen}

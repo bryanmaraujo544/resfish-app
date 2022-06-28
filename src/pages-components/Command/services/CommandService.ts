@@ -4,7 +4,9 @@ import { Product } from 'types/Product';
 
 interface UpdateCommand extends Command {
   _id: string | undefined;
-  products: Product[] | undefined;
+  products?: Product[] | undefined;
+  updateTotal?: string;
+  total?: number;
 }
 
 interface DeleteCommand {
@@ -29,15 +31,19 @@ class CommandService {
     products,
     total,
     isActive,
+    updateTotal,
   }: UpdateCommand) {
-    const { data } = await serverApi.put(`/commands/${_id}`, {
-      waiter,
-      table,
-      fishingType,
-      products,
-      total,
-      isActive,
-    });
+    const { data } = await serverApi.put(
+      `/commands/${_id}?updateTotal=${updateTotal}`,
+      {
+        waiter,
+        table,
+        fishingType,
+        products,
+        total,
+        isActive,
+      }
+    );
     return data;
   }
 
