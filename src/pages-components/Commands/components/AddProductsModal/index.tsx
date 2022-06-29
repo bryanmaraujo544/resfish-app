@@ -11,6 +11,7 @@ import {
   useContext,
   useCallback,
 } from 'react';
+import { Product } from 'types/Product';
 import { formatAmount } from 'utils/formatAmount';
 import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
@@ -104,28 +105,11 @@ export const AddProductsModal = ({
       const formattedAmount = Number(
         formatAmount({ num: amount, to: 'point' })
       );
+
       if (Number.isNaN(formattedAmount)) {
         toast({
           status: 'error',
           title: 'Número inválido',
-          duration: 2000,
-          isClosable: true,
-        });
-        setIsSelectingProduct(false);
-        return;
-      }
-
-      // TODO: verify if the amount informed of the product is available in stock of produt
-      const { isInStock } = await ProductsService.verifyAmount({
-        productId: productToSetAmount?._id as string,
-        amount: formattedAmount,
-      });
-
-      if (!isInStock) {
-        toast.closeAll();
-        toast({
-          status: 'error',
-          title: 'Quantidade acima do estoque disponível',
           duration: 2000,
           isClosable: true,
         });
@@ -186,6 +170,20 @@ export const AddProductsModal = ({
           duration: 2000,
           isClosable: true,
         });
+        return;
+      }
+
+      // If one of the product amount is unavailable the promises will fails and falls in catch block
+      const allAvailable = await Promise.all(
+        selectedProducts.map((product: Product) =>
+          ProductsService.verifyAmount({
+            productId: product?._id as string,
+            amount: product?.amount,
+          })
+        )
+      );
+
+      if (!allAvailable) {
         return;
       }
 
