@@ -1,5 +1,5 @@
 /* eslint-disable no-unsafe-optional-chaining */
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useContext } from 'react';
 import {
   Button,
   Stack,
@@ -17,6 +17,7 @@ import {
 import { Modal } from 'components/Modal';
 import { Product } from 'types/Product';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
+import { CommandContext } from 'pages-components/Command';
 
 interface Props {
   isModalOpen: boolean;
@@ -45,13 +46,28 @@ export const PayProductModalLayout = ({
   setTypeOfPayment,
   isPaying,
 }: Props) => {
+  const { command } = useContext(CommandContext);
   const totalOfProduct = productInfos.amount * productInfos.unitPrice;
 
-  const restValueToBePayedNum =
+  const tempRestValueToBePayedNum =
     Math.round(
       (totalOfProduct - (productInfos.totalPayed as number) + Number.EPSILON) *
         100
     ) / 100;
+
+  const tempTotalToBePayed =
+    Math.round(
+      ((command?.total || 0) - (command?.totalPayed || 0) + Number.EPSILON) *
+        100
+    ) / 100;
+  const commandValueToBePayed = tempTotalToBePayed > 0 ? tempTotalToBePayed : 0;
+
+  // If the value to be payed of some product is greater thant the necesary to be payed of command
+  // it means the user made a payment of part of command.
+  const restValueToBePayedNum =
+    tempRestValueToBePayedNum > commandValueToBePayed
+      ? commandValueToBePayed
+      : tempRestValueToBePayedNum;
 
   const totalToBePayed = formatDecimalNum({
     num: restValueToBePayedNum.toString(),

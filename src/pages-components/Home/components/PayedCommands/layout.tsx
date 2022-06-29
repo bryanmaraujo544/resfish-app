@@ -18,6 +18,7 @@ import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { get10PastDays } from 'utils/get10PastDays';
 
 import { BsCashStack } from 'react-icons/bs';
+import { formatPaymentTypes } from 'utils/formatPaymentTypes';
 
 interface Props {
   payedCommandsDate: any;
@@ -75,10 +76,11 @@ export const PayedCommandsLayout = ({
             ({
               _id,
               totalPayed,
-              paymentType,
+              paymentTypes,
               createdAt,
               command,
               waiterExtra,
+              observation,
             }) => (
               <Flex
                 key={`home-payments-${_id}`}
@@ -108,7 +110,10 @@ export const PayedCommandsLayout = ({
                   </BoldText>
                 </Text>
                 <Text>
-                  Meio de Pagamento: <BoldText>{paymentType}</BoldText>
+                  Meio de Pagamento:{' '}
+                  <BoldText>
+                    {formatPaymentTypes(paymentTypes) || paymentTypes[0]}
+                  </BoldText>
                 </Text>
                 <Text>
                   Criada em:{' '}
@@ -132,6 +137,9 @@ export const PayedCommandsLayout = ({
                     })}
                   </BoldText>
                 </Text>
+                {observation && (
+                  <Text fontSize={[12, 14]}>Obs: {observation || ''}</Text>
+                )}
                 <Divider my={2} />
                 <Stack
                   gap={[1, 2]}

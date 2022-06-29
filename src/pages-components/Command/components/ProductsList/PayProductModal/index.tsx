@@ -123,9 +123,12 @@ export const PayProductModal = ({
         }
         return product;
       });
+
       const { command: updatedCommand } = await CommandService.updateCommand({
         _id: command?._id as string,
         products: newProducts,
+        total: paymentValueFormatted,
+        updateTotal: 'true',
       });
       setCommand(updatedCommand);
 

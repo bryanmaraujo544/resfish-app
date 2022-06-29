@@ -27,8 +27,6 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     message: '',
   });
   const [paymentType, setPaymentType] = useState('Dinheiro');
-  // const [waiterExtra, setWaiterExtra] = useState('');
-  // const [waiterExtraPercent, setWaiterExtraPercent] = useState(0);
 
   const [isPaying, setIsPaying] = useState(false);
 
@@ -56,7 +54,7 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       setExchange('0');
     }
 
-    if (receivedValueFormatted > totalToBePayed) {
+    if (receivedValueFormatted > totalToBePayed && paymentType === 'Dinheiro') {
       setIsReceivedValueInvalid({ value: false, message: '' });
       const updatedExchange = (receivedValueFormatted - totalToBePayed).toFixed(
         2
@@ -68,25 +66,24 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         })
       );
     }
+
+    if (paymentType !== 'Dinheiro' && receivedValueFormatted > totalToBePayed) {
+      setIsReceivedValueInvalid({
+        value: true,
+        message: 'Pagamento maior do que o necessário',
+      });
+    } else {
+      setIsReceivedValueInvalid({ value: false, message: '' });
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [receivedValue]);
-
-  // useEffect(() => {
-  //   const percentageValue =
-  //     Math.round(
-  //       (totalToBePayed * (waiterExtraPercent / 100) + Number.EPSILON) * 100
-  //     ) / 100;
-  //   setWaiterExtra(
-  //     formatDecimalNum({ num: percentageValue.toString(), to: 'comma' })
-  //   );
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [waiterExtraPercent]);
 
   function handleCloseModal() {
     setIsModalOpen(false);
     setIsReceivedValueInvalid({ value: false, message: '' });
     setIsPaying(false);
-    setReceivedValue('0');
+    setReceivedValue('');
     setExchange('0');
   }
 
@@ -110,11 +107,11 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         return;
       }
 
-      if (paymentType === 'Dinheiro' && !receivedValue) {
+      if (!receivedValue) {
         setIsPaying(false);
         toast.closeAll();
         toast({
-          status: 'info',
+          status: 'warning',
           title: 'Insira o valor recebido do cliente',
           duration: 2000,
         });
@@ -132,28 +129,6 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         return;
       }
 
-      // const waiterExtraFormatted = Number(
-      //   formatDecimalNum({ num: waiterExtra, to: 'point' })
-      // );
-
-      // if (waiterExtraFormatted && Number.isNaN(waiterExtraFormatted)) {
-      //   toast({
-      //     status: 'error',
-      //     title: 'Valor da caixinha inválido.',
-      //     duration: 1000,
-      //     isClosable: true,
-      //   });
-      //   setIsPaying(false);
-      //   return;
-      // }
-
-      // const { message, paymentInfos } = await PaymentsService.pay({
-      //   commandId: command?._id as string,
-      //   paymentType,
-      //   waiterExtra: waiterExtraFormatted,
-      // });
-      // setCommand(paymentInfos.command);
-
       const receivedValueFormatted = Number(
         formatDecimalNum({ num: receivedValue, to: 'point' })
       );
@@ -168,6 +143,7 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
           _id: command._id,
           updateTotal: 'true',
           total: totalToPay,
+          paymentType,
         });
 
       setCommand(updatedCommand);
@@ -207,10 +183,6 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       isReceivedValueInvalid={isReceivedValueInvalid}
       totalToBePayed={totalToBePayed}
       isPaying={isPaying}
-      // waiterExtra={waiterExtra}
-      // setWaiterExtra={setWaiterExtra}
-      // waiterExtraPercent={waiterExtraPercent}
-      // setWaiterExtraPercent={setWaiterExtraPercent}
     />
   );
 };

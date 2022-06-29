@@ -17,6 +17,7 @@ import { Dispatch, SetStateAction } from 'react';
 // eslint-disable-next-line import/named
 import { Cashier, CashierPayment } from 'types/Cashier';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
+import { formatPaymentTypes } from 'utils/formatPaymentTypes';
 
 interface Props {
   cashier: Cashier;
@@ -79,7 +80,7 @@ export const CashierLayout = ({
 
           <Stack gap={[4, 8]} mt={[6, 12]}>
             {payments?.map(
-              ({ _id, totalPayed, paymentType, command, waiterExtra }) => (
+              ({ _id, totalPayed, paymentTypes, command, waiterExtra }) => (
                 <Flex
                   key={`home-payments-${_id}`}
                   bg="blue.50"
@@ -130,7 +131,8 @@ export const CashierLayout = ({
                     </TextWhiteBox>
                     <TextWhiteBox>
                       <Text>
-                        Meio de Pagamento: <BoldText>{paymentType}</BoldText>
+                        Meio de Pagamento:{' '}
+                        <BoldText>{formatPaymentTypes(paymentTypes)}</BoldText>
                       </Text>
                     </TextWhiteBox>
                   </Grid>

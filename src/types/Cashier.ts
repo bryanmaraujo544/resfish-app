@@ -15,7 +15,7 @@ interface CashierCommand {
 
 interface CashierPayment {
   _id: string;
-  paymentType: string;
+  paymentTypes: string[];
   totalPayed: number;
   command: CashierCommand;
   waiterExtra?: number;

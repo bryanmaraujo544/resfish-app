@@ -7,6 +7,7 @@ interface UpdateCommand extends Command {
   products?: Product[] | undefined;
   updateTotal?: string;
   total?: number;
+  paymentType?: string;
 }
 
 interface DeleteCommand {
@@ -32,6 +33,7 @@ class CommandService {
     total,
     isActive,
     updateTotal,
+    paymentType,
   }: UpdateCommand) {
     const { data } = await serverApi.put(
       `/commands/${_id}?updateTotal=${updateTotal}`,
@@ -42,6 +44,7 @@ class CommandService {
         products,
         total,
         isActive,
+        paymentType,
       }
     );
     return data;

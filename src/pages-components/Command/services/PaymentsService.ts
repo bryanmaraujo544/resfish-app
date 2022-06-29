@@ -2,16 +2,18 @@ import { serverApi } from 'services/serverApi';
 
 interface Pay {
   commandId: string;
-  paymentType: string;
+  paymentTypes: string[];
   waiterExtra: number;
+  observation?: string;
 }
 
 class PaymentsService {
-  async pay({ commandId, paymentType, waiterExtra }: Pay) {
+  async pay({ commandId, paymentTypes, waiterExtra, observation }: Pay) {
     const { data } = await serverApi.post('/payments', {
       commandId,
-      paymentType,
+      paymentTypes,
       waiterExtra,
+      observation,
     });
     return data;
   }
