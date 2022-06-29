@@ -115,23 +115,6 @@ export const AddProductModal = ({
         return;
       }
 
-      const { isInStock } = await ProductsService.verifyAmount({
-        productId: productToSetAmount?._id as string,
-        amount: formattedAmount,
-      });
-
-      if (!isInStock) {
-        setIsSelectingProduct(false);
-        toast.closeAll();
-        toast({
-          status: 'error',
-          title: 'Quantidade acima do estoque disponível',
-          duration: 2000,
-          isClosable: true,
-        });
-        return;
-      }
-
       setSelectedProducts((prev: any) => [
         ...prev,
         {
@@ -184,6 +167,20 @@ export const AddProductModal = ({
           status: 'error',
           duration: 2000,
         });
+        return;
+      }
+
+      // If one of the product amount is unavailable the promises will fails and falls in catch block
+      const allAvailable = await Promise.all(
+        selectedProducts.map((product: Product) =>
+          ProductsService.verifyAmount({
+            productId: product?._id as string,
+            amount: product?.amount,
+          })
+        )
+      );
+
+      if (!allAvailable) {
         return;
       }
 

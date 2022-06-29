@@ -36,8 +36,6 @@ type Props = {
   setName: Dispatch<SetStateAction<string>>;
   category: string;
   setCategory: Dispatch<SetStateAction<string>>;
-  image: string;
-  setImage: Dispatch<SetStateAction<string>>;
   amount: number;
   setAmount: Dispatch<SetStateAction<number>>;
   isSubmitting: boolean;
@@ -53,8 +51,6 @@ export const AddItemModalLayout = ({
   setName,
   category,
   setCategory,
-  image,
-  setImage,
   amount,
   setAmount,
   isSubmitting,
@@ -80,14 +76,7 @@ export const AddItemModalLayout = ({
           onChange={(e) => setName(e.target.value)}
         />
       </InputGroup>
-      <InputGroup>
-        <Text>URL da imagem</Text>
-        <Input
-          placeholder="URL da imagem"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-        />
-      </InputGroup>
+
       <InputGroup>
         <Text>Categoria *</Text>
         <Select
