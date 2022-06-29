@@ -10,6 +10,7 @@ import {
   useEffect,
   useContext,
   useCallback,
+  useRef,
 } from 'react';
 import { Product } from 'types/Product';
 import { formatAmount } from 'utils/formatAmount';
@@ -41,7 +42,8 @@ export const AddProductsModal = ({
   const [productToSetAmount, setProductToSetAmount] = useState<ProductNoAmount>(
     {} as ProductNoAmount
   );
-  const [amount, setAmount] = useState('1');
+  const amount = useRef('1');
+
   const [filter, setFilter] = useState('');
   const [searchContent, setSearchContent] = useState('');
 
@@ -66,6 +68,7 @@ export const AddProductsModal = ({
     setIsModalOpen(false);
     setIsAddingProducts(false);
     setIsSelectingProduct(false);
+    amount.current = '1';
   }
 
   // This function receives the product infos of the product clicked and opens the modal to select the amount of this
@@ -103,7 +106,7 @@ export const AddProductsModal = ({
       }
 
       const formattedAmount = Number(
-        formatAmount({ num: amount, to: 'point' })
+        formatAmount({ num: amount.current, to: 'point' })
       );
 
       if (Number.isNaN(formattedAmount)) {
@@ -244,7 +247,7 @@ export const AddProductsModal = ({
 
   const cleanModalValues = useCallback(() => {
     setSelectedProducts([]);
-    setAmount('1');
+    amount.current = '1';
     setFilter('');
     setSearchContent('');
   }, []);
@@ -298,7 +301,6 @@ export const AddProductsModal = ({
         isSetAmountModalOpen={isSetAmountModalOpen}
         setIsSetAmountModalOpen={setIsSetAmountModalOpen}
         amount={amount}
-        setAmount={setAmount}
         handleAddProduct={handleAddProduct}
         isFishesCategory={
           productToSetAmount?.category?.toLowerCase() === 'peixes' ||

@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 import {
   NumberDecrementStepper,
   NumberIncrementStepper,
@@ -9,13 +11,13 @@ import {
 } from '@chakra-ui/react';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
-import { Dispatch, SetStateAction, useRef } from 'react';
+// import { Dispatch, SetStateAction, useRef } from 'react';
+import { useRef } from 'react';
 
 type Props = {
   isModalOpen: boolean;
   handleCloseAmountModal: () => void;
-  amount: string;
-  setAmount: Dispatch<SetStateAction<string>>;
+  amount: { current: string };
   handleAddProduct: (e: any) => void;
   isFishesCategory: boolean;
   isSelectingProduct: boolean;
@@ -25,7 +27,6 @@ export const SetAmountModalLayout = ({
   isModalOpen,
   handleCloseAmountModal,
   amount,
-  setAmount,
   handleAddProduct,
   isFishesCategory,
   isSelectingProduct,
@@ -42,15 +43,15 @@ export const SetAmountModalLayout = ({
       <Stack spacing={4} as="form" onSubmit={(e) => handleAddProduct(e)}>
         {isFishesCategory ? (
           <Input
-            value={amount}
+            defaultValue="1"
             type="text"
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => (amount.current = e.target.value)}
           />
         ) : (
           <NumberInput
-            value={amount}
+            defaultValue="1"
             min={1}
-            onChange={(numStr) => setAmount(numStr)}
+            onChange={(numStr) => (amount.current = numStr)}
             color="blue.800"
             fontWeight={700}
           >

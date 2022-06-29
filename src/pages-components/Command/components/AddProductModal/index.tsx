@@ -6,6 +6,7 @@ import {
   useMemo,
   useCallback,
   useContext,
+  useRef,
 } from 'react';
 import { useToast } from '@chakra-ui/react';
 
@@ -52,7 +53,7 @@ export const AddProductModal = ({
   const [productToSetAmount, setProductToSetAmount] = useState<ProductNoAmount>(
     {} as ProductNoAmount
   );
-  const [amount, setAmount] = useState('1');
+  const amount = useRef('1');
 
   const [filter, setFilter] = useState('');
   const [searchContent, setSearchContent] = useState('');
@@ -67,6 +68,7 @@ export const AddProductModal = ({
     setIsModalOpen(false);
     setIsAddingProducts(false);
     setIsSelectingProduct(false);
+    amount.current = '1';
   }
 
   // This function receives the product infos of the product clicked and opens the modal to select the amount of this
@@ -100,7 +102,7 @@ export const AddProductModal = ({
       }
 
       const formattedAmount = Number(
-        formatAmount({ num: amount, to: 'point' })
+        formatAmount({ num: amount.current, to: 'point' })
       );
 
       if (Number.isNaN(formattedAmount)) {
@@ -243,7 +245,7 @@ export const AddProductModal = ({
 
   const cleanModalValues = useCallback(() => {
     setSelectedProducts([]);
-    setAmount('1');
+    amount.current = '1';
     setFilter('');
     setSearchContent('');
   }, []);
@@ -297,7 +299,6 @@ export const AddProductModal = ({
         isSetAmountModalOpen={isSetAmountModalOpen}
         setIsSetAmountModalOpen={setIsSetAmountModalOpen}
         amount={amount}
-        setAmount={setAmount}
         handleAddProduct={handleAddProduct}
         isFishesCategory={
           productToSetAmount?.category?.toLowerCase() === 'peixes' ||
