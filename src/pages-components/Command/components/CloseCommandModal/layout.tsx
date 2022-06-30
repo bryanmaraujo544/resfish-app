@@ -54,7 +54,7 @@ export const CloseCommandModalLayout = ({
             Total:{' '}
             <TitleText as="span">
               {formatDecimalNum({
-                num: command?.total?.toString() as string,
+                num: (command?.total?.toString() as string) || '',
                 to: 'comma',
               })}
             </TitleText>
@@ -65,7 +65,7 @@ export const CloseCommandModalLayout = ({
             Total Pago:{' '}
             <TitleText as="span">
               {formatDecimalNum({
-                num: command?.totalPayed?.toString() as string,
+                num: (command?.totalPayed?.toString() as string) || '',
                 to: 'comma',
               })}
             </TitleText>
