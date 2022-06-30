@@ -264,24 +264,35 @@ export const AddProductModal = ({
   }
 
   const handleFavoriteProduct = useCallback(
-    (_id: string) => {
-      console.log(_id);
+    async (_id: string) => {
       allProductsDispatch({
         type: 'FAVORITE-PRODUCT',
         payload: { product: { _id } },
       });
+
+      await ProductsService.updateFavoriteStatus({
+        productId: _id,
+        isFavorite: true,
+      });
     },
-    [allProducts]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [allProducts, allProductsDispatch]
   );
 
   const handleUnfavoriteProduct = useCallback(
-    (_id: string) => {
+    async (_id: string) => {
       allProductsDispatch({
         type: 'UNFAVORITE-PRODUCT',
         payload: { product: { _id } },
       });
+
+      await ProductsService.updateFavoriteStatus({
+        productId: _id,
+        isFavorite: false,
+      });
     },
-    [allProducts]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [allProducts, allProductsDispatch]
   );
 
   const filteredByFilter = useMemo(() => {

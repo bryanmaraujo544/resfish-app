@@ -5,6 +5,11 @@ interface VerifyAmount {
   amount: number;
 }
 
+interface FavoriteStatus {
+  productId: string;
+  isFavorite: boolean;
+}
+
 type IncreaseAmount = VerifyAmount;
 type DecreaseAmount = IncreaseAmount;
 
@@ -19,6 +24,16 @@ class ProductsService {
       productId,
       amount,
     });
+    return data;
+  }
+
+  async updateFavoriteStatus({ productId, isFavorite }: FavoriteStatus) {
+    const { data } = await serverApi.put(
+      `/products/${productId}?isUpdateFavorite=true`,
+      {
+        isFavorite,
+      }
+    );
     return data;
   }
 
