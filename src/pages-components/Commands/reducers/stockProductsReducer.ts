@@ -5,7 +5,11 @@ interface State {
 }
 
 interface Action {
-  type: 'ADD-ALL-PRODUCTS' | 'UPDATE-ONE-PRODUCT';
+  type:
+    | 'ADD-ALL-PRODUCTS'
+    | 'UPDATE-ONE-PRODUCT'
+    | 'FAVORITE-PRODUCT'
+    | 'UNFAVORITE-PRODUCT';
   payload: any;
 }
 
@@ -26,6 +30,33 @@ export const stockProductsReducer = (state: State, action: Action) => {
       });
       return { value: newState };
     }
+    case 'FAVORITE-PRODUCT': {
+      const payloadProduct = action?.payload?.product;
+      const newState = state.value.map((product: Product) => {
+        if (product._id === payloadProduct?._id) {
+          return {
+            ...product,
+            isFavorite: true,
+          };
+        }
+        return product;
+      });
+      return { value: newState };
+    }
+    case 'UNFAVORITE-PRODUCT': {
+      const payloadProduct = action?.payload?.product;
+      const newState = state.value.map((product: Product) => {
+        if (product._id === payloadProduct?._id) {
+          return {
+            ...product,
+            isFavorite: false,
+          };
+        }
+        return product;
+      });
+      return { value: newState };
+    }
+
     default: {
       throw new Error('This type is unknown');
     }

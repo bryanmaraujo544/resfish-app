@@ -5,4 +5,5 @@ export interface Product {
   unitPrice: number;
   category?: string;
   totalPayed?: number;
+  isFavorite?: boolean;
 }

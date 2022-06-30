@@ -12,7 +12,11 @@ interface AllCommandsAction {
 }
 
 interface StockProductsAction {
-  type: 'ADD-ALL-PRODUCTS' | 'UPDATE-ONE-PRODUCT';
+  type:
+    | 'ADD-ALL-PRODUCTS'
+    | 'UPDATE-ONE-PRODUCT'
+    | 'FAVORITE-PRODUCT'
+    | 'UNFAVORITE-PRODUCT';
   payload: any;
 }
 

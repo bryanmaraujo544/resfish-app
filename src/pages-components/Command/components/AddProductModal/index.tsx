@@ -20,7 +20,11 @@ import { AddProductModalLayout } from './layout';
 import { SetAmountModal } from './SetAmountModal';
 
 interface AllProductsAction {
-  type: 'ADD-ALL-PRODUCTS' | 'UPDATE-ONE-PRODUCT';
+  type:
+    | 'ADD-ALL-PRODUCTS'
+    | 'UPDATE-ONE-PRODUCT'
+    | 'FAVORITE-PRODUCT'
+    | 'UNFAVORITE-PRODUCT';
   payload: any;
 }
 interface Props {
@@ -259,6 +263,27 @@ export const AddProductModal = ({
     });
   }
 
+  const handleFavoriteProduct = useCallback(
+    (_id: string) => {
+      console.log(_id);
+      allProductsDispatch({
+        type: 'FAVORITE-PRODUCT',
+        payload: { product: { _id } },
+      });
+    },
+    [allProducts]
+  );
+
+  const handleUnfavoriteProduct = useCallback(
+    (_id: string) => {
+      allProductsDispatch({
+        type: 'UNFAVORITE-PRODUCT',
+        payload: { product: { _id } },
+      });
+    },
+    [allProducts]
+  );
+
   const filteredByFilter = useMemo(() => {
     if (filter === '') {
       return allProducts;
@@ -293,6 +318,8 @@ export const AddProductModal = ({
         searchContent={searchContent}
         setSearchContent={setSearchContent}
         isAddingProducts={isAddingProducts}
+        handleFavoriteProduct={handleFavoriteProduct}
+        handleUnfavoriteProduct={handleUnfavoriteProduct}
       />
       {/* Set amount of product modal */}
       <SetAmountModal

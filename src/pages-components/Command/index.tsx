@@ -28,7 +28,11 @@ import { SendToKitchenModal } from './components/SendToKitchenModal';
 import { CloseCommandModal } from './components/CloseCommandModal';
 
 interface StockProductsAction {
-  type: 'ADD-ALL-PRODUCTS' | 'UPDATE-ONE-PRODUCT';
+  type:
+    | 'ADD-ALL-PRODUCTS'
+    | 'UPDATE-ONE-PRODUCT'
+    | 'FAVORITE-PRODUCT'
+    | 'UNFAVORITE-PRODUCT';
   payload: any;
 }
 

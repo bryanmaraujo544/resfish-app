@@ -261,6 +261,27 @@ export const AddProductsModal = ({
     });
   }
 
+  const handleFavoriteProduct = useCallback(
+    (_id: string) => {
+      console.log(_id);
+      stockProductsDispatch({
+        type: 'FAVORITE-PRODUCT',
+        payload: { product: { _id } },
+      });
+    },
+    [allProducts]
+  );
+
+  const handleUnfavoriteProduct = useCallback(
+    (_id: string) => {
+      stockProductsDispatch({
+        type: 'UNFAVORITE-PRODUCT',
+        payload: { product: { _id } },
+      });
+    },
+    [allProducts]
+  );
+
   const filteredByFilter = useMemo(() => {
     if (filter === '') {
       return allProducts;
@@ -295,6 +316,8 @@ export const AddProductsModal = ({
         searchContent={searchContent}
         setSearchContent={setSearchContent}
         isAddingProducts={isAddingProducts}
+        handleFavoriteProduct={handleFavoriteProduct}
+        handleUnfavoriteProduct={handleUnfavoriteProduct}
       />
       {/* Set amount of product modal */}
       <SetAmountModal

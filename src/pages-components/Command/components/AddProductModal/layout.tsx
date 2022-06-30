@@ -25,6 +25,7 @@ import {
 } from '@chakra-ui/react';
 import { BiSad, BiSearchAlt } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
+import { AiOutlineStar, AiFillStar } from 'react-icons/ai';
 
 import { Modal } from 'components/Modal';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
@@ -65,6 +66,8 @@ interface Props {
   // eslint-disable-next-line no-unused-vars
   handleChangeFilter: (selectedFilter: string) => void;
   isAddingProducts: boolean;
+  handleFavoriteProduct: (_id: string) => void;
+  handleUnfavoriteProduct: (_id: string) => void;
 }
 
 export const AddProductModalLayout = ({
@@ -80,6 +83,8 @@ export const AddProductModalLayout = ({
   searchContent,
   setSearchContent,
   isAddingProducts,
+  handleFavoriteProduct,
+  handleUnfavoriteProduct,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -187,32 +192,60 @@ export const AddProductModalLayout = ({
           </Thead>
           <Tbody>
             {products?.length > 0 &&
-              products?.map(({ _id, name, unitPrice, amount, category }) => (
-                <Tr key={`add-product-modal-product-${_id}`}>
-                  <Td>{name}</Td>
-                  <Td>{amount}</Td>
-                  <Td>
-                    R${' '}
-                    {formatDecimalNum({
-                      num: unitPrice.toString(),
-                      to: 'comma',
-                    })}
-                  </Td>
-                  <Td isNumeric>
-                    <Button
-                      bg="blue.50"
-                      color="blue.700"
-                      onClick={() =>
-                        handleOpenAmountModal({
-                          product: { _id, name, unitPrice, category },
-                        })
-                      }
-                    >
-                      Selecionar
-                    </Button>
-                  </Td>
-                </Tr>
-              ))}
+              products?.map(
+                ({ _id, name, unitPrice, amount, category, isFavorite }) => (
+                  <Tr key={`add-product-modal-product-${_id}`}>
+                    <Td>{name}</Td>
+                    <Td>{amount}</Td>
+                    <Td>
+                      R${' '}
+                      {formatDecimalNum({
+                        num: unitPrice.toString(),
+                        to: 'comma',
+                      })}
+                    </Td>
+                    <Td isNumeric>
+                      <Flex justify="flex-end" align="center" gap={2}>
+                        <Button
+                          bg="blue.50"
+                          color="blue.700"
+                          onClick={() =>
+                            handleOpenAmountModal({
+                              product: { _id, name, unitPrice, category },
+                            })
+                          }
+                        >
+                          Selecionar
+                        </Button>
+
+                        {isFavorite ? (
+                          <Icon
+                            onClick={() => handleUnfavoriteProduct(_id)}
+                            as={AiFillStar}
+                            fontSize={[18, 20]}
+                            color="blue.600"
+                            cursor="pointer"
+                            _hover={{
+                              color: 'blue.700',
+                            }}
+                          />
+                        ) : (
+                          <Icon
+                            onClick={() => handleFavoriteProduct(_id)}
+                            as={AiOutlineStar}
+                            fontSize={[18, 20]}
+                            color="blue.600"
+                            cursor="pointer"
+                            _hover={{
+                              color: 'blue.700',
+                            }}
+                          />
+                        )}
+                      </Flex>
+                    </Td>
+                  </Tr>
+                )
+              )}
             {products?.length === 0 && (
               <Tr>
                 <Td>
