@@ -24,7 +24,9 @@ interface Action {
     | 'ADD-PRODUCTS'
     | 'ADD-ONE-PRODUCT'
     | 'REMOVE-ONE-PRODUCT'
-    | 'UPDATE-ONE-PRODUCT';
+    | 'UPDATE-ONE-PRODUCT'
+    | 'FAVORITE-PRODUCT'
+    | 'UNFAVORITE-PRODUCT';
   payload: any;
 }
 

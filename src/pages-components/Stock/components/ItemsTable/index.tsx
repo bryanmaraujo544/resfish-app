@@ -8,6 +8,7 @@ import { Item } from 'pages-components/Stock/types/Item';
 import { ItemsTableLayout } from './layout';
 import { EditModal } from '../EditModal';
 import { DeleteItemModal } from '../DeleteItemModal';
+import StockService from '../../services';
 
 export const ItemsTable = () => {
   const [id, setId] = useState(null as null | number | string);
@@ -27,6 +28,7 @@ export const ItemsTable = () => {
     filters,
     searchContent,
     products,
+    productsDispatch,
   } = useContext(StockContext);
 
   const filteredByFilter = useMemo(() => {
@@ -98,6 +100,38 @@ export const ItemsTable = () => {
     []
   );
 
+  const handleFavoriteProduct = useCallback(
+    async (_id: string) => {
+      productsDispatch({
+        type: 'FAVORITE-PRODUCT',
+        payload: { product: { _id } },
+      });
+
+      await StockService.updateFavoriteStatus({
+        productId: _id,
+        isFavorite: true,
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [products, productsDispatch]
+  );
+
+  const handleUnfavoriteProduct = useCallback(
+    async (_id: string) => {
+      productsDispatch({
+        type: 'UNFAVORITE-PRODUCT',
+        payload: { product: { _id } },
+      });
+
+      await StockService.updateFavoriteStatus({
+        productId: _id,
+        isFavorite: false,
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [products, productsDispatch]
+  );
+
   return (
     <>
       <ItemsTableLayout
@@ -107,6 +141,8 @@ export const ItemsTable = () => {
         handleToggleOrderByDir={handleToggleOrderByDir}
         handleOpenDeleteItemModal={handleOpenDeleteItemModal}
         items={filteredBySearch}
+        handleFavoriteProduct={handleFavoriteProduct}
+        handleUnfavoriteProduct={handleUnfavoriteProduct}
       />
       <EditModal
         isEditModalOpen={isEditModalOpen}

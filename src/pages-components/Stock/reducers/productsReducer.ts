@@ -8,7 +8,9 @@ interface Action {
     | 'ADD-PRODUCTS'
     | 'ADD-ONE-PRODUCT'
     | 'REMOVE-ONE-PRODUCT'
-    | 'UPDATE-ONE-PRODUCT';
+    | 'UPDATE-ONE-PRODUCT'
+    | 'FAVORITE-PRODUCT'
+    | 'UNFAVORITE-PRODUCT';
   payload: any;
 }
 
@@ -38,6 +40,32 @@ export const productsReducer = (state: ProductsState, action: Action) => {
         return product;
       });
       return { value: updatedProducts };
+    }
+    case 'FAVORITE-PRODUCT': {
+      const payloadProduct = action?.payload?.product;
+      const newState = state.value.map((product: Product) => {
+        if (product._id === payloadProduct?._id) {
+          return {
+            ...product,
+            isFavorite: true,
+          };
+        }
+        return product;
+      });
+      return { value: newState };
+    }
+    case 'UNFAVORITE-PRODUCT': {
+      const payloadProduct = action?.payload?.product;
+      const newState = state.value.map((product: Product) => {
+        if (product._id === payloadProduct?._id) {
+          return {
+            ...product,
+            isFavorite: false,
+          };
+        }
+        return product;
+      });
+      return { value: newState };
     }
     default:
       throw new Error('This type is invalid');

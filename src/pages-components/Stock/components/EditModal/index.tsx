@@ -60,7 +60,9 @@ export const EditModal = ({
         return;
       }
 
-      if (!name || !amount || !category) {
+      console.log(amount);
+
+      if (!name || (!amount && amount !== 0) || !category) {
         toast({
           status: 'error',
           title: 'Preencha os campos obrigatórios',

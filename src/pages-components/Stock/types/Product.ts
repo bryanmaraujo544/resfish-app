@@ -5,4 +5,5 @@ export interface Product {
   imageURL?: string;
   category: string;
   unitPrice: number;
+  isFavorite?: boolean;
 }
