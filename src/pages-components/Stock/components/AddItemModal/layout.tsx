@@ -20,6 +20,7 @@ const categories = [
   'Peixes',
   'Pratos',
   'Bebidas',
+  'Bebidas-Cozinha',
   'Doses',
   'Sobremesas',
   'Porções',

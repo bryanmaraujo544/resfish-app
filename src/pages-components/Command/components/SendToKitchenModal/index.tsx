@@ -26,7 +26,8 @@ interface StoreKitchen {
   observation: string;
 }
 
-const categoriesToKitchenPrepare = ['pratos', 'porções', 'bebidas'];
+// const categoriesToKitchenPrepare = ['pratos', 'porções', 'bebidas'];
+const categoriesToKitchenPrepare = ['pratos', 'porções', 'bebidas-cozinha'];
 
 export const SendToKitchenModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   const [isSending, setIsSending] = useState(false);
