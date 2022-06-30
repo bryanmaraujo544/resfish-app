@@ -11,6 +11,7 @@ import {
   Grid,
 } from '@chakra-ui/react';
 import { Command } from 'types/Command';
+import { formatDecimalNum } from 'utils/formatDecimalNum';
 
 interface Props {
   isModalOpen: boolean;
@@ -50,12 +51,24 @@ export const CloseCommandModalLayout = ({
         </BgBox>
         <BgBox>
           <Text fontSize={[14, 16, 18]}>
-            Total: <TitleText as="span">{command?.total}</TitleText>
+            Total:{' '}
+            <TitleText as="span">
+              {formatDecimalNum({
+                num: command?.total?.toString() as string,
+                to: 'comma',
+              })}
+            </TitleText>
           </Text>
         </BgBox>
         <BgBox>
           <Text fontSize={[14, 16, 18]}>
-            Total Pago: <TitleText as="span">{command?.totalPayed}</TitleText>
+            Total Pago:{' '}
+            <TitleText as="span">
+              {formatDecimalNum({
+                num: command?.totalPayed?.toString() as string,
+                to: 'comma',
+              })}
+            </TitleText>
           </Text>
         </BgBox>
       </Grid>

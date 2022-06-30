@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
+import { createContext } from 'react';
 import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
-import { createContext } from 'react';
 import io from 'socket.io-client';
 
 interface SocketProps {
