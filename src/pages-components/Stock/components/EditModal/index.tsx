@@ -60,8 +60,6 @@ export const EditModal = ({
         return;
       }
 
-      console.log(amount);
-
       if (!name || (!amount && amount !== 0) || !category) {
         toast({
           status: 'error',

@@ -19,6 +19,13 @@ import { Product } from 'types/Product';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { CommandContext } from 'pages-components/Command';
 
+const paymentOptions = [
+  'Dinheiro',
+  'Cartão de Crédito',
+  'Cartão de Débito',
+  'Pix',
+];
+
 interface Props {
   isModalOpen: boolean;
   handleCloseModal: () => void;
@@ -31,6 +38,8 @@ interface Props {
   typeOfPayment: 'unit' | 'free';
   setTypeOfPayment: Dispatch<SetStateAction<'unit' | 'free'>>;
   isPaying: boolean;
+  paymentType: string;
+  setPaymentType: Dispatch<SetStateAction<string>>;
 }
 
 export const PayProductModalLayout = ({
@@ -45,6 +54,8 @@ export const PayProductModalLayout = ({
   typeOfPayment,
   setTypeOfPayment,
   isPaying,
+  paymentType,
+  setPaymentType,
 }: Props) => {
   const { command } = useContext(CommandContext);
   const totalOfProduct = productInfos.amount * productInfos.unitPrice;
@@ -102,7 +113,7 @@ export const PayProductModalLayout = ({
 
           {typeOfPayment === 'unit' ? (
             <>
-              <Text>Quantidade a Pagar</Text>
+              <Text fontWeight={500}>Quantidade a Pagar</Text>
               <NumberInput
                 defaultValue={0}
                 min={0}
@@ -119,7 +130,7 @@ export const PayProductModalLayout = ({
             </>
           ) : (
             <>
-              <Text>Valor a pagar</Text>
+              <Text fontWeight={500}>Valor a pagar</Text>
               <Input
                 placeholder="Valor a pagar"
                 type="text"
@@ -131,12 +142,23 @@ export const PayProductModalLayout = ({
           )}
         </Stack>
         {typeOfPayment === 'unit' && (
-          <Text>
+          <Text fontWeight={500}>
             Pagar: R${' '}
             {formatDecimalNum({ num: paymentValue.toString(), to: 'comma' })}
           </Text>
         )}
-        <Text>Total a ser pago: {totalToBePayed}</Text>
+        <Stack>
+          <Text fontWeight={500}>Meio de Pagamento</Text>
+          <Select
+            value={paymentType}
+            onChange={(e) => setPaymentType(e.target.value)}
+          >
+            {paymentOptions.map((payment) => (
+              <option key={`payment-option-${payment}`}>{payment}</option>
+            ))}
+          </Select>
+        </Stack>
+        <Text fontWeight={500}>Total a ser pago: {totalToBePayed}</Text>
         <Button
           type="submit"
           isLoading={isPaying}

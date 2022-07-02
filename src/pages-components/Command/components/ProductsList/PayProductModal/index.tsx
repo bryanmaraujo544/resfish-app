@@ -26,6 +26,7 @@ export const PayProductModal = ({
   const [paymentValue, setPaymentValue] = useState('0');
   const [amountToPay, setAmountToPay] = useState(0);
   const [typeOfPayment, setTypeOfPayment] = useState<'unit' | 'free'>('free');
+  const [paymentType, setPaymentType] = useState('Dinheiro');
 
   const [isPaying, setIsPaying] = useState(false);
 
@@ -49,6 +50,7 @@ export const PayProductModal = ({
     setAmountToPay(0);
     setTypeOfPayment('free');
     setIsPaying(false);
+    setPaymentType('Dinheiro');
   }
 
   async function handlePayProduct(e: any) {
@@ -129,6 +131,7 @@ export const PayProductModal = ({
         products: newProducts,
         total: paymentValueFormatted,
         updateTotal: 'true',
+        paymentType,
       });
       setCommand(updatedCommand);
 
@@ -171,6 +174,8 @@ export const PayProductModal = ({
       typeOfPayment={typeOfPayment}
       setTypeOfPayment={setTypeOfPayment}
       isPaying={isPaying}
+      paymentType={paymentType}
+      setPaymentType={setPaymentType}
     />
   );
 };
