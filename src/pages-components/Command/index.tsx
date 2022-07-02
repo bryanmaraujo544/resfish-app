@@ -205,6 +205,13 @@ export const Command = ({ commandId }: Props) => {
     setIsDeleteCommandModalOpen(true);
   }, []);
 
+  const tempTotalToBePayed =
+    Math.round(
+      ((command?.total || 0) - (command?.totalPayed || 0) + Number.EPSILON) *
+        100
+    ) / 100;
+  const totalToBePayed = tempTotalToBePayed > 0 ? tempTotalToBePayed : 0;
+
   return (
     <CommandContext.Provider
       value={{
@@ -237,6 +244,7 @@ export const Command = ({ commandId }: Props) => {
         handleDeleteCommand={handleDeleteCommand}
         handleOpenSentToKitchenModal={handleOpenSentToKitchenModal}
         handleOpenCloseCommandModal={handleOpenCloseCommandModal}
+        totalToBePayed={totalToBePayed}
       />
       <DeleteProductModal
         isModalOpen={isDeleteProductModalOpen}

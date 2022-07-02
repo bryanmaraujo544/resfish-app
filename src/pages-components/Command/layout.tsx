@@ -33,6 +33,7 @@ import { ProductsList } from './components/ProductsList';
 interface Props {
   command: Command;
   isLoading: boolean;
+  totalToBePayed: number;
   handleGoToCommands?: () => void;
   handleOpenPaymentModal: () => void;
   handleDeleteCommand: () => void;
@@ -48,6 +49,7 @@ export const CommandLayout = ({
   handleDeleteCommand,
   handleOpenSentToKitchenModal,
   handleOpenCloseCommandModal,
+  totalToBePayed,
 }: Props) => {
   const dt = DateTime.fromISO(command?.createdAt as string, {
     zone: 'pt-BR',
@@ -116,10 +118,17 @@ export const CommandLayout = ({
         />
       ) : (
         <>
-          <Grid gridTemplateColumns={['1fr', '1fr 1fr']} mb={4} gap={2}>
-            <GridItem display="flex" justifyContent={['center', 'flex-start']}>
-              <Stack>
-                <BgBox w={['100%', 'auto']} justify="center">
+          <Grid
+            gridTemplateColumns={['1fr', '1fr', '1fr', '1fr auto']}
+            mb={4}
+            gap={2}
+          >
+            <GridItem
+              display="flex"
+              justifyContent={['center', 'center', 'center', 'flex-start']}
+            >
+              <Stack align={['center', 'center', 'center', 'flex-start']}>
+                <BgBox w={['100%', '100%', '100%', 'auto']} justify="center">
                   <Heading fontSize={[16, 20, 22]}>
                     Comanda: {command?.table}
                   </Heading>
@@ -130,12 +139,25 @@ export const CommandLayout = ({
               </Stack>
             </GridItem>
             <GridItem>
-              <Flex gap={2} justify={['center', 'flex-end']}>
+              <Flex
+                gap={2}
+                justify={['center', 'center', 'center', 'flex-end']}
+                align="stretch"
+              >
                 <BgBox w={['100%', 'auto']} justify="center">
                   <Heading fontSize={[16, 20, 22]}>
                     Total: R${' '}
                     {formatDecimalNum({
                       num: command?.total?.toString() || '0',
+                      to: 'comma',
+                    })}
+                  </Heading>
+                </BgBox>
+                <BgBox w={['100%', 'auto']} justify="center">
+                  <Heading fontSize={[16, 20, 22]}>
+                    A Pagar: R${' '}
+                    {formatDecimalNum({
+                      num: totalToBePayed?.toString() || '0',
                       to: 'comma',
                     })}
                   </Heading>
