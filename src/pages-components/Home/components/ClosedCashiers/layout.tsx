@@ -9,24 +9,35 @@ import {
   Thead,
   Tr,
   Icon,
+  Heading,
 } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import { Cashier } from 'types/Cashier';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 
 import { MdOutlineReadMore } from 'react-icons/md';
+import { Dispatch, SetStateAction } from 'react';
+import { NavHeader } from './NavHeader';
 
 const columns = ['Data', 'Total', 'Comandas', ''];
 interface Props {
   allCashiers: Cashier[];
   handleGoToCashierPage: (cashierId: string) => void;
   handleDownloadCashiers: (e: any) => void;
+  year: string;
+  setYear: Dispatch<SetStateAction<string>>;
+  month: string;
+  setMonth: Dispatch<SetStateAction<string>>;
 }
 
 export const ClosedCashiersLayout = ({
   allCashiers,
   handleGoToCashierPage,
   handleDownloadCashiers,
+  month,
+  setMonth,
+  setYear,
+  year,
 }: Props) => {
   function formatDate(date: any) {
     const dt = DateTime.fromISO(date, {
@@ -38,7 +49,15 @@ export const ClosedCashiersLayout = ({
 
   return (
     <Stack>
-      <Button onClick={handleDownloadCashiers}>Baixar Caixas</Button>
+      <NavHeader
+        handleDownloadCashiers={handleDownloadCashiers}
+        month={month}
+        setMonth={setMonth}
+        setYear={setYear}
+        year={year}
+        allCashiers={allCashiers}
+      />
+      {/* <Button onClick={handleDownloadCashiers}>Baixar Caixas</Button> */}
       <TableContainer>
         <Table size="lg">
           <Thead>
@@ -49,25 +68,47 @@ export const ClosedCashiersLayout = ({
             </Tr>
           </Thead>
           <Tbody>
-            {allCashiers.map(({ _id, date, total, payments }) => (
-              <Tr key={`cashier-oflist-${_id}`}>
-                <Td>{formatDate(date)}</Td>
-                <Td>
-                  R$ {formatDecimalNum({ num: total.toString(), to: 'comma' })}
-                </Td>
-                <Td>{payments.length}</Td>
-                <Td isNumeric>
-                  <Button
-                    onClick={() => handleGoToCashierPage(_id)}
-                    colorScheme="blue"
-                    fontSize={[14, 16]}
+            {allCashiers?.length > 0 ? (
+              allCashiers?.map(({ _id, date, total, payments }) => (
+                <Tr key={`cashier-oflist-${_id}`}>
+                  <Td>{formatDate(date)}</Td>
+                  <Td>
+                    R${' '}
+                    {formatDecimalNum({
+                      num: total?.toString() || '0',
+                      to: 'comma',
+                    })}
+                  </Td>
+                  <Td>{payments?.length}</Td>
+                  <Td isNumeric>
+                    <Button
+                      onClick={() => handleGoToCashierPage(_id)}
+                      colorScheme="blue"
+                      fontSize={[14, 16]}
+                    >
+                      Ver Mais{' '}
+                      <Icon as={MdOutlineReadMore} ml={2} fontSize={[16, 18]} />
+                    </Button>
+                  </Td>
+                </Tr>
+              ))
+            ) : (
+              <Tr>
+                <Td w="100%">
+                  <Heading
+                    as="span"
+                    fontSize={[18, 20, 24]}
+                    color="blue.700"
+                    bg="blue.50"
+                    rounded={4}
+                    py={2}
+                    px={4}
                   >
-                    Ver Mais{' '}
-                    <Icon as={MdOutlineReadMore} ml={2} fontSize={[16, 18]} />
-                  </Button>
+                    Nenhum caixa fechado neste mês e ano
+                  </Heading>
                 </Td>
               </Tr>
-            ))}
+            )}
           </Tbody>
         </Table>
       </TableContainer>
