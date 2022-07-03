@@ -79,6 +79,7 @@ export const AddProductModal = ({
   function handleOpenAmountModal({ product }: { product: ProductNoAmount }) {
     setProductToSetAmount(product);
     setIsSetAmountModalOpen(true);
+    amount.current = '1';
   }
 
   // This function add in selected products list. Takes the object with infos based on the click of the user,
