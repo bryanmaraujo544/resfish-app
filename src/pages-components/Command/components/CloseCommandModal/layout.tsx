@@ -23,6 +23,10 @@ interface Props {
   command: Command;
   observation: { current: string };
   handleCloseCommand: () => void;
+  discount: string;
+  setDiscount: Dispatch<SetStateAction<string>>;
+  discountPercent: number;
+  setDiscountPercent: Dispatch<SetStateAction<number>>;
 }
 
 export const CloseCommandModalLayout = ({
@@ -35,6 +39,10 @@ export const CloseCommandModalLayout = ({
   command,
   observation,
   handleCloseCommand,
+  discount,
+  setDiscount,
+  discountPercent,
+  setDiscountPercent,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -53,6 +61,7 @@ export const CloseCommandModalLayout = ({
           <Text fontSize={[14, 16, 18]}>
             Total:{' '}
             <TitleText as="span">
+              R${' '}
               {formatDecimalNum({
                 num: (command?.total?.toString() as string) || '',
                 to: 'comma',
@@ -64,6 +73,7 @@ export const CloseCommandModalLayout = ({
           <Text fontSize={[14, 16, 18]}>
             Total Pago:{' '}
             <TitleText as="span">
+              R${' '}
               {formatDecimalNum({
                 num: (command?.totalPayed?.toString() as string) || '',
                 to: 'comma',
@@ -73,13 +83,37 @@ export const CloseCommandModalLayout = ({
         </BgBox>
       </Grid>
       <Stack>
+        <Text fontWeight={600}>Desconto</Text>
+        <Flex gap={[2, 4, 6]} w="100%" flexDir={['column', 'row']}>
+          <Stack flex="1.5">
+            <Text fontSize={[12, 14]}>Valor</Text>
+            <Input
+              value={discount}
+              onChange={(e) => setDiscount(e.target.value)}
+              placeholder="Valor do desconto. Ex: 32,90"
+              w="auto"
+            />
+          </Stack>
+          <Stack flex="1">
+            <Text fontSize={[12, 14]}>Porcentagem (%)</Text>
+            <Input
+              value={discountPercent}
+              onChange={(e) => setDiscountPercent(Number(e.target.value))}
+              placeholder="Porcentagem do desconto. Ex: 10 "
+              type="number"
+              w="auto"
+            />
+          </Stack>
+        </Flex>
+      </Stack>
+      <Stack>
         <Text>
           Caixinha do garçom:{' '}
           <TitleText as="span" fontSize={[12, 14, 18]}>
             {command?.waiter}
           </TitleText>
         </Text>
-        <Flex gap={[2, 4, 6]} alignItems="center">
+        <Flex gap={[2, 4, 6]} alignItems="center" w="100%">
           <Input
             value={waiterExtra}
             onChange={(e) => setWaiterExtra(e.target.value)}
