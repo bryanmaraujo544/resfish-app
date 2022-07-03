@@ -23,6 +23,9 @@ export const CloseCommandModal = ({ isModalOpen, setIsModalOpen }: Props) => {
   const [isClosing, setIsClosing] = useState(false);
   const observation = useRef('');
 
+  const [discount, setDiscount] = useState('');
+  const [discountPercent, setDiscountPercent] = useState(0);
+
   const { command, setCommand } = useContext(CommandContext);
   const toast = useToast();
 
@@ -48,6 +51,22 @@ export const CloseCommandModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [waiterExtraPercent]);
+
+  useEffect(() => {
+    const discountValue =
+      Math.round(
+        ((command?.total as number) * (discountPercent / 100) +
+          Number.EPSILON) *
+          100
+      ) / 100;
+
+    setDiscount(
+      formatDecimalNum({
+        num: Number.isNaN(discountValue) ? '0' : discountValue.toString(),
+        to: 'comma',
+      })
+    );
+  }, [discountPercent, command]);
 
   function handleCloseModal() {
     setIsModalOpen(false);
@@ -87,11 +106,49 @@ export const CloseCommandModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         return;
       }
 
+      const discountFormatted = Number(
+        formatDecimalNum({ num: discount, to: 'point' })
+      );
+
+      if (discount && Number.isNaN(discountFormatted)) {
+        toast({
+          status: 'error',
+          title: 'Valor de desconto inválido.',
+          duration: 1000,
+          isClosable: true,
+        });
+        setIsClosing(false);
+        return;
+      }
+
+      if (discountFormatted < 0) {
+        toast({
+          status: 'error',
+          title: 'Valor de desconto inválido.',
+          duration: 1000,
+          isClosable: true,
+        });
+        setIsClosing(false);
+        return;
+      }
+
+      if (discountFormatted > (command?.total as number)) {
+        toast({
+          status: 'error',
+          title: 'Valor de desconto maior que o toal.',
+          duration: 1000,
+          isClosable: true,
+        });
+        setIsClosing(false);
+        return;
+      }
+
       const { paymentInfos } = await PaymentsService.pay({
         commandId: command?._id as string,
         paymentTypes: command?.paymentTypes as string[],
         waiterExtra: waiterExtraFormatted,
         observation: observation.current,
+        discount: discountFormatted,
       });
 
       toast.closeAll();
@@ -125,6 +182,10 @@ export const CloseCommandModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       command={command}
       observation={observation}
       handleCloseCommand={handleCloseCommand}
+      discount={discount}
+      setDiscount={setDiscount}
+      discountPercent={discountPercent}
+      setDiscountPercent={setDiscountPercent}
     />
   );
 };
