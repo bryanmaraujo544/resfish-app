@@ -11,6 +11,9 @@ import { ClosedCashiersLayout } from './layout';
 export const ClosedCashiers = () => {
   const [allCashiers, setAllCashiers] = useState<Cashier[]>([]);
 
+  const [month, setMonth] = useState('Todos');
+  const [year, setYear] = useState('Todos');
+
   const { socket } = useContext(SocketContext);
   const router = useRouter();
 
@@ -76,11 +79,47 @@ export const ClosedCashiers = () => {
     });
   }
 
+  const filteredCashiers = allCashiers.filter((cashier) => {
+    // This path is when the user wants all the cashiers, it doesn't matter the year and month
+    if (month === 'Todos' && year === 'Todos') {
+      return true;
+    }
+
+    const dt = DateTime.fromISO(cashier.date, {
+      zone: 'pt-BR',
+      setZone: true,
+    }).setLocale('pt-BR');
+    const formattedDt = dt.toLocaleString(DateTime.DATE_FULL);
+
+    // This path is when the user wants cashiers of all months of some specific year
+    if (month === 'Todos' && formattedDt.includes(year.toLowerCase())) {
+      return true;
+    }
+
+    // This path is when the user wants cashiers of some month of all years
+    if (year === 'Todos' && formattedDt.includes(month.toLowerCase())) {
+      return true;
+    }
+
+    // This path is when the user wants cashiers of some month and year
+    if (
+      formattedDt.includes(month.toLowerCase()) &&
+      formattedDt.includes(year.toLowerCase())
+    ) {
+      return true;
+    }
+    return false;
+  });
+
   return (
     <ClosedCashiersLayout
-      allCashiers={allCashiers}
+      allCashiers={filteredCashiers}
       handleGoToCashierPage={handleGoToCashierPage}
       handleDownloadCashiers={handleDownloadCashiers}
+      year={year}
+      setYear={setYear}
+      month={month}
+      setMonth={setMonth}
     />
   );
 };
