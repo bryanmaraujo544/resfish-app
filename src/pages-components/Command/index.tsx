@@ -266,6 +266,7 @@ export const Command = ({ commandId }: Props) => {
       <PaymentModal
         isModalOpen={isPaymentModalOpen}
         setIsModalOpen={setIsPaymentModalOpen}
+        setIsCloseCommandModalOpen={setIsCloseCommandModalOpen}
       />
       <CloseCommandModal
         isModalOpen={isCloseCommandModalOpen}

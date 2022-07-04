@@ -8,18 +8,25 @@ import {
 
 import { CommandContext } from 'pages-components/Command';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
-import { useToast } from '@chakra-ui/react';
+import { Button, Flex, useToast } from '@chakra-ui/react';
 // import PaymentsService from 'pages-components/Command/services/PaymentsService';
 import CommandService from 'pages-components/Command/services/CommandService';
+import { Modal } from 'components/Modal';
 import { PaymentModalLayout } from './layout';
 
 interface Props {
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  setIsCloseCommandModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
+export const PaymentModal = ({
+  isModalOpen,
+  setIsModalOpen,
+  setIsCloseCommandModalOpen,
+}: Props) => {
   const { command, setCommand } = useContext(CommandContext);
+  const [isPaying, setIsPaying] = useState(false);
   const [receivedValue, setReceivedValue] = useState('');
   const [exchange, setExchange] = useState('0');
   const [isReceivedValueInvalid, setIsReceivedValueInvalid] = useState({
@@ -27,8 +34,8 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     message: '',
   });
   const [paymentType, setPaymentType] = useState('Dinheiro');
-
-  const [isPaying, setIsPaying] = useState(false);
+  const [isConfirmCloseCommandModalOpen, setIsConfirmCloseCommandModalOpen] =
+    useState(false);
 
   const toast = useToast();
 
@@ -148,6 +155,13 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
 
       setCommand(updatedCommand);
 
+      if (updatedCommand.total === updatedCommand.totalPayed) {
+        // Ask if the user wants to close the cashier
+
+        setIsConfirmCloseCommandModalOpen(true);
+        // setIsCloseCommandModalOpen;
+      }
+
       toast({
         status: 'success',
         title: message,
@@ -169,20 +183,49 @@ export const PaymentModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     }
   };
 
+  function handleCloseConfirmModal() {
+    setIsConfirmCloseCommandModalOpen(false);
+  }
+
+  function handleOpenCloseCommandModal() {
+    handleCloseConfirmModal();
+    setIsCloseCommandModalOpen(true);
+  }
+
   return (
-    <PaymentModalLayout
-      isModalOpen={isModalOpen}
-      handleCloseModal={handleCloseModal}
-      handleMakePayment={handleMakePayment}
-      command={command}
-      exchange={exchange}
-      paymentType={paymentType}
-      setPaymentType={setPaymentType}
-      receivedValue={receivedValue}
-      setReceivedValue={setReceivedValue}
-      isReceivedValueInvalid={isReceivedValueInvalid}
-      totalToBePayed={totalToBePayed}
-      isPaying={isPaying}
-    />
+    <>
+      <PaymentModalLayout
+        isModalOpen={isModalOpen}
+        handleCloseModal={handleCloseModal}
+        handleMakePayment={handleMakePayment}
+        command={command}
+        exchange={exchange}
+        paymentType={paymentType}
+        setPaymentType={setPaymentType}
+        receivedValue={receivedValue}
+        setReceivedValue={setReceivedValue}
+        isReceivedValueInvalid={isReceivedValueInvalid}
+        totalToBePayed={totalToBePayed}
+        isPaying={isPaying}
+      />
+      <Modal
+        isOpen={isConfirmCloseCommandModalOpen}
+        onClose={handleCloseConfirmModal}
+        title="Deseja fechar a comanda?"
+      >
+        <Flex gap={4}>
+          <Button flex="1" onClick={handleCloseConfirmModal}>
+            Cancelar
+          </Button>
+          <Button
+            flex="1"
+            colorScheme="blue"
+            onClick={handleOpenCloseCommandModal}
+          >
+            Confirmar
+          </Button>
+        </Flex>
+      </Modal>
+    </>
   );
 };
