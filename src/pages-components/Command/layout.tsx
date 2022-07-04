@@ -129,7 +129,7 @@ export const CommandLayout = ({
             >
               <Stack align={['center', 'center', 'center', 'flex-start']}>
                 <BgBox w={['100%', '100%', '100%', 'auto']} justify="center">
-                  <Heading fontSize={[16, 20, 22]}>
+                  <Heading fontSize={[16, 20, 22]} textAlign="center">
                     Comanda: {command?.table}
                   </Heading>
                 </BgBox>
@@ -141,11 +141,12 @@ export const CommandLayout = ({
             <GridItem>
               <Flex
                 gap={2}
+                flexDir={['column', 'column', 'row', 'row']}
                 justify={['center', 'center', 'center', 'flex-end']}
                 align="stretch"
               >
                 <BgBox w={['100%', 'auto']} justify="center">
-                  <Heading fontSize={[16, 20, 22]}>
+                  <Heading fontSize={[14, 16, 20, 22]}>
                     Total: R${' '}
                     {formatDecimalNum({
                       num: command?.total?.toString() || '0',
@@ -154,7 +155,7 @@ export const CommandLayout = ({
                   </Heading>
                 </BgBox>
                 <BgBox w={['100%', 'auto']} justify="center">
-                  <Heading fontSize={[16, 20, 22]}>
+                  <Heading fontSize={[14, 16, 20, 22]}>
                     A Pagar: R${' '}
                     {formatDecimalNum({
                       num: totalToBePayed?.toString() || '0',
@@ -169,6 +170,7 @@ export const CommandLayout = ({
                   color="blue.500"
                   fontWeight="700"
                   display="flex"
+                  justifyItems="center"
                   alignItems="center"
                   rounded={4}
                   gap={2}
@@ -180,7 +182,7 @@ export const CommandLayout = ({
                     bg: 'green.100',
                     color: 'green.500',
                   }}
-                  fontSize={[16, 20]}
+                  fontSize={[14, 16, 20]}
                 >
                   <Icon as={IoCashOutline} mt={0.8} />
                   <Text>Pagar</Text>
@@ -200,7 +202,10 @@ export const CommandLayout = ({
                     <Icon
                       as={CgOptions}
                       fontSize={[16, 22]}
-                      display="block"
+                      display="inline-block"
+                      m={0}
+                      p={0}
+                      mt={1.5}
                       color="blue.800"
                     />
                   </MenuButton>

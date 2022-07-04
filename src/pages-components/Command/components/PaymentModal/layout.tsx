@@ -167,7 +167,12 @@ export const PaymentModalLayout = ({
           <BgBox>
             <TitleText fontSize={[18, 22, 26]}>
               Troco:{' '}
-              <Text fontWeight="700" display="inline-block" color="red.400">
+              <Text
+                as="span"
+                fontWeight="700"
+                display="inline-block"
+                color="red.400"
+              >
                 R${' '}
                 {formatDecimalNum({
                   num: exchange,

@@ -3,7 +3,6 @@ import { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import {
   Flex,
-  Text,
   Icon,
   Button,
   Drawer,
@@ -12,7 +11,9 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   DrawerBody,
+  Box,
 } from '@chakra-ui/react';
+import Image from 'next/image';
 
 import { MdInventory2 } from 'react-icons/md';
 import { GiCook } from 'react-icons/gi';
@@ -20,6 +21,7 @@ import { CgMenu } from 'react-icons/cg';
 import { FaArrowUp } from 'react-icons/fa';
 import { AiFillHome } from 'react-icons/ai';
 import { IoMdListBox } from 'react-icons/io';
+import Logo from '../../assets/logo.jpeg';
 
 const headerButtons = [
   {
@@ -97,9 +99,9 @@ export const HeaderLayout = ({
               <Icon as={FaArrowUp} />
             </Button>
           )}
-          <Text fontWeight={700} color="red.500" fontSize="2xl">
-            Pesqueiro Arruda's
-          </Text>
+          <Box position="relative" width={[12, 16]} height={[12, 16]}>
+            <Image src={Logo} alt="logo" layout="fill" objectFit="contain" />
+          </Box>
         </Flex>
         <Flex
           gap={4}
