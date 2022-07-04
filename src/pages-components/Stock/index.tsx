@@ -41,6 +41,7 @@ interface StockContextProps {
   setSearchContent: Dispatch<SetStateAction<string>>;
   products: Product[] | [];
   productsDispatch: Dispatch<Action>;
+  isLoading: boolean;
 }
 
 export const StockContext = createContext({} as StockContextProps);
@@ -56,12 +57,15 @@ export const Stock = () => {
   const [searchContent, setSearchContent] = useState('');
 
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   const { socket } = useContext(SocketContext);
   const router = useRouter();
 
   useEffect(() => {
     (async () => {
       const allProducts = await StockService.getAllProducts();
+      setIsLoading(false);
       productsDispatch({ type: 'ADD-PRODUCTS', payload: allProducts });
     })();
   }, []);
@@ -110,6 +114,7 @@ export const Stock = () => {
         setSearchContent,
         products: products.value,
         productsDispatch,
+        isLoading,
       }}
     >
       <AddItemModal

@@ -198,6 +198,20 @@ export const PayedCommandsLayout = ({
             )
           )
         )}
+        {!isGettingPayments && payments.length === 0 && (
+          <Box
+            bg="blue.50"
+            p={3}
+            px={4}
+            border="1px solid"
+            borderColor="gray.300"
+            rounded={4}
+          >
+            <Text fontSize={[16, 20, 22]} fontWeight={600} color="blue.800">
+              Nenhuma comanda paga. :(
+            </Text>
+          </Box>
+        )}
       </Grid>
     </Stack>
   );

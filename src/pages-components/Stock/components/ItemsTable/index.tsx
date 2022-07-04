@@ -29,6 +29,7 @@ export const ItemsTable = () => {
     searchContent,
     products,
     productsDispatch,
+    isLoading,
   } = useContext(StockContext);
 
   const filteredByFilter = useMemo(() => {
@@ -143,6 +144,7 @@ export const ItemsTable = () => {
         items={filteredBySearch}
         handleFavoriteProduct={handleFavoriteProduct}
         handleUnfavoriteProduct={handleUnfavoriteProduct}
+        isLoading={isLoading}
       />
       <EditModal
         isEditModalOpen={isEditModalOpen}
