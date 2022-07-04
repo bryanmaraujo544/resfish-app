@@ -1,22 +1,37 @@
-import { useState } from 'react';
-import { Stack, Text, Flex, Button, useToast } from '@chakra-ui/react';
+import { useRef, useState } from 'react';
+import { Stack, Text, Flex, Button, useToast, Input } from '@chakra-ui/react';
 import { Layout } from 'components/Layout';
 import { Modal } from 'components/Modal';
+import AdminService from './services/index';
 
 export const Admin = () => {
   const [isConfirmResetModalOpen, setIsConfirmResetModalOpen] = useState(false);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+
   const [isReseting, setIsReseting] = useState(false);
+
+  const accessKey = useRef('');
+
   const toast = useToast();
 
-  function handleConfirmReset() {
+  function handleOpenConfirmationModal() {
     setIsConfirmResetModalOpen(true);
   }
 
-  function handleCloseModal() {
-    setIsConfirmResetModalOpen(false);
-    setIsReseting(false);
+  function handleOpenResetModal() {
+    setIsResetModalOpen(true);
+    handleCloseConfirmationModal();
   }
 
+  function handleCloseConfirmationModal() {
+    setIsConfirmResetModalOpen(false);
+  }
+
+  function handleCloseResetModal() {
+    setIsResetModalOpen(false);
+    setIsReseting(false);
+    accessKey.current = '';
+  }
   async function handleResetSystem() {
     try {
       if (isReseting) {
@@ -24,22 +39,30 @@ export const Admin = () => {
       }
       setIsReseting(true);
 
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      await new Promise((resolve) => {
-        setTimeout(() => resolve('a'), 1000);
-      });
+      if (accessKey.current === '') {
+        toast({
+          status: 'error',
+          title: 'Insira a chave de acesso para resetar o sistema',
+        });
+        setIsReseting(false);
+        return;
+      }
 
-      handleCloseModal();
+      await AdminService.deletePayments(accessKey.current);
+      await AdminService.deleteCommands(accessKey.current);
+
+      handleCloseResetModal();
       toast({
-        title: 'Função em desenvolvimento',
+        title: 'Sistem resetado.',
       });
     } catch (err: any) {
       toast({
         status: 'error',
-        title: 'Algo deu errado. Recarregue a página',
+        title: err?.response?.data?.message,
         duration: 1000,
         isClosable: true,
       });
+      setIsReseting(false);
     }
   }
 
@@ -70,7 +93,7 @@ export const Admin = () => {
           </Flex>
           <Stack>
             <Button
-              onClick={() => handleConfirmReset()}
+              onClick={() => handleOpenConfirmationModal()}
               colorScheme="red"
               fontSize={[18, 20]}
               h="auto"
@@ -84,22 +107,38 @@ export const Admin = () => {
       <Modal
         isOpen={isConfirmResetModalOpen}
         title="Deletar todos os dados do sistema?"
-        onClose={handleCloseModal}
+        onClose={handleCloseConfirmationModal}
       >
-        <Flex>
-          <Button flex="1" onClick={() => handleCloseModal()}>
+        <Flex gap={[2, 4]}>
+          <Button flex="1" onClick={() => handleCloseConfirmationModal()}>
             Cancelar
           </Button>
+          <Button onClick={handleOpenResetModal} colorScheme="red" flex="1">
+            Confirmar
+          </Button>
+        </Flex>
+      </Modal>
+      <Modal
+        isOpen={isResetModalOpen}
+        onClose={handleCloseResetModal}
+        title="Insira a chave de acesso para resetar o sistema"
+      >
+        <Stack gap={[2, 4]}>
+          <Input
+            onChange={(e) => {
+              accessKey.current = e.target.value;
+            }}
+            placeholder="Chave de acesso"
+            type="password"
+          />
           <Button
             onClick={handleResetSystem}
-            colorScheme="red"
-            flex="1"
             isLoading={isReseting}
             loadingText="Restaurando"
           >
             Confirmar
           </Button>
-        </Flex>
+        </Stack>
       </Modal>
     </>
   );
