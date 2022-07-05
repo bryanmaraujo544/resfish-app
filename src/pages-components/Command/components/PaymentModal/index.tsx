@@ -41,7 +41,10 @@ export const PaymentModal = ({
 
   const tempTotalToBePayed =
     Math.round(
-      ((command?.total || 0) - (command?.totalPayed || 0) + Number.EPSILON) *
+      ((command?.total || 0) -
+        (command?.totalPayed || 0) -
+        (command?.discount || 0) +
+        Number.EPSILON) *
         100
     ) / 100;
   const totalToBePayed = tempTotalToBePayed > 0 ? tempTotalToBePayed : 0;
@@ -155,7 +158,10 @@ export const PaymentModal = ({
 
       setCommand(updatedCommand);
 
-      if (updatedCommand.total === updatedCommand.totalPayed) {
+      if (
+        updatedCommand.total ===
+        updatedCommand.totalPayed + updatedCommand.discount
+      ) {
         // Ask if the user wants to close the cashier
 
         setIsConfirmCloseCommandModalOpen(true);

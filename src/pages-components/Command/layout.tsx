@@ -21,6 +21,7 @@ import { CgOptions } from 'react-icons/cg';
 import { MdVerified } from 'react-icons/md';
 import { BsFillTrashFill } from 'react-icons/bs';
 import { IoCashOutline } from 'react-icons/io5';
+import { FaPercentage } from 'react-icons/fa';
 
 import { Header } from 'components/Header';
 import { Layout } from 'components/Layout';
@@ -39,6 +40,7 @@ interface Props {
   handleDeleteCommand: () => void;
   handleOpenSentToKitchenModal: () => void;
   handleOpenCloseCommandModal: () => void;
+  handleEditDiscount: () => void;
 }
 
 export const CommandLayout = ({
@@ -50,6 +52,7 @@ export const CommandLayout = ({
   handleOpenSentToKitchenModal,
   handleOpenCloseCommandModal,
   totalToBePayed,
+  handleEditDiscount,
 }: Props) => {
   const dt = DateTime.fromISO(command?.createdAt as string, {
     zone: 'pt-BR',
@@ -230,6 +233,25 @@ export const CommandLayout = ({
                       }}
                     >
                       <Text>Fechar Comanda</Text>
+                    </MenuItem>
+                    <MenuItem
+                      icon={<FaPercentage fontSize={14} />}
+                      onClick={() => handleEditDiscount()}
+                      isDisabled={command.isActive === false}
+                      color="blue.900"
+                      display="flex"
+                      alignItems="center"
+                      rounded={4}
+                      _focus={{
+                        bg: 'blue.100',
+                        color: 'blue.500',
+                      }}
+                      _hover={{
+                        bg: 'blue.100',
+                        color: 'blue.500',
+                      }}
+                    >
+                      <Text>Editar Desconto</Text>
                     </MenuItem>
                     <MenuItem
                       icon={<BsFillTrashFill fontSize={14} />}

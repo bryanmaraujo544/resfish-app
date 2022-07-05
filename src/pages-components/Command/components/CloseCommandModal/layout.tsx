@@ -23,10 +23,6 @@ interface Props {
   command: Command;
   observation: { current: string };
   handleCloseCommand: () => void;
-  discount: string;
-  setDiscount: Dispatch<SetStateAction<string>>;
-  discountPercent: number;
-  setDiscountPercent: Dispatch<SetStateAction<number>>;
 }
 
 export const CloseCommandModalLayout = ({
@@ -39,10 +35,6 @@ export const CloseCommandModalLayout = ({
   command,
   observation,
   handleCloseCommand,
-  discount,
-  setDiscount,
-  discountPercent,
-  setDiscountPercent,
 }: Props) => (
   <Modal
     isOpen={isModalOpen}
@@ -82,7 +74,7 @@ export const CloseCommandModalLayout = ({
           </Text>
         </BgBox>
       </Grid>
-      <Stack>
+      {/* <Stack>
         <Text fontWeight={600}>Desconto</Text>
         <Flex gap={[2, 4, 6]} w="100%" flexDir={['column', 'row']}>
           <Stack flex="1.5">
@@ -105,7 +97,7 @@ export const CloseCommandModalLayout = ({
             />
           </Stack>
         </Flex>
-      </Stack>
+      </Stack> */}
       <Stack>
         <Text>
           Caixinha do garçom:{' '}

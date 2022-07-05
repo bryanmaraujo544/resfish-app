@@ -26,6 +26,7 @@ import { stockProductsReducer } from './reducers/stockProductsReducer';
 import { DeleteCommandModal } from './components/DeleteCommandModal';
 import { SendToKitchenModal } from './components/SendToKitchenModal';
 import { CloseCommandModal } from './components/CloseCommandModal';
+import { DiscountModal } from './components/DiscountModal';
 
 interface StockProductsAction {
   type:
@@ -87,6 +88,8 @@ export const Command = ({ commandId }: Props) => {
   const [isSendToKitchenModalOpen, setIsSendToKitchenModalOpen] =
     useState(false);
   const [isCloseCommandModalOpen, setIsCloseCommandModalOpen] = useState(false);
+
+  const [isDiscountModalOpen, setIsDiscountModalOpen] = useState(false);
 
   const [filter, setFilter] = useState('');
   const [orderBy, setOrderBy] = useState('');
@@ -205,9 +208,16 @@ export const Command = ({ commandId }: Props) => {
     setIsDeleteCommandModalOpen(true);
   }, []);
 
+  const handleEditDiscount = useCallback(() => {
+    setIsDiscountModalOpen(true);
+  }, []);
+
   const tempTotalToBePayed =
     Math.round(
-      ((command?.total || 0) - (command?.totalPayed || 0) + Number.EPSILON) *
+      ((command?.total || 0) -
+        (command?.totalPayed || 0) -
+        (command?.discount || 0) +
+        Number.EPSILON) *
         100
     ) / 100;
   const totalToBePayed = tempTotalToBePayed > 0 ? tempTotalToBePayed : 0;
@@ -244,6 +254,7 @@ export const Command = ({ commandId }: Props) => {
         handleDeleteCommand={handleDeleteCommand}
         handleOpenSentToKitchenModal={handleOpenSentToKitchenModal}
         handleOpenCloseCommandModal={handleOpenCloseCommandModal}
+        handleEditDiscount={handleEditDiscount}
         totalToBePayed={totalToBePayed}
       />
       <DeleteProductModal
@@ -275,6 +286,10 @@ export const Command = ({ commandId }: Props) => {
       <SendToKitchenModal
         isModalOpen={isSendToKitchenModalOpen}
         setIsModalOpen={setIsSendToKitchenModalOpen}
+      />
+      <DiscountModal
+        isModalOpen={isDiscountModalOpen}
+        setIsModalOpen={setIsDiscountModalOpen}
       />
     </CommandContext.Provider>
   );

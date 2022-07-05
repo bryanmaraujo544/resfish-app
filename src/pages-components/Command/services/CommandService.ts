@@ -50,6 +50,19 @@ class CommandService {
     return data;
   }
 
+  async updateCommandDiscount({
+    _id,
+    discount,
+  }: {
+    _id: string;
+    discount: number;
+  }) {
+    const { data } = await serverApi.put(`/commands/${_id}`, {
+      discount,
+    });
+    return data;
+  }
+
   async deleteCommand({ commandId }: DeleteCommand) {
     const { data } = await serverApi.delete(`/commands/${commandId}`);
     return data;

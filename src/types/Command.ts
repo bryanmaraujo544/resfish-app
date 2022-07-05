@@ -12,4 +12,5 @@ export interface Command {
   createdAt?: string;
   waiterExtra?: number;
   paymentTypes?: string[];
+  discount?: number;
 }
