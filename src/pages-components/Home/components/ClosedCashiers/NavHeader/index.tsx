@@ -20,7 +20,9 @@ export const NavHeader = ({
   allCashiers,
 }: Props) => {
   const totalValue = allCashiers?.reduce(
-    (total, current) => (current.total * 100 + total * 100) / 100,
+    (total, current) =>
+      Math.round(((current?.total as number) + total + Number.EPSILON) * 100) /
+      100,
     0
   );
 
