@@ -58,7 +58,7 @@ export const CommandLayout = ({
     zone: 'pt-BR',
     setZone: true,
   }).setLocale('pt-BR');
-  const createdAtFormatted = dt.toLocaleString(DateTime.DATE_FULL);
+  const createdAtFormatted = dt.toLocaleString(DateTime.DATETIME_MED);
 
   return (
     <Layout>
