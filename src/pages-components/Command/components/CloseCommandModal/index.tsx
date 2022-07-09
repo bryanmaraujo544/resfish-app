@@ -79,7 +79,7 @@ export const CloseCommandModal = ({ isModalOpen, setIsModalOpen }: Props) => {
         formatDecimalNum({ num: waiterExtra, to: 'point' })
       );
 
-      if (waiterExtraFormatted && Number.isNaN(waiterExtraFormatted)) {
+      if (Number.isNaN(waiterExtraFormatted) || waiterExtraFormatted < 0) {
         toast({
           status: 'error',
           title: 'Valor da caixinha inválido.',
