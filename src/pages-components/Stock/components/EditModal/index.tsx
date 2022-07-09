@@ -24,13 +24,14 @@ export const EditModal = ({
   const toast = useToast();
 
   async function handleSubmit(e: any) {
-    e.preventDefault();
-    if (isSubmitting) {
-      return;
-    }
-
     try {
+      e.preventDefault();
+
       setIsSubmitting(true);
+      if (isSubmitting) {
+        return;
+      }
+
       const {
         name,
         amount,
@@ -40,7 +41,7 @@ export const EditModal = ({
         id,
       }: any = itemInfos;
 
-      const unitPrice = updatedUnitPrice.split(' ')[1];
+      const unitPrice = updatedUnitPrice;
       const formattedUnitPrice = Number(
         formatDecimalNum({
           num: unitPrice,
@@ -97,7 +98,7 @@ export const EditModal = ({
       toast.closeAll();
       toast({
         status: 'error',
-        title: err?.response.data.message,
+        title: err?.response?.data?.message,
         duration: 2000,
       });
     }

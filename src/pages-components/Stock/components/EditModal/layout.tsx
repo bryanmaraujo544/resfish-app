@@ -60,13 +60,13 @@ export const EditModalLayout = ({
         onChange={(e) => itemInfos.setName(e.target.value)}
         mb={2}
       />
-      <InputText title="URL da imagem" />
+      {/* <InputText title="URL da imagem" />
       <Input
         placeholder="URL da Imagem"
         value={itemInfos.image}
         onChange={(e) => itemInfos.setImage(e.target.value)}
         mb={2}
-      />
+      /> */}
       <InputText title="Categoria" />
       <Select
         value={itemInfos.category || ''}
