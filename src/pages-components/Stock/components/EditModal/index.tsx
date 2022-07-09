@@ -1,7 +1,7 @@
 import { SetStateAction, Dispatch, useContext, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
 
-import { formatPrice } from 'utils/formatPrice';
+// import { formatPrice } from 'utils/formatPrice';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { StockContext } from 'pages-components/Stock';
 import StockService from '../../services/index';
@@ -110,7 +110,7 @@ export const EditModal = ({
   }
 
   function handleChangeUnitPrice(e: any) {
-    itemInfos.setUnitPrice(formatPrice(e.target.value));
+    itemInfos.setUnitPrice(e.target.value);
   }
 
   return (

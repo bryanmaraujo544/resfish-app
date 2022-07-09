@@ -50,6 +50,7 @@ export const AddItemModal = ({
       setIsSubmitting(true);
       // taking out the "R$" of the string and getting only the number;
       const unitPriceNum = unitPrice.split(' ')[1];
+
       const formattedUnitPriceStr = formatDecimalNum({
         num: unitPriceNum,
         to: 'point',

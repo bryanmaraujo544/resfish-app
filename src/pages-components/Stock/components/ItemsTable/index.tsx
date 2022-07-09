@@ -16,7 +16,7 @@ export const ItemsTable = () => {
   const [image, setImage] = useState('');
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState(null as null | number);
-  const [unitPrice, setUnitPrice] = useState('R$');
+  const [unitPrice, setUnitPrice] = useState('');
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteItemModalOpen, setIsDeleteItemModalOpen] = useState(false);
