@@ -7,4 +7,5 @@ export interface Order {
   waiter: string;
   observation: string;
   products: OrderProduct[];
+  createdAt?: string;
 }

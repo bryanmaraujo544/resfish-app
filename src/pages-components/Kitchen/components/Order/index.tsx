@@ -16,6 +16,8 @@ export const Order = ({ order }: Props) => {
 
   const toast = useToast();
 
+  console.log(order);
+
   const handleCheckOneProduct = useCallback(
     async (product: OrderProduct) => {
       try {
