@@ -64,16 +64,21 @@ export const PaymentModal = ({
       setExchange('0');
     }
 
+    if (receivedValueFormatted < 0) {
+      setIsReceivedValueInvalid({ value: true, message: 'Valor inválido.' });
+    }
+
     if (receivedValueFormatted > totalToBePayed && paymentType === 'Dinheiro') {
       setIsReceivedValueInvalid({ value: false, message: '' });
       const updatedExchange = (receivedValueFormatted - totalToBePayed).toFixed(
         2
       );
       setExchange(
-        formatDecimalNum({
-          num: updatedExchange.toString(),
-          to: 'comma',
-        })
+        // formatDecimalNum({
+        //   num: updatedExchange.toString(),
+        //   to: 'comma',
+        // })
+        updatedExchange
       );
     }
 
@@ -142,6 +147,17 @@ export const PaymentModal = ({
       const receivedValueFormatted = Number(
         formatDecimalNum({ num: receivedValue, to: 'point' })
       );
+
+      if (receivedValueFormatted < 0) {
+        setIsPaying(false);
+        toast.closeAll();
+        toast({
+          status: 'error',
+          title: 'Valor menor que 0',
+          duration: 1000,
+        });
+        return;
+      }
 
       const totalToPay =
         receivedValueFormatted > totalToBePayed
