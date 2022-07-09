@@ -24,6 +24,7 @@ export const formatDecimalNum = ({ num, to }: Props) => {
   if (numberAfterComma?.length < 2) {
     return `${numWithComma}0`;
   }
+
   return numWithComma;
 
   // return num;

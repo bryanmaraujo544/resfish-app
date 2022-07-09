@@ -13,10 +13,10 @@ import {
 } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import { Cashier } from 'types/Cashier';
-import { formatDecimalNum } from 'utils/formatDecimalNum';
 
 import { MdOutlineReadMore } from 'react-icons/md';
 import { Dispatch, SetStateAction } from 'react';
+import { parseToBRL } from 'utils/parseToBRL';
 import { NavHeader } from './NavHeader';
 
 const columns = ['Data', 'Total', 'Comandas', ''];
@@ -72,13 +72,7 @@ export const ClosedCashiersLayout = ({
               allCashiers?.map(({ _id, date, total, payments }) => (
                 <Tr key={`cashier-oflist-${_id}`}>
                   <Td>{formatDate(date)}</Td>
-                  <Td>
-                    R${' '}
-                    {formatDecimalNum({
-                      num: total?.toString() || '0',
-                      to: 'comma',
-                    })}
-                  </Td>
+                  <Td>{parseToBRL(total || 0)}</Td>
                   <Td>{payments?.length}</Td>
                   <Td isNumeric>
                     <Button

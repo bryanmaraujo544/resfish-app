@@ -33,7 +33,7 @@ export const DiscountModal = ({ isModalOpen, setIsModalOpen }: Props) => {
     setNewDiscount(
       formatDecimalNum({ num: String(discountWithPercent), to: 'comma' })
     );
-  }, [percent]);
+  }, [percent, command]);
 
   function handleCloseModal() {
     setIsModalOpen(false);

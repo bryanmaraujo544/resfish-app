@@ -3,7 +3,7 @@
 import { Input, Stack, Text, Button, Flex, Select } from '@chakra-ui/react';
 import { Modal } from 'components/Modal';
 import { Dispatch, SetStateAction } from 'react';
-import { formatDecimalNum } from 'utils/formatDecimalNum';
+import { parseToBRL } from 'utils/parseToBRL';
 
 interface Props {
   isModalOpen: boolean;
@@ -35,8 +35,7 @@ export const DiscountLayout = ({
   >
     <Stack gap={[2, 4]}>
       <Text fontSize={[16, 18, 20]} fontWeight={600} color="blue.800">
-        Desconto da comanda: R${' '}
-        {formatDecimalNum({ num: String(discount), to: 'comma' })}
+        Desconto da comanda: {parseToBRL(discount || 0)}
       </Text>
       <Stack>
         <Flex gap={[2]}>

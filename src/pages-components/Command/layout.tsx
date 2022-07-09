@@ -26,8 +26,8 @@ import { FaPercentage } from 'react-icons/fa';
 import { Header } from 'components/Header';
 import { Layout } from 'components/Layout';
 import { Command } from 'types/Command';
-import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { GiCook } from 'react-icons/gi';
+import { parseToBRL } from 'utils/parseToBRL';
 import { NavHeader } from './components/NavHeader';
 import { ProductsList } from './components/ProductsList';
 
@@ -150,20 +150,12 @@ export const CommandLayout = ({
               >
                 <BgBox w={['100%', 'auto']} justify="center">
                   <Heading fontSize={[14, 16, 20, 22]}>
-                    Total: R${' '}
-                    {formatDecimalNum({
-                      num: command?.total?.toString() || '0',
-                      to: 'comma',
-                    })}
+                    Total: {parseToBRL(command?.total || 0)}
                   </Heading>
                 </BgBox>
                 <BgBox w={['100%', 'auto']} justify="center">
                   <Heading fontSize={[14, 16, 20, 22]}>
-                    A Pagar: R${' '}
-                    {formatDecimalNum({
-                      num: totalToBePayed?.toString() || '0',
-                      to: 'comma',
-                    })}
+                    A Pagar: {parseToBRL(totalToBePayed || 0)}
                   </Heading>
                 </BgBox>
                 <Button

@@ -17,8 +17,8 @@ import { FaArrowUp } from 'react-icons/fa';
 import { AiFillStar, AiOutlineStar, AiOutlineDelete } from 'react-icons/ai';
 import { FiEdit2 } from 'react-icons/fi';
 
-import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { Product } from 'pages-components/Stock/types/Product';
+import { parseToBRL } from 'utils/parseToBRL';
 
 const stockColumns = [
   { text: 'Imagem', prop: 'image' },
@@ -122,13 +122,7 @@ export const ItemsTableLayout = ({
                     <Td>{name}</Td>
                     <Td>{category}</Td>
                     <Td>{amount}</Td>
-                    <Td>
-                      R${' '}
-                      {formatDecimalNum({
-                        num: unitPrice.toString(),
-                        to: 'comma',
-                      })}
-                    </Td>
+                    <Td>{parseToBRL(unitPrice || 0)}</Td>
                     <Td>
                       {/* <Button></Button> */}
                       <Flex gap={2} align="center" color="blue.800">

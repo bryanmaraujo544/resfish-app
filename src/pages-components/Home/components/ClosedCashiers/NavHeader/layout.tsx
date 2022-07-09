@@ -1,6 +1,6 @@
 import { Button, Grid, Stack, Text, Flex, Select } from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
-import { formatDecimalNum } from 'utils/formatDecimalNum';
+import { parseToBRL } from 'utils/parseToBRL';
 
 interface Props {
   handleDownloadCashiers: (e: any) => void;
@@ -88,8 +88,7 @@ export const NavHeaderLayout = ({
         flex="1"
         textAlign="center"
       >
-        Valor Total: R${' '}
-        {formatDecimalNum({ num: totalValue.toString() || '0', to: 'comma' })}
+        Valor Total: {parseToBRL(totalValue || 0)}
       </Text>
       <Text
         fontWeight={600}

@@ -83,7 +83,7 @@ export const ItemsTable = () => {
     setImage(itemInfos.image);
     setAmount(itemInfos.amount);
     setUnitPrice(
-      `R$ ${formatDecimalNum({
+      `${formatDecimalNum({
         num: itemInfos.unitPrice.toString(),
         to: 'comma',
       })}`

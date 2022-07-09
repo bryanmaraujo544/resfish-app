@@ -14,7 +14,7 @@ import {
 import { Modal } from 'components/Modal';
 import { Dispatch, SetStateAction } from 'react';
 import { Command } from 'types/Command';
-import { formatDecimalNum } from 'utils/formatDecimalNum';
+import { parseToBRL } from 'utils/parseToBRL';
 
 interface Props {
   isModalOpen: boolean;
@@ -85,11 +85,7 @@ export const PaymentModalLayout = ({
           <Text fontSize={[14, 18, 20]}>
             Total:{' '}
             <Text as="span" fontWeight="700">
-              R${' '}
-              {formatDecimalNum({
-                num: command?.total?.toString() || '',
-                to: 'comma',
-              })}
+              {parseToBRL(command?.total || 0)}
             </Text>
           </Text>
         </BgBox>
@@ -97,11 +93,7 @@ export const PaymentModalLayout = ({
           <Text fontSize={[14, 18, 20]}>
             Pago:{' '}
             <Text as="span" fontWeight="700">
-              R${' '}
-              {formatDecimalNum({
-                num: command?.totalPayed?.toString() || '',
-                to: 'comma',
-              })}
+              {parseToBRL(command?.totalPayed || 0)}
             </Text>
           </Text>
         </BgBox>
@@ -109,11 +101,7 @@ export const PaymentModalLayout = ({
           <Text fontSize={[14, 18, 20]}>
             A pagar:{' '}
             <Text as="span" fontWeight="700">
-              R${' '}
-              {formatDecimalNum({
-                num: totalToBePayed.toString(),
-                to: 'comma',
-              })}
+              {parseToBRL(totalToBePayed || 0)}
             </Text>
           </Text>
         </BgBox>
@@ -173,11 +161,7 @@ export const PaymentModalLayout = ({
                 display="inline-block"
                 color="red.400"
               >
-                R${' '}
-                {formatDecimalNum({
-                  num: exchange,
-                  to: 'comma',
-                })}
+                {parseToBRL(Number(exchange) || 0)}
               </Text>
             </TitleText>
           </BgBox>

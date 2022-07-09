@@ -27,11 +27,11 @@ import { IoCashOutline } from 'react-icons/io5';
 import { BiSad } from 'react-icons/bi';
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 
-import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { Product } from 'types/Product';
 import { formatAmount } from 'utils/formatAmount';
 import { useClickOutsideToClose } from 'hooks/useClickOutsideToClose';
 import { CommandContext } from 'pages-components/Command';
+import { parseToBRL } from 'utils/parseToBRL';
 
 const columns = [
   {
@@ -227,51 +227,13 @@ export const ProductsListLayout = ({
                               cursor="pointer"
                             />
                           )}
-                          {/* {!commandIsPayed && (
-                            <Icon
-                              onClick={() => {
-                                if (!commandIsPayed) {
-                                  handleActiveEditFishAmount({
-                                    productId: _id,
-                                    amount: amount.toString(),
-                                  });
-                                }
-                              }}
-                              as={FiEdit2}
-                              fontSize={14}
-                              cursor="pointer"
-                              _hover={{
-                                color: 'blue.500',
-                              }}
-                            />
-                          )} */}
                         </>
                       )}
                     </Flex>
                   </Td>
-                  <Td>
-                    R${' '}
-                    {formatDecimalNum({
-                      num: unitPrice.toString(),
-                      to: 'comma',
-                    })}
-                  </Td>
-                  <Td>
-                    R${' '}
-                    {formatDecimalNum({
-                      num: (amount * unitPrice).toFixed(2).toString(),
-                      to: 'comma',
-                    })}
-                  </Td>
-                  {!commandIsPayed && (
-                    <Td>
-                      R${' '}
-                      {formatDecimalNum({
-                        num: totalPayed?.toString() as string,
-                        to: 'comma',
-                      })}
-                    </Td>
-                  )}
+                  <Td>{parseToBRL(unitPrice || 0)}</Td>
+                  <Td>{parseToBRL(Number((amount * unitPrice).toFixed(2)))}</Td>
+                  {!commandIsPayed && <Td>{parseToBRL(totalPayed || 0)}</Td>}
 
                   <Td isNumeric>
                     {!commandIsPayed && (

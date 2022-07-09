@@ -26,11 +26,11 @@ import {
 import { BiSad, BiSearchAlt } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
 
-import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { Modal } from 'components/Modal';
 import { MdPlaylistAdd } from 'react-icons/md';
 import { formatAmount } from 'utils/formatAmount';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
+import { parseToBRL } from 'utils/parseToBRL';
 
 const filterOptions = [
   'Pesca',
@@ -196,13 +196,7 @@ export const AddProductModalLayout = ({
                   <Tr key={`add-product-modal-product-${_id}`}>
                     <Td>{name}</Td>
                     <Td>{amount}</Td>
-                    <Td>
-                      R${' '}
-                      {formatDecimalNum({
-                        num: unitPrice.toString(),
-                        to: 'comma',
-                      })}
-                    </Td>
+                    <Td>{parseToBRL(unitPrice || 0)}</Td>
                     <Td isNumeric>
                       <Flex justify="flex-end" align="center" gap={2}>
                         <Button

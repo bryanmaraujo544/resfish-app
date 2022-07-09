@@ -14,11 +14,11 @@ import {
 } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import { Payment } from 'pages-components/Home/types/Payment';
-import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { get10PastDays } from 'utils/get10PastDays';
 
 import { BsCashStack } from 'react-icons/bs';
 import { formatPaymentTypes } from 'utils/formatPaymentTypes';
+import { parseToBRL } from 'utils/parseToBRL';
 
 interface Props {
   payedCommandsDate: any;
@@ -71,7 +71,7 @@ export const PayedCommandsLayout = ({
         </Flex>
       </Flex>
       <Text color="blue.800" fontWeight={600} fontSize={[16, 20]}>
-        Total: R$ {formatDecimalNum({ num: String(total), to: 'comma' })}
+        Total: {parseToBRL(total || 0)}
       </Text>
       <Grid gridTemplateColumns={['1fr', '1fr', '1fr 1fr']} gap={[2, 4]}>
         {isGettingPayments ? (
@@ -105,14 +105,7 @@ export const PayedCommandsLayout = ({
                   Mesa: <BoldText>{command?.table}</BoldText>
                 </Text>
                 <Text>
-                  Total:{' '}
-                  <BoldText>
-                    R${' '}
-                    {formatDecimalNum({
-                      num: totalPayed?.toString(),
-                      to: 'comma',
-                    })}
-                  </BoldText>
+                  Total: <BoldText>{parseToBRL(totalPayed || 0)}</BoldText>
                 </Text>
                 <Text>
                   Meio de Pagamento:{' '}
@@ -133,14 +126,7 @@ export const PayedCommandsLayout = ({
                 </Text>
                 <Text>
                   Caixinha {command?.waiter}:{' '}
-                  <BoldText>
-                    R${' '}
-                    {formatDecimalNum({
-                      num:
-                        (waiterExtra?.toString() as string) || ('0' as string),
-                      to: 'comma',
-                    })}
-                  </BoldText>
+                  <BoldText>{parseToBRL(waiterExtra || 0)}</BoldText>
                 </Text>
                 {observation && (
                   <Text fontSize={[12, 14]}>Obs: {observation || ''}</Text>

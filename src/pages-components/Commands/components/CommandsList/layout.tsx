@@ -21,9 +21,9 @@ import { CgOptions } from 'react-icons/cg';
 import { FiEdit2 } from 'react-icons/fi';
 import { FaArrowUp } from 'react-icons/fa';
 
-import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { Command } from 'types/Command';
 import { MdVerified } from 'react-icons/md';
+import { parseToBRL } from 'utils/parseToBRL';
 
 const listColumns = [
   {
@@ -108,7 +108,7 @@ export const CommandsListLayout = ({
                 {waiter}
               </Td>
               <Td onClick={() => handleGoToCommandPage({ commandId: _id })}>
-                R$ {formatDecimalNum({ num: total.toString(), to: 'comma' })}
+                {parseToBRL(total || 0)}
               </Td>
               <Td isNumeric>
                 {isActive === false && (

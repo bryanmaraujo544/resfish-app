@@ -18,6 +18,7 @@ import { Modal } from 'components/Modal';
 import { Product } from 'types/Product';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { CommandContext } from 'pages-components/Command';
+import { parseToBRL } from 'utils/parseToBRL';
 
 const paymentOptions = [
   'Dinheiro',
@@ -143,8 +144,7 @@ export const PayProductModalLayout = ({
         </Stack>
         {typeOfPayment === 'unit' && (
           <Text fontWeight={500}>
-            Pagar: R${' '}
-            {formatDecimalNum({ num: paymentValue.toString(), to: 'comma' })}
+            Pagar: {parseToBRL(Number(paymentValue) || 0)}
           </Text>
         )}
         <Stack>

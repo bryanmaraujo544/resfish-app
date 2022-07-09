@@ -18,6 +18,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { Cashier, CashierPayment } from 'types/Cashier';
 import { formatDecimalNum } from 'utils/formatDecimalNum';
 import { formatPaymentTypes } from 'utils/formatPaymentTypes';
+import { parseToBRL } from 'utils/parseToBRL';
 
 interface Props {
   cashier: Cashier;
@@ -62,11 +63,7 @@ export const CashierLayout = ({
               <Text fontSize={[20, 22]} color="blue.50">
                 Total:{' '}
                 <BoldText color="blue.50">
-                  R$
-                  {formatDecimalNum({
-                    num: cashier?.total?.toString() || '',
-                    to: 'comma',
-                  })}
+                  {parseToBRL(cashier?.total || 0)}
                 </BoldText>
               </Text>
             </Box>
@@ -108,25 +105,13 @@ export const CashierLayout = ({
                     <TextWhiteBox>
                       <Text>
                         Total:{' '}
-                        <BoldText>
-                          R${' '}
-                          {formatDecimalNum({
-                            num: totalPayed.toString(),
-                            to: 'comma',
-                          })}
-                        </BoldText>
+                        <BoldText>{parseToBRL(totalPayed || 0)}</BoldText>
                       </Text>
                     </TextWhiteBox>
                     <TextWhiteBox>
                       <Text>
                         Caixinha {command?.waiter}:{' '}
-                        <BoldText>
-                          R${' '}
-                          {formatDecimalNum({
-                            num: waiterExtra?.toString() || ('0' as string),
-                            to: 'comma',
-                          })}
-                        </BoldText>
+                        <BoldText>{parseToBRL(waiterExtra || 0)}</BoldText>
                       </Text>
                     </TextWhiteBox>
                     <TextWhiteBox>
