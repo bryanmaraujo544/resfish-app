@@ -73,6 +73,12 @@ export const PayedCommands = () => {
     setIsCloseCashierModalOpen(true);
   }, []);
 
+  const tempTotal = payments.reduce(
+    (total, payment) =>
+      Math.round((total + payment.totalPayed + Number.EPSILON) * 100) / 100,
+    0
+  );
+
   return (
     <>
       <PayedCommandsLayout
@@ -82,6 +88,7 @@ export const PayedCommands = () => {
         handleGoToCommandPage={handleGoToCommandPage}
         handleCloseCashier={handleCloseCashier}
         isGettingPayments={isGettingPayments}
+        total={tempTotal}
       />
       <CloseCashier
         isModalOpen={isCloseCashierModalOpen}

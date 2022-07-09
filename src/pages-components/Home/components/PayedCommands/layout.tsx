@@ -27,6 +27,7 @@ interface Props {
   handleGoToCommandPage: (commandId: string) => void;
   handleCloseCashier: () => void;
   isGettingPayments: boolean;
+  total: number;
 }
 
 export const PayedCommandsLayout = ({
@@ -36,6 +37,7 @@ export const PayedCommandsLayout = ({
   handleGoToCommandPage,
   handleCloseCashier,
   isGettingPayments,
+  total,
 }: Props) => {
   const past10Days = get10PastDays();
 
@@ -45,6 +47,7 @@ export const PayedCommandsLayout = ({
         <Heading as="h2" fontSize={[20, 24]} color="blue.900" flex="1">
           Comandas Pagas
         </Heading>
+
         <Flex align="center" gap={[4, 6]}>
           <Select
             onChange={(e) => setPayedCommandsDate(e.target.value)}
@@ -67,7 +70,9 @@ export const PayedCommandsLayout = ({
           </Button>
         </Flex>
       </Flex>
-
+      <Text color="blue.800" fontWeight={600} fontSize={[16, 20]}>
+        Total: R$ {formatDecimalNum({ num: String(total), to: 'comma' })}
+      </Text>
       <Grid gridTemplateColumns={['1fr', '1fr', '1fr 1fr']} gap={[2, 4]}>
         {isGettingPayments ? (
           <Spinner size="xl" />
