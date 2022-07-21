@@ -13,7 +13,7 @@ export const SocketContext = createContext({} as SocketProps);
 const apiUrl =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:8080'
-    : process.env.API_URL;
+    : 'https://resfish.herokuapp.com';
 
 const socket = io(apiUrl as string);
 
