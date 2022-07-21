@@ -21,7 +21,7 @@ import { CgMenu } from 'react-icons/cg';
 import { FaArrowUp } from 'react-icons/fa';
 import { AiFillHome } from 'react-icons/ai';
 import { IoMdListBox } from 'react-icons/io';
-import Logo from '../../assets/logo.jpeg';
+import Logo from '../../assets/logo.svg';
 
 const headerButtons = [
   {
@@ -99,7 +99,11 @@ export const HeaderLayout = ({
               <Icon as={FaArrowUp} />
             </Button>
           )}
-          <Box position="relative" width={[12, 16]} height={[12, 16]}>
+          <Box
+            position="relative"
+            width={['calc(0.25 * 249px)', 'calc(249px * 0.5)']}
+            height={['calc(0.25 * 75px)', 'calc(75px * 0.5)']}
+          >
             <Image src={Logo} alt="logo" layout="fill" objectFit="contain" />
           </Box>
         </Flex>

@@ -1,8 +1,10 @@
 import axios from 'axios';
 
-// const devUrl = 'http://localhost:8080';
-const prodUrl = 'https://pesqueiro-arrudas.herokuapp.com';
+const apiUrl =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080'
+    : process.env.API_URL;
 
 export const serverApi = axios.create({
-  baseURL: prodUrl,
+  baseURL: apiUrl,
 });

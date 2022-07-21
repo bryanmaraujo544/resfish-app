@@ -10,10 +10,12 @@ interface SocketProps {
 
 export const SocketContext = createContext({} as SocketProps);
 
-// const devUrl = 'http://localhost:8080';
-const prodUrl = 'https://pesqueiro-arrudas.herokuapp.com';
+const apiUrl =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080'
+    : process.env.API_URL;
 
-const socket = io(prodUrl);
+const socket = io(apiUrl as string);
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
