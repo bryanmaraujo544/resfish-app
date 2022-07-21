@@ -1,34 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Resfish App
 
-## Getting Started
+<!---Esses são exemplos. Veja https://shields.io para outras pessoas ou para personalizar este conjunto de escudos. Você pode querer incluir dependências, status do projeto e informações de licença aqui--->
 
-First, run the development server:
+![ignews](https://user-images.githubusercontent.com/62571814/180027776-e7f63d8a-6ff1-4406-9d74-85fe535a5caf.gif)
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+> A system for fishing/restaurants. The restaurant can create and manipulate commands containing the products purchased by their customers. There's a stock containing all the products and its informations. In the final of the day the restaurant can close the cashier and receive the information of all the purchases of that day. There's a section where is for the kithen receive in real-time the stuffs to be prepared.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 💻 How it works
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### The system has 4 main sections
+- #### Home: In this section the user can access all of the orders payed of some date chosen, close cashier of some date and access all of the cashiers already closed. In the cashiers closed the user is able to select by month and year and receive informations about the payments.
+- #### Orders: In this part of application the user is able to create new orders of customers and add products to the order, as well edit or delete orders. The user can access all of the orders that is opened or that already has been paid.
+- #### Specific Order: In orders page the user can clicks in some order and see and manipulate all of the products and its information, as well add more products to the order. The user can make many payments of different type in the order. Can set discount to the order and finally the user is able to close the cashier.
+- #### Kitchen: The people of the restaurant kitchen can receive in real-time of waiters what needs to be prepared;
+- #### Stock: Here the user has full access of the products of the restaurant, being able to create new products and edit or delete products. The system takes care of the control of stock, so when one product is added in some order the amount of that product in stock is modified.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## :hammer: How it was made
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+  To build the interface I've used Next.js and ChakraUI. The client is being connected to an API made by using Node.js and MongoDB;
 
-## Learn More
+## 🚀 Technologies used in project
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js
+- TypeScript
+- ChakraUI
+- Node.js
+- MongoDB
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To contribute, follow the next steps:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Fork this repository.
+2. Create a new branch: `git checkout -b <branch_name>`.
+3. Make your changes and confirm them: `git commit -m '<commit_message>'`
+4. Send to the main branch: `git push origin <project_name> / <local>`
+5. Create the pull request.
 
-## Deploy on Vercel
+As an alternative, check the documentation of the Github to lear how to make a pull request: (https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🤝 Developer
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<table>
+  <tr>
+    <td align="center">
+      <a href="#">
+        <img src="https://github.com/bryanmaraujo544.png" width="100px;" alt="Bryan's profile photo"/><br>
+        <sub>
+          <b>Bryan Martins</b>
+        </sub>
+      </a>
+    </td>
+
+</table>
+
