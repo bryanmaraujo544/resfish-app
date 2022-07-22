@@ -2,6 +2,8 @@
 
 <!---Esses são exemplos. Veja https://shields.io para outras pessoas ou para personalizar este conjunto de escudos. Você pode querer incluir dependências, status do projeto e informações de licença aqui--->
 
+<img src="https://user-images.githubusercontent.com/62571814/180497067-1a586e15-91da-43b5-81cc-88279de64a0e.png" alt="resfish-app"/>
+
 > A system for fishing/restaurants. The restaurant can create and manipulate commands containing the products purchased by their customers. There's a stock containing all the products and its informations. In the final of the day the restaurant can close the cashier and receive the information of all the purchases of that day. There's a section where is for the kithen receive in real-time the stuffs to be prepared.
 
 ## 💻 How it works
