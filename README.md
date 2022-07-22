@@ -21,8 +21,15 @@
 ![resfish-command-1](https://user-images.githubusercontent.com/62571814/180471774-01087237-70cb-4547-a65b-43a958d62fd2.gif)
 ![resfish-command-2](https://user-images.githubusercontent.com/62571814/180472215-30467411-4942-4b39-bd33-dd331d7881b1.gif)
 
+<hr />
+
 - #### Kitchen: The people of the restaurant kitchen can receive in real-time of waiters what needs to be prepared;
+![resfish-kitchen](https://user-images.githubusercontent.com/62571814/180474135-05bfd91c-f964-4c98-85cd-7353e3720057.gif)
+
+<hr />
+
 - #### Stock: Here the user has full access of the products of the restaurant, being able to create new products and edit or delete products. The system takes care of the control of stock, so when one product is added in some order the amount of that product in stock is modified.
+![resfish-stock](https://user-images.githubusercontent.com/62571814/180475400-6ac89d9a-f9a5-498e-8a38-38aa3a91c0f4.gif)
 
 ## :hammer: How it was made
 
