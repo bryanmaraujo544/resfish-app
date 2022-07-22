@@ -2,14 +2,14 @@
 
 <!---Esses são exemplos. Veja https://shields.io para outras pessoas ou para personalizar este conjunto de escudos. Você pode querer incluir dependências, status do projeto e informações de licença aqui--->
 
-![ignews](https://user-images.githubusercontent.com/62571814/180027776-e7f63d8a-6ff1-4406-9d74-85fe535a5caf.gif)
-
 > A system for fishing/restaurants. The restaurant can create and manipulate commands containing the products purchased by their customers. There's a stock containing all the products and its informations. In the final of the day the restaurant can close the cashier and receive the information of all the purchases of that day. There's a section where is for the kithen receive in real-time the stuffs to be prepared.
 
 ## 💻 How it works
 
 ### The system has 4 main sections
 - #### Home: In this section the user can access all of the orders payed of some date chosen, close cashier of some date and access all of the cashiers already closed. In the cashiers closed the user is able to select by month and year and receive informations about the payments.
+![resfish-home](https://user-images.githubusercontent.com/62571814/180468394-20b34096-7518-4a7e-bcf1-6dec4a92d9bf.gif)
+
 - #### Orders: In this part of application the user is able to create new orders of customers and add products to the order, as well edit or delete orders. The user can access all of the orders that is opened or that already has been paid.
 - #### Specific Order: In orders page the user can clicks in some order and see and manipulate all of the products and its information, as well add more products to the order. The user can make many payments of different type in the order. Can set discount to the order and finally the user is able to close the cashier.
 - #### Kitchen: The people of the restaurant kitchen can receive in real-time of waiters what needs to be prepared;
