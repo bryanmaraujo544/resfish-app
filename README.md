@@ -6,12 +6,21 @@
 
 ## 💻 How it works
 
-### The system has 4 main sections
-- #### Home: In this section the user can access all of the orders payed of some date chosen, close cashier of some date and access all of the cashiers already closed. In the cashiers closed the user is able to select by month and year and receive informations about the payments.
+#### The system has 4 main sections
+- ### Home: In this section the user can access all of the orders payed of some date chosen, close cashier of some date and access all of the cashiers already closed. In the cashiers closed the user is able to select by month and year and receive informations about the payments.
 ![resfish-home](https://user-images.githubusercontent.com/62571814/180468394-20b34096-7518-4a7e-bcf1-6dec4a92d9bf.gif)
 
+<hr />
+
 - #### Orders: In this part of application the user is able to create new orders of customers and add products to the order, as well edit or delete orders. The user can access all of the orders that is opened or that already has been paid.
+![resfish-orders](https://user-images.githubusercontent.com/62571814/180469497-5bee461d-499e-4b4a-a09e-02e1304c08a7.gif)
+
+<hr />
+
 - #### Specific Order: In orders page the user can clicks in some order and see and manipulate all of the products and its information, as well add more products to the order. The user can make many payments of different type in the order. Can set discount to the order and finally the user is able to close the cashier.
+![resfish-command-1](https://user-images.githubusercontent.com/62571814/180471774-01087237-70cb-4547-a65b-43a958d62fd2.gif)
+![resfish-command-2](https://user-images.githubusercontent.com/62571814/180472215-30467411-4942-4b39-bd33-dd331d7881b1.gif)
+
 - #### Kitchen: The people of the restaurant kitchen can receive in real-time of waiters what needs to be prepared;
 - #### Stock: Here the user has full access of the products of the restaurant, being able to create new products and edit or delete products. The system takes care of the control of stock, so when one product is added in some order the amount of that product in stock is modified.
 
